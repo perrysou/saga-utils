@@ -1,2 +1,2 @@
 # saga-utils
-Data processing, analysis estimation utilities for Scintillation Auroral GPS Array (SAGA).
+Data processing, analysis and estimation utilities for Scintillation Auroral GPS Array (SAGA).
