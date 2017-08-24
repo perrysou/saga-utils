@@ -61,6 +61,8 @@ else
     scfile = [];
 end
 outfilename = strcat('prn_files_',signal,sep,'scintdata.mat');
+command = strcat('mkdir -p ', [' ', op_path, 'prn_files_', signal, sep]);
+system(command);
 save([op_path,outfilename],'DATA','scfile');
 % keyboard;
 %% txinfo
@@ -116,6 +118,8 @@ else
     DATA_el = [];
 end
 outfilename = strcat('prn_files_',signal,sep,'txinfodata.mat');
+command = strcat('mkdir -p ', [' ', op_path, 'prn_files_', signal, sep]);
+system(command);
 save([op_path,outfilename],'DATA_el');
 
 end
