@@ -1,4 +1,5 @@
 function [R_rytov,k_par,k_par_ind] = Lz(Fs,NFFT,V,Psi_v,az,ze,L,z)
+    load lz.mat
     %convert L,z to km
     L = L;
     z = z;
@@ -25,6 +26,7 @@ function [R_rytov,k_par,k_par_ind] = Lz(Fs,NFFT,V,Psi_v,az,ze,L,z)
 %     end
 
     k_prime_sq = k_perp.^2 + (k_x*cos(az) + k_y*sin(az)).^2*tan(ze)^2; 
+    k_prime_sq = k_par .^ 2 * (sin(Psi_v + az) .^ 2 * sec(ze) .^ 2 + cos(Psi_v + az) .^ 2);
     
     ratio = k_prime_sq./k;
     if L == 0
