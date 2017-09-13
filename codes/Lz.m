@@ -1,5 +1,4 @@
 function [R_rytov,k_par,k_par_ind] = Lz(Fs,NFFT,V,Psi_v,az,ze,L,z)
-    load lz.mat
     %convert L,z to km
     L = L;
     z = z;

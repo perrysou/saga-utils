@@ -2,6 +2,8 @@ function [rx_struct] = rx_dirs(cases_folder,year,doy)
 sep = filesep;
 if strcmp(doy,'342') && strcmp(year,'2013')
     comm = ['dir -d1 ',cases_folder,year,sep,doy,sep,'{grid*,ASTRA*}'];
+elseif strcmp(doy,'233') && strcmp(year,'2017')
+    comm = ['ls -d1 ',cases_folder,year,sep,doy,sep,'grid*'];
 else
     comm = ['dir -d1 ',cases_folder,year,sep,doy,sep,'grid*'];
 end

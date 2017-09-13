@@ -1,6 +1,7 @@
 %Spectral Analysis Part
-
-load lz.mat
+clear all;
+load lz.mat;
+[~, op_path, ~] = ver_chk;
 v_ccmin = [0.6];
 v_dtau = 60;
 for i_dtau = 1:length(v_dtau)
@@ -10,7 +11,7 @@ for i_dtau = 1:length(v_dtau)
 %     [tslist, telist] = dividet_v3(t, dtau*3/4, 10);
     [tslist telist telist - tslist]
     for tt = 1:length(telist)        
-        if ~isnan(vmag) && ~isnan(vang) && 0
+        if ~isnan(vmag) && ~isnan(vang)
             %spectral analysis
             %                     if (strcmp(doy,'051') || strcmp(doy,'342')) && ccmin == 0.6 && dtau == 60
             Fs = 100;

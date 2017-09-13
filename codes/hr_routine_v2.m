@@ -56,7 +56,7 @@ for yearnum = yearlist
         end
         
         %check if low rate data has already been processed
-        matfile = dir([op_path, 'lrdata_', year, '_', doy, '.mat'])
+        matfile = dir([op_path, 'lrdata_', num2str(signal_type), '_', year, '_', doy, '.mat'])
         if ~isempty(matfile) && matfile.datenum >= datenum([2015, 5, 30, 0, 0, 0])
             disp([op_path, 'lrdata_', year, '_', doy, '.mat already exists']);
         else
@@ -65,7 +65,7 @@ for yearnum = yearlist
             [MSP, MS4, HITDATA, CST, rcvr_op, tlim, splim, s4lim, signal] = scint_el_stackplot(cases_folder, home_dir, signal_type, doy, year, spmask, s4mask);
             lrdata = {MSP, HITDATA, CST, rcvr_op, tlim, splim, signal, spmask, MS4, s4mask, s4lim};
             if ~isempty(MSP) && ~isempty(MS4)
-                save([op_path, 'lrdata_', year, '_', doy, '.mat'], 'lrdata');
+                save([op_path, 'lrdata_', num2str(signal_type), '_', year, '_', doy, '.mat'], 'lrdata');
             else
                 disp('No data for this day, exiting....');
                 continue;
@@ -73,7 +73,7 @@ for yearnum = yearlist
         end
         %% Generate low-rate sigmaphi stackplots
         %load low rate results
-        lrfile = [op_path, 'lrdata_', year, '_', doy, '.mat'];
+        lrfile = [op_path, 'lrdata_', num2str(signal_type), '_', year, '_', doy, '.mat'];
         load(lrfile);
         tlim_vec = datevec(lrdata{5})
         hr_times = [];
@@ -97,22 +97,22 @@ for yearnum = yearlist
         % rcvr_struct = ['grid108';'grid154';'grid160';'grid161';'grid162';'grid163'];
         
         if ~isempty(MSP)
-            lr_rx_stackplot(lrdata,year,doy,rcvr_struct,op_path,'sp');
-            lr_prn_stackplot(lrdata,year,doy,rcvr_struct,op_path,'sp');
+            %             lr_rx_stackplot(lrdata,year,doy,rcvr_struct,op_path,'sp');
+            %             lr_prn_stackplot(lrdata,year,doy,rcvr_struct,op_path,'sp');
         else % no enough scintillation data to conitue, considered a quiet day
             disp(['doy:', doy, ' of ', year, ' is a quiet day']);
         end
         
         if ~isempty(MS4)
-            lr_rx_stackplot(lrdata,year,doy,rcvr_struct,op_path,'s4');
-            lr_prn_stackplot(lrdata,year,doy,rcvr_struct,op_path,'s4');
+            %             lr_rx_stackplot(lrdata,year,doy,rcvr_struct,op_path,'s4');
+            %             lr_prn_stackplot(lrdata,year,doy,rcvr_struct,op_path,'s4');
         else % no enough scintillation data to conitue, considered a quiet day
             disp(['doy:', doy, ' of ', year, ' is a quiet day']);
             continue;
         end
         
-%         exit;
-%         return;
+        %         exit;
+        %         return;
         
         %save MSP for each day into MEGA_MSP
         % datevec(MSP([1 end],1))
@@ -190,27 +190,27 @@ for yearnum = yearlist
         
         lrtimesfile = [home_dir, 'Dropbox/research/lrtimes', '_', year, '_', doy, '.mat']
         if isempty(dir(lrtimesfile))
-            disp([lrtimesfile, 'already exists']);
+            disp([lrtimesfile, 'doesn not exist']);
             [mega_t, TSP_hr0, TSP_hrv0] = find_general_times(MSP, rcvr_op, spth_hr);
             TSP_hrv0
-            save(lrtimesfile,'MSP','rcvr_op','spth_hr','TSP_hr0','TSP_hrv0');
+            save(lrtimesfile, 'MSP', 'rcvr_op', 'spth_hr', 'TSP_hr0', 'TSP_hrv0');
         else
-            load(lrtimesfile);            
+            load(lrtimesfile);
             TSP_hrv0
         end
-              
-%         keyboard;
+        
+        %         keyboard;
         e_common = findhrtimes(year, doy);
-        t0 = datevec(e_common(:,2));
-        tf = datevec(e_common(:,3));
-        e_common0 = [e_common(:,1), t0(:,4), t0(:,5), ...
-            tf(:,4), tf(:,5), e_common(:,end)]
-%         keyboard;
+        t0 = datevec(e_common(:, 2));
+        tf = datevec(e_common(:, 3));
+        e_common0 = [e_common(:, 1), t0(:, 4), t0(:, 5), ...
+            tf(:, 4), tf(:, 5), e_common(:, end)]
+        %         keyboard;
         TSP_hr0_short = TSP_hr0(1:10,:);
         TSP_hrv0_short = TSP_hrv0(1:10,:);
         TSP_hr = TSP_hr0;
         
-%         keyboard;
+        %         keyboard;
         % continue;
         %%
         %receiver structure of high rate data, different from that of low rate as
@@ -239,35 +239,35 @@ for yearnum = yearlist
         end
         
         rcvr_op_hr;
-        continue;
+        %         continue;
         %% High-rate processing w/{w/o} specified PRNs or time intervals
         flag = 'single';
-%         flag = 'multiple';
+        %         flag = 'multiple';
         if strcmp(flag, 'single')
-            prnlist = unique(TSP_hr(:, 1), 'stable'); 
+            prnlist = unique(TSP_hr(:, 1), 'stable');
             prnlist = prnlist(1);
-        else         
-            prnlist = e_common(:,1);
-%             t_common = unique(e_common(:,2:3),'rows','stable');
-            t_common = e_common(:,2:3);
+        else
+            prnlist = e_common(:, 1);
+            %             t_common = unique(e_common(:,2:3),'rows','stable');
+            t_common = e_common(:, 2:3);
         end
-%         keyboard;
+        %         keyboard;
         switch doy
-%             case '342'
-%                 prnlist = [23,10,13];
-                %     case '050'
-                %         prnlist = [17];
+            %             case '342'
+            %                 prnlist = [23,10,13];
+            %     case '050'
+            %         prnlist = [17];
             case '051'
                 prnlist = [29];
             case '076'
-                prnlist = [27 22 18];
+                prnlist = [27, 22, 18];
                 %         prnlist = [27];
                 %     case '077'
                 %         prnlist = [25 29 31];
                 %         prnlist = 1;
         end
         length(prnlist)
-        for kk = 1:min(3,length(prnlist))
+        for kk = 1:min(3, length(prnlist))
             %  for kk = 1
             % for kk = 1:min(length(prnlist),5)
             prn = prnlist(kk)
@@ -277,15 +277,15 @@ for yearnum = yearlist
                 trow = find(prnlist == prn);
             end
             length(trow)
-            for irow = 1%:length(trow)
+            for irow = 1 %:length(trow)
                 if strcmp(flag, 'single')
-                    tt = TSP_hr(trow(irow), 2:3)';   
+                    tt = TSP_hr(trow(irow), 2:3)';
                     duration = TSP_hr(trow(irow), 4);
                     sp_median = TSP_hr(trow(irow), 5);
                 else
-                    tt =  t_common(trow(irow),:)';
+                    tt = t_common(trow(irow),:)';
                     duration = diff(tt) * 24 * 60;
-               end
+                end
                 
                 %         datevec(tt)
                 %         if (isempty(t_old) && diff(tt)<=dt)
@@ -297,11 +297,11 @@ for yearnum = yearlist
                 %         end
                 %         tt = tt_new;
                 datevec(tt)
-%                 keyboard;
+                %                 keyboard;
                 init_time = datevec(tt(1));
-                init_time = datenum([init_time(1:4), 0, 0])                
+                init_time = datenum([init_time(1:4), 0, 0])
                 xtime = (tt - init_time) * 24 * 3600;
-
+                
                 %
                 %         specify times of interest used in the case study
                 switch prn
@@ -314,9 +314,9 @@ for yearnum = yearlist
                     %             case {21}
                     %                 init_time = datenum([2015 3 17 11 0 0]);
                     %                 xtime = [0;3600*3];
-%                                 case {10,13}
-%                                     init_time = datenum([2013 12 8 3 0 0]);
-%                                     xtime = [2604.4;4648.9];
+                    %                                 case {10,13}
+                    %                                     init_time = datenum([2013 12 8 3 0 0]);
+                    %                                     xtime = [2604.4;4648.9];
                     %             case {31,29,25}
                     %                 init_time = datenum([2015 3 18 7 50 0]);
                     %                 xtime = [0;2400];
@@ -325,7 +325,7 @@ for yearnum = yearlist
                     %                 xtime = [-600;600];
                 end
                 
-%                         keyboard;
+                %                         keyboard;
                 %         xtime = [3600;2*3600+45*60];
                 %         xtime = [3600+1800;2*3600];
                 tt = init_time + xtime / 24 / 3600;
@@ -344,7 +344,7 @@ for yearnum = yearlist
                 catch
                     SCINTEVENTS = [SCINTEVENTS; ...
                         [yearnum, doynum, prn, tstt(4:5), tend(4:5), duration]]
-
+                    
                 end
             end
         end

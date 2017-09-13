@@ -99,14 +99,21 @@ switch plot_str
             ' of year:',num2str(year)]);
 end
 
-op_path = ['/data1/public/webplots/cases_quicklook/',num2str(year),...
+op_path2 = ['/data1/public/webplots/cases_quicklook/',num2str(year),...
     sep,num2str(doy,'%03i'),sep];
-comm = ['mkdir -p ',op_path];
+comm = ['mkdir -p ',op_path2];
 system(comm);
-saveas(gca,[op_path,signal,'_',plot_str,'_lr_prn_stackplot_',num2str(year),'_',...
+try
+saveas(gca,[op_path2,signal,'_',plot_str,'_lr_prn_stackplot_',num2str(year),'_',...
     num2str(doy,'%03i'),'_',num2str(mask),'.png'],'png');
+saveas(gca,[op_path2,signal,'_',plot_str,'_lr_prn_stackplot_',num2str(year),'_',...
+    num2str(doy,'%03i'),'_',num2str(mask),'.eps'],'epsc2');
 saveas(gca,[op_path,signal,'_',plot_str,'_lr_prn_stackplot_',num2str(year),'_',...
     num2str(doy,'%03i'),'_',num2str(mask),'.eps'],'epsc2');
+catch
+saveas(gca,[op_path,signal,'_',plot_str,'_lr_prn_stackplot_',num2str(year),'_',...
+    num2str(doy,'%03i'),'_',num2str(mask),'.eps'],'epsc2');
+end
 close;
 toc
 end

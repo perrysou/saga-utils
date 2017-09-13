@@ -59,7 +59,7 @@ for kk = 1:32
     end
     if kk == 32 || kk == 16
 %         legend(RCVRNAME);
-        ylabel('el [deg], \sigma_\phi [cycle]')
+        ylabel('el [deg], $\sigma_\phi$ [cycle]')
     end
     SPM = [SPM;spm];
     S4M = [S4M;s4m];

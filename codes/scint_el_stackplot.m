@@ -118,10 +118,11 @@ for rr = 1:size(rcvr_struct,1)
         doy,year,sep,in_path,op_path,signal);
     read_iono(doy,year,sep,in_path,op_path,signal);
     %repacking
-    repack_comm = ['sh ',home_dir,'repack_v1.sh ',in_path_tmp,' ',op_path];
-    system(repack_comm);
-    repack_comm = ['sh ',home_dir,'repack_v1.sh ',in_path_tmp_offset,' ',op_path];
-    system(repack_comm);
+    %2017/9/11 commented out repack commands just to be safe
+%     repack_comm = ['sh ',home_dir,'repack_v1.sh ',in_path_tmp,' ',op_path];
+%     system(repack_comm);
+%     repack_comm = ['sh ',home_dir,'repack_v1.sh ',in_path_tmp_offset,' ',op_path];
+%     system(repack_comm);
 end
 refprn = unique(REF);
 if isempty(rcvr_op)
@@ -199,7 +200,7 @@ for kk = 1:32
     ylim([0 splim*1.2]);
     xlabel(['PRN',num2str(kk)]); 
     if kk == 32 || kk == 16
-        ylabel('\sigma_\phi in [rad]');
+        ylabel('$\sigma_\phi$ in [rad]');
         legend(RCVRNAME);
     end
 end
@@ -302,7 +303,7 @@ for kk = 1:32
     xlabel(['PRN',num2str(kk)]);
     
     if kk == 32 || kk == 16
-        ylabel('\sigma_\phi in [rad]');
+        ylabel('$\sigma_\phi$ in [rad]');
         legend(RCVRNAME);
     end
 end
