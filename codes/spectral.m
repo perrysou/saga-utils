@@ -6,8 +6,8 @@ v_ccmin = [0.6];
 v_dtau = 60;
 
 % flags used in the analysis
-normalize = 1;
-fitall = 0;
+normalize = 0;
+fitall = 1;
 for i_dtau = 1:length(v_dtau)
     dtau = v_dtau(i_dtau);
     [tslist, telist] = dividet_v2(t, dtau, 10);
@@ -16,19 +16,28 @@ for i_dtau = 1:length(v_dtau)
 %     [tslist telist telist - tslist]
     for tt = 1:length(telist)        
         if ~isnan(vmag) && ~isnan(vang)
-            %spectral analysis
-%             if (strcmp(doy,'051') || strcmp(doy,'342')) && ccmin == 0.6 && dtau == 60
             Fs = 100;
+            
+            %get time-shifted signals
+            [ph_truncated, pwr_truncated] = ...
+                plot_shifted(xdata, tpeak, rcvr_op, sitenum_op, combos,  Fs);
             for rr = 1:size(rcvr_op, 1)
                 if strcmp(rcvr_op(rr,:), 'ASTRArx') && strcmp(doy, '342') && strcmp(year, '2013')
                     AZ(tt, rr) = mean(AZ(tt, [1:rr - 1, rr + 1:end]));
                     ZE(tt, rr) = mean(ZE(tt, [1:rr - 1, rr + 1:end]));
                 end
-                zmin = 100e3; zmax = 1000e3; Lmin = 50e3; step = 25e3;
+                zmin = 100e3; zmax = 1000e3; Lmin = 25e3; step = 25e3;
+                
                 %Amplitude and phase of the receivered signal
-                l = length(xdata{rr}(:, 1));
-                pwr = xdata{rr}(:, 2); %+ 0.25*randn(l,1);
-                ph = xdata{rr}(:, 3); %+ 0.25*randn(l,1);        
+                
+                %original signals
+                pwr_o = xdata{rr}(:, 2); %+ 0.25*randn(l,1);
+                ph_o = xdata{rr}(:, 3); %+ 0.25*randn(l,1);
+                %time-shifted, aligned and truncated signals
+                pwr = pwr_truncated{rr}; %+ 0.25*randn(l,1);
+                ph = ph_truncated{rr}; %+ 0.25*randn(l,1);                
+                
+                l = length(pwr_truncated{rr}(:, 1));
                 NFFT = 2^nextpow2(l);
                [Spwr_obs{tt, rr}, ~] = pwelch(log(pwr), [], [], NFFT, Fs, 'power');
         %         [Spwr_obs{tt, rr}, f] = periodogram(pwr, [], [], NFFT, 'psd', Fs);
@@ -46,14 +55,15 @@ for i_dtau = 1:length(v_dtau)
                         z = zgrid(i,j);
                         if L < z  
                             if fitall == 0
-                                [R_rytov, k_par, k_par_index] = Lz(vmag, vang, AZ(tt, rr), ZE(tt, rr), L, z, f);                                                        
+                                [R_rytov, k_par, k_par_index, R_Bust] = Lz(vmag, vang, AZ(tt, rr), ZE(tt, rr), L, z, f);                                                        
                                 R_obs_c = R_obs(k_par_index, rr);
                             else
-                                [R_rytov, k_par, k_par_index] = Lz(vmag, vang, AZ(tt, :), ZE(tt, :), L, z, f);
+                                [R_rytov, k_par, k_par_index, R_Bust] = Lz(vmag, vang, AZ(tt, :), ZE(tt, :), L, z, f);
                                 R_obs_c = R_obs(k_par_index, :);
                             end
                             
                             R_rytov_c = R_rytov(k_par_index, :);
+                            R_Bust_c = R_Bust(k_par_index, :);
                             
                             % normalized?
                             if normalize == 0
@@ -104,24 +114,24 @@ for i_dtau = 1:length(v_dtau)
             end
             xl = [-inf, inf]; %xl = [1e-3 1e-1];
 %             return;
-%             for rr = 1:size(rcvr_op, 1)
-%                 figall = figure;                
-%                 loglog(k_par, Spwr_obs{tt, rr}, 'b', ...
-%                     k_par, Sph_obs{tt, rr}, 'k', ...
-%                     k_par, R_obs(:, rr), 'r');
-%                 xlim(xl);
-%                 %                     set(gca,'YTick',[1e-5 1e-4 1e-3 1e-2 1e-1 1e0 1e1 1e2]);
-%                 title('Observed Log-Amplitude to Phase Power Spectrum Ratio');
-%                 legend({'Log-Amplitude', 'Phase', 'Ratio'}, 'location', 'southwest');
-%                 xlabel(['Wavenumber along Drift Velocity Direction $k_{\parallel}$ [rad/m], ', sitenum_op{rr,:}]);
-%                 %                     legend({'Phase','Log_{10} Power'},'location','best')
-%                 plotname = [year, '_', doy, '_PRN', num2str(prn), '_', sitenum_op{rr,:}, '_ObservedRatio_', ...
-%                     num2str(tslist(tt), '%.0f'), '-', num2str(telist(tt), '%.0f'), 's_after_', ...
-%                     datestr(init_time, 'HHMM'), 'UT'];
-%                 plotpath = [op_path, plotname, '.png'];
-%                 saveas(gcf, plotpath, 'png');
-%                 close;
-%             end
+            for rr = 1:size(rcvr_op, 1)
+                figall = figure;                
+                loglog(k_par, Spwr_obs{tt, rr}, 'b', ...
+                    k_par, Sph_obs{tt, rr}, 'k', ...
+                    k_par, R_obs(:, rr), 'r');
+                xlim(xl);
+                %                     set(gca,'YTick',[1e-5 1e-4 1e-3 1e-2 1e-1 1e0 1e1 1e2]);
+                title('Observed Log-Amplitude to Phase Power Spectrum Ratio');
+                legend({'Log-Amplitude', 'Phase', 'Ratio'}, 'location', 'southwest');
+                xlabel(['Wavenumber along Drift Velocity Direction $k_{\parallel}$ [rad/m], ', sitenum_op{rr,:}]);
+                %                     legend({'Phase','Log_{10} Power'},'location','best')
+                plotname = [year, '_', doy, '_PRN', num2str(prn), '_', sitenum_op{rr,:}, '_ObservedRatio_', ...
+                    num2str(tslist(tt), '%.0f'), '-', num2str(telist(tt), '%.0f'), 's_after_', ...
+                    datestr(init_time, 'HHMM'), 'UT'];
+                plotpath = [op_path, plotname, '.png'];
+                saveas(gcf, plotpath, 'png');
+                close;
+            end
             fighat = figure;
             if size(rcvr_op, 1) > 2
                 set(gcf, 'papersize', [8, 2*size(rcvr_op, 1)], ...
@@ -131,15 +141,23 @@ for i_dtau = 1:length(v_dtau)
             end
             [sp, ~] = tight_subplot(size(rcvr_op, 1), 1, [0, 0.03], [0.11, 0.05], [0.11, 0.05]);
             for rr = 1:size(rcvr_op, 1)   
-                [R_rytov_hat, k_par, k_par_index] = Lz(vmag, vang, ...
+                [R_rytov_hat, k_par, k_par_index, R_Bust] = Lz(vmag, vang, ...
                     AZ(tt, rr), ZE(tt, rr), L_hat(:, rr), z_hat(:, rr), f);
+                [R_rytov_fixed, ~, k_par_index_Bust, R_Bust_fixed] = Lz(vmag, vang, ...
+                    AZ(tt, rr), ZE(tt, rr), 500e3, 200e3, f);
                 k_par_c = k_par(k_par_index,:);
                 R_rytov_hat_c(:, rr) = R_rytov_hat(k_par_index, :);
                 R_obs_c(:, rr) = R_obs(k_par_index, rr);
-                loglog(sp(rr), k_par_c, R_obs_c(:, rr), 'r', k_par_c, R_rytov_hat_c(:, rr), 'c');
-                legend(sp(rr), ['Observed,', sitenum_op{rr,:}], ...
-                    ['Rytov, $\hat{L} =$ ', num2str(L_hat(:, rr) / 10^3), 'km, $\hat{z} =$ ', num2str(z_hat(:, rr) / 10^3), 'km'] ...
-                    , 'location', 'southeast');
+                loglog(sp(rr), k_par_c, R_obs_c(:, rr), 'r', ...
+                    k_par_c, R_rytov_hat_c(:, rr), 'c', ...
+                    k_par_c, R_Bust(k_par_index), 'k', ...
+                    k_par_c, R_rytov_fixed(k_par_index), 'g', ...
+                    k_par_c, R_Bust_fixed(k_par_index), 'b');
+%                 legend(sp(rr), ['Observed, ', sitenum_op{rr,:}], ...
+%                     ['Rytov, $\hat{L} =$ ', num2str(L_hat(:, rr) / 10^3), 'km, $\hat{z} =$ ', num2str(z_hat(:, rr) / 10^3), 'km'], ...
+%                     ['Bust, $\hat{L} =$ ', num2str(L_hat(:, rr) / 10^3), 'km, $\hat{z} =$ ', num2str(z_hat(:, rr) / 10^3), 'km'], ...
+%                     'Bust, $\hat{L} = 500$ km, $\hat{z} = 200$ km' ...
+%                     , 'location', 'southeast', 'orientation', 'vertical');
 
                 xlim(sp(rr), xl);
                 ylim(sp(rr), [10^-5, 10^2.5]);
@@ -153,12 +171,14 @@ for i_dtau = 1:length(v_dtau)
             title(sp(1), 'Rytov and Observed Log-Amplitude to Phase Power Spectrum Ratio');
             xlabel(sp(rr), 'Wavenumber along Drift Velocity Direction $k_{\parallel}$ [rad/m]');
             set(sp(1 : (rr - 1)), 'xticklabel', []);
-            set(sp([2: 2: rr]), 'yticklabel', []);
+            set(sp(2: 2: rr), 'yticklabel', []);
+            tightfig;
             plotname = [year, '_', doy, '_PRN', num2str(prn), '_', sitenum_op{rr,:}, '_RytovObserved_', ...
                     num2str(tslist(tt), '%.0f'), '-', num2str(telist(tt), '%.0f'), 's_after_', ...
                     datestr(init_time, 'HHMM'), 'UT_', num2str(normalize), '_', num2str(fitall)];
             plotpath = [op_path, plotname, '.png'];
             saveas(gcf, plotpath, 'png');
+%             print(gcf, [plotpath, '_pver.png'], '-dpng', '-r600');
 %                 close;
            
             close;

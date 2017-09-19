@@ -37,7 +37,6 @@ data = horzcat(xdata{:});
 tmat = data(:, 1:size(xdata{1}, 2):end);
 obsmat = data(:, colnum:size(xdata{1}, 2):end);
 
-
 [rhoarr, lag] = xcorr(obsmat);
 rhomax = max(rhoarr);
 
