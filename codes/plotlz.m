@@ -27,7 +27,7 @@ end
 year = num2str(tstt(1));
 doy = num2str(floor(datenum(tstt)-datenum([tstt(1), zeros(1, 5)])), '%03i');
 matfilestruct = dir([MEGAVEST_path, 'xcorr_*.mat']);
-tau = 30;
+tau = 60;
 col = [3 4 5];
 [sp, ~] = tight_subplot(length(col), 1, [0.05, 0], [0.18, 0.05], [0.11, 0.05]);
 matfilesname = dir([MEGAVEST_path, ...
