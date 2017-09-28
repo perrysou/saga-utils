@@ -34,14 +34,15 @@ k = 2 * pi * 1575.42 * 10^6 / c;
 % Dr. Bust's way
 k_x = k_v * cos(Psi_v);
 k_y = k_v * sin(Psi_v);
-k_squared_Bust = repmat(k_v.^2, 1, length(az)) + (k_x.^2 * cos(az).^2 + k_y.^2 * sin(az).^2) .* tan(ze).^2;
+k_squared_Bust = repmat(k_v.^2, 1, length(az)) + ...
+    (k_x.^2 * cos(az).^2 + k_y.^2 * sin(az).^2) .* repmat(tan(ze).^2, length(k_v), 1);
 
 % Our way
 k_squared = k_v.^2 * (sin(Psi_v+az).^2 .* sec(ze).^2 + cos(Psi_v+az).^2);
 
 %effective thickness and height along signal ray path
-thickness_effective = thickness * sec(ze);
-height_effective = height * sec(ze);
+thickness_effective = thickness * repmat(sec(ze), length(k_v), 1);
+height_effective = height * repmat(sec(ze), length(k_v), 1);
 
 ratio = k_squared ./ k;
 
@@ -70,9 +71,8 @@ R_rytov_Bust = S_minus_Bust ./ S_plus_Bust;
 
 %     loglog(k_v, R_rytov, k_v, R_rytov_Bust);
 % Difference between Bust and Ours
-diff_sqr = sumsqr(R_rytov-R_rytov_Bust);
+% diff_sqr = sumsqr(R_rytov-R_rytov_Bust);
 %     fprintf('%f\n', diff_sqr);
 
 end
-
 

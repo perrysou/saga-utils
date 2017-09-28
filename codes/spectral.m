@@ -34,7 +34,7 @@ if welch
 else
     spectrumflag = 'periodogram';
 end
-overlap = 0;
+overlap = 1;
 if overlap
     overlapflag = '50overlap';
 else
@@ -65,14 +65,14 @@ if ~isnan(vmag) && ~isnan(vang)
     Fs = 100;
     
     %get time-shifted signals
-    [ph_truncated, pwr_truncated] = ...
-        plot_shifted(xdata, tpeak, rcvr_op, sitenum_op, combos, Fs);
+%     [ph_truncated, pwr_truncated] = ...
+%         plot_shifted(xdata, tpeak, rcvr_op, sitenum_op, combos, Fs);
     for rr = 1:size(rcvr_op, 1)
         if strcmp(rcvr_op(rr,:), 'ASTRArx') && strcmp(doy, '342') && strcmp(year, '2013')
             AZ(tt, rr) = mean(AZ(tt, [1:rr - 1, rr + 1:end]));
             ZE(tt, rr) = mean(ZE(tt, [1:rr - 1, rr + 1:end]));
         end
-        zmin = 100e3; zmax = 600e3; Lmin = 25e3; step = 25e3;
+        zmin = 100e3; zmax = 1000e3; Lmin = 25e3; step = 25e3;
         
         %Amplitude and phase of the receivered signal
         
@@ -80,17 +80,18 @@ if ~isnan(vmag) && ~isnan(vang)
         pwr_o = xdata{rr}(:, 2); %+ 0.25*randn(l,1);
         ph_o = xdata{rr}(:, 3); %+ 0.25*randn(l,1);
         %time-shifted, aligned and truncated signals
-        pwr = pwr_truncated{rr}; %+ 0.25*randn(l,1);
-        ph = ph_truncated{rr}; %+ 0.25*randn(l,1);
+        pwr = pwr_o; %+ 0.25*randn(l,1);
+        ph = ph_o; %+ 0.25*randn(l,1);
         
-        l = length(pwr_truncated{rr}(:, 1));
+        l = length(pwr);
         NFFT = 2^nextpow2(l);
+        l = NFFT;
         
         if windowed
-            window_welch = hamming(1000);
-            window_period = hamming(l);
+            window_welch = [];
+            window_period = [];
         else
-            window_welch = ones(1000, 1);
+            window_welch = ones(l, 1);
             window_period = ones(l, 1);
         end
         

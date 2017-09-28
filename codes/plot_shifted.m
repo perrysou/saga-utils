@@ -12,8 +12,16 @@ for rr = 1:size(rcvr_op, 1)
     leadnum(rr) = length(find(tpeaks_rr < 0));
     lagnum(rr) = size(rcvr_op, 1) - 1 - leadnum(rr);
 end
+
+
 rr_lead = find(leadnum == max(leadnum));
 rr_lag = find(lagnum == max(lagnum));
+
+leadsumsqr = sum(tpeaks_array(:, rr_lead).^2);
+lagsumsqr = sum(tpeaks_array(:, rr_lag).^2);
+
+rr_lead = rr_lead(leadsumsqr == min(leadsumsqr));
+rr_lag = rr_lag(lagsumsqr == min(lagsumsqr));
 
 % tmat(:,1) = tmat(:,1) - 2.79;
 % tmat(:,2) = tmat(:,2) - 2.53;

@@ -1,6 +1,4 @@
-function [AZb, ELb, beamid] = plotPFISR_NeTe(t0, tf, flag)
-t0 = [2013, 12, 8, 3, 43, 24.3627000000015];
-tf = [2013, 12, 8, 4, 17, 28.9386000000013];
+function [AZb, ELb, beamid, op_path] = plotPFISR_NeTe(t1, t2, flag)
 t0 = [2013, 12, 8, 3, 30, 0];
 tf = [2013, 12, 8, 4, 30, 0];
 flag = 'Ne';
@@ -20,7 +18,7 @@ if strcmp(flag, 'Ne')
     cols = 6;
 end
 
-delta = 1;
+delta = 0;
 if delta
     deltaflag = 'delta';
 else
@@ -28,27 +26,28 @@ else
 end
 
 %creat folders for figures
-op_path = char(strjoin([string(op_path), "research - misc", "ION2017", "figs", ...
-    flag, deltaflag, filesep], filesep));
-mkdir = strjoin(["mkdir, -p", op_path]);
-system(char(mkdir));
+op_path = strjoin({op_path, 'research-misc', 'ION2017', 'figs', ...
+    flag, deltaflag, filesep}, filesep);
+mkdir = strjoin({'mkdir -p', op_path});
+system(mkdir);
 
 data = [datenum(PFISR_data(:, 1:6)), PFISR_data(:, 7:end)];
 data = data(data(:, 1) <= datenum(tf)+360/24/3600 & data(:, 1) >= datenum(t0)-360/24/3600,:);
 if ~isempty(data)
     beamid = unique(data(:, 4), 'stable');
-    for ibeam = 1:length(beamid)
+    for ibeam = length(beamid)
         AZb(ibeam,:) = unique(data(data(:, 4) == beamid(ibeam), 2));
         ELb(ibeam,:) = unique(data(data(:, 4) == beamid(ibeam), 3));
         beamstr = strjoin({num2str(beamid(ibeam)), ...
-            [num2str(AZb(ibeam,:)), '$^\circ$N az'], [num2str(ELb(ibeam,:)), '$^\circ$N el']}, ', ');
-        figure;
+            [num2str(AZb(ibeam,:)), '$^\circ$ az'], [num2str(ELb(ibeam,:)), '$^\circ$ el']}, ', ');
+%         subplot(2,1,2);
         data_beam = data(data(:, 4) == beamid(ibeam),:);
         ranges = unique(data_beam(:, 5), 'stable');
         times = unique(data_beam(:, 1), 'stable');
         ne = 10.^data_beam(:, cols);
         te = data_beam(:, 10);
         negrid = reshape(ne, length(ranges), []);
+%         continue;
         difftimenegrid = [diff(negrid, 1, 2), NaN(length(ranges), 1)] ./ ...
             [diff(times) * 24 * 3600; NaN]';
         diffrangenegrid = [diff(negrid, 1, 1); NaN(1, length(times))] ./ ...
@@ -74,14 +73,14 @@ if ~isempty(data)
                 '$\log_{10}{N_e} [m^{-3}]$', ...
                 'interpreter', 'latex');
         end
-        %         shading flat;
-        datetick('x', 'HH:MM', 'keeplimits');
-        %         datetick('x', 'HH:MM');
+        shading flat;       
         set(gca, 'layer', 'top');
         grid off;
         xlabel('Time [HH:MM UT]');
         ylabel('Altitude [km]');
-        ylim([100, 550]);
+        ylim([100, 600]);
+        xlim(datenum([t1; t2]));
+        datetick('x', 'HH:MM', 'keeplimits');
         plotname = strjoin({num2str(beamid(ibeam)), flag, deltaflag}, '_');
         plotpath = [op_path, plotname, '.png'];
         saveas(gcf, plotpath, 'png');
@@ -91,7 +90,7 @@ else
     AZb = NaN;
     ELb = NaN;
 end
-close all;
+% close all;
 end
 
 

@@ -1,3 +1,3 @@
 function [] = btfy(varargin)
-MBeautify.formatCurrentEditorPage(true);
+MBeautify.formatCurrentEditorPage();
 end
