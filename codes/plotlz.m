@@ -96,12 +96,41 @@ matfilesname = dir([MEGAVEST_path, ...
                     topheight_kk = MEGA_LZ(:, kk, 4);
                     
                     if col(subi) == 5
-                        rect(kk, :) = patch(sp(subi), ...
+                        bottomheight = topheight - thickness;
+                        rect_kk(kk, :) = patch(sp(subi), ...
                             [x_kk, y_kk, y_kk, x_kk]', ...
                             [bottomheight_kk, bottomheight_kk, topheight_kk, topheight_kk]', ...
                             'k', 'edgecolor', rx_color(sitenum_op{kk}), ...
                             'linewidth', 1.5, 'facealpha', 1 / length(sitenum_op));
-                        set(sp(subi), 'layer', 'top');
+                    end
+                    
+                    if col(subi) == 5 && kk == length(sitenum_op)
+                        boxes_overlap = [];
+                        for i = ngood'
+                            seq = [bottomheight(i, :); topheight(i, :)];
+                            trx = mat2cell(seq, 2, ones(1, length(sitenum_op)));
+                            [t_common, ~] = find_common_times_v2(trx);
+                            for j = 1:length(sitenum_op) - 1
+                                layer = horzcat(t_common{j, :});
+                                if isempty(layer)
+                                    continue;                                 
+                                else
+                                    b = layer(1, :);
+                                    t = layer(2, :);
+                                    if ~all(b == t)
+                                        boxes_overlap = [boxes_overlap; ...
+                                            patch(sp(subi), ...
+                                            [repmat(MEGA_LZ(i, 1, 1), 1, size(layer, 2)); ... 
+                                            repmat(MEGA_LZ(i, 1, 2), 2, size(layer, 2)); ...
+                                            repmat(MEGA_LZ(i, 1, 1), 1, size(layer, 2))], ...
+                                            [repmat(b, 2, 1); repmat(t, 2, 1)], ...
+                                             'w', 'edgecolor', 'k', ...
+                                            'linewidth', 1.5, 'facealpha', 0)];
+                                        break;
+                                    end
+                                end
+                            end
+                        end
                     end   
                     
                     x = MEGA_LZ(:, :, 1);
@@ -169,7 +198,7 @@ for subi = 1:length(col)
 end
 
 % adjust the legend
-lg = legend(rect, sitenum_op, ...
+lg = legend(rect_kk, sitenum_op, ...
     'location','North','orientation','horizontal');
 lgpos = get(lg, 'Position');
 spposu = get(sp(end-1), 'outerPosition');
@@ -181,7 +210,8 @@ set(lg, 'position', ...
 h = get(sp(end), 'children');
 figcomp = figure;
 [~, ~, ~, op_path] = plotPFISR_NeTe(tmin, tmax, 'Ne');
-copyobj(h, gca);
+h_ = findobj(boxes_overlap, 'type', 'patch');
+copyobj(boxes_overlap, gca);
 set(gca, 'xtick', get(sp(end), 'xtick'));
 datetick('x', 'HH:MM', 'keepticks');
 set(gca, 'xlim', [tmin, tmax]);

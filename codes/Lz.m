@@ -20,8 +20,8 @@ k_v = 2 * pi * f / V;
 %limit the wavenumber within [10^-3, 0.5*10^-2]
 %     k_par_ind = find(k_par<=10^-1&k_par>=10^-3);
 index_valid = find(k_v >= 0);
-index_valid = find(f > 0.2 & k_v <= 3*10^-2);
-index_valid = find(f > 0.2);
+index_valid = find(f > 0.2 & k_v <= 0.11);
+% index_valid = find(f > 0.2);
 
 %incident wave number of the signal
 k = 2 * pi * 1575.42 * 10^6 / c;

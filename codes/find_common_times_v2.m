@@ -47,7 +47,9 @@ for tol = length(trx):- 1:2
     combos{length(trx)-tol+1,:} = nchoosek(1:length(trx), tol);
 end
 
-tmat = cell(length(combos));
+
+
+tmat = cell(length(combos), size(nchoosek(1:length(trx), tol), 1));
 for numrx = 1:length(combos)
     for numc = 1:size(combos{numrx,:}, 1)
         rxnum = combos{numrx,:}(numc, 1:end);

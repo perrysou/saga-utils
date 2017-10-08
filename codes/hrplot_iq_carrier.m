@@ -694,7 +694,7 @@ for i_dtau = 1:length(v_dtau)
         end   
         
         % do the fit for all receivers or individually? 
-        fitall = 1;
+        fitall = 0;
         if fitall
             fitflag = 'fitall';
         else
@@ -707,6 +707,13 @@ for i_dtau = 1:length(v_dtau)
             debugflag = 'yesBust';
         else
             debugflag = 'noBust';
+        end
+        
+        zeropadding = 1;
+        if zeropadding
+            zeropadflag = 'zeropadding';
+        else
+            zeropadflag = 'nopadding';
         end
         
         % welch method or basic periodogram?
@@ -732,7 +739,7 @@ for i_dtau = 1:length(v_dtau)
         factor = 1; %0.5
         
         % iteration grid
-        zmin = 150e3; zmax = 600e3; Lmin = 25e3; step = 25e3;
+        zmin = 125e3; zmax = 600e3; Lmin = 25e3; step = 25e3;
         
         % figure format, png/pdf/eps2c
         format = 'png'; suffix = '.png';
@@ -743,7 +750,7 @@ for i_dtau = 1:length(v_dtau)
         
         %creat folders for figures
         op_path = strjoin({op_path, 'research-misc', 'ION2017', 'figs', ...
-            normflag, debugflag, overlapflag, fitflag, filesep}, filesep);
+            normflag, debugflag, zeropadflag, overlapflag, fitflag, filesep}, filesep);
         mkdir = strjoin({'mkdir -p', op_path});
         system(mkdir);
         
@@ -776,8 +783,11 @@ for i_dtau = 1:length(v_dtau)
                 end
                 
                 l = length(pwr);
-                NFFT = 2^nextpow2(l);
-                NFFT = l;
+                if zeropadding                    
+                    NFFT = 2^nextpow2(l);
+                else
+                    NFFT = l;
+                end
                 
                 if windowed
                     window_welch = [];
@@ -788,12 +798,15 @@ for i_dtau = 1:length(v_dtau)
                 end    
                 
                 if overlap
-                    [Spwr_obs_welch{tt, rr}, ~] = pwelch(factor * log(pwr), window_welch, [], NFFT, Fs, 'psd');
-                    [Sph_obs_welch{tt, rr}, f] = pwelch(ph, window_welch, [], NFFT, Fs, 'psd');
+                    noverlap = [];
                 else
-                    [Spwr_obs_welch{tt, rr}, ~] = pwelch(factor * log(pwr), window_welch, 0, NFFT, Fs, 'psd');
-                    [Sph_obs_welch{tt, rr}, f] = pwelch(ph, window_welch, 0, NFFT, Fs, 'psd');
+                    noverlap = 0;
                 end                    
+                [Spwr_obs_welch{tt, rr}, ~] = pwelch(factor * log(pwr), window_welch, noverlap, NFFT, Fs, 'psd');
+                [Sph_obs_welch{tt, rr}, f] = pwelch(ph, window_welch, noverlap, NFFT, Fs, 'psd');
+                
+%                 keyboard;
+                
                 [Spwr_obs_period{tt, rr}, ~] = periodogram(factor * log(pwr), window_period, NFFT, Fs, 'psd');
                 [Sph_obs_period{tt, rr}, f] = periodogram(ph, window_period, NFFT, Fs, 'psd');
                 
@@ -894,7 +907,7 @@ for i_dtau = 1:length(v_dtau)
                 %                     set(gca,'YTick',[1e-5 1e-4 1e-3 1e-2 1e-1 1e0 1e1 1e2]);
                 title('Observed Log-Amplitude to Phase Power Spectrum Ratio');
                 legend({'Log-Amplitude', 'Phase', 'Ratio'}, 'location', 'southwest');
-                xlabel(['Wavenumber along Drift Velocity Direction $k_{\parallel}$ [rad/m], ', sitenum_op{rr,:}]);
+                xlabel(['Wavenumber along Drift Velocity Direction $\kappa_v$ [rad/m], ', sitenum_op{rr,:}]);
                 %                     legend({'Phase','Log_{10} Power'},'location','best')
                 tightfig;
                 plotname = [year, '_', doy, '_PRN', num2str(prn), '_', sitenum_op{rr,:}, '_ObservedRatio_', ...
@@ -950,7 +963,7 @@ for i_dtau = 1:length(v_dtau)
             end
             MEGA_LZ
             title(sp(1), 'Rytov and Observed Log-Amplitude to Phase Power Spectrum Ratio');
-            xlabel(sp(rr), 'Wavenumber along Drift Velocity Direction $k_{\parallel}$ [rad/m]');
+            xlabel(sp(rr), 'Wavenumber along Drift Velocity Direction $\kappa_v$ [rad/m]');
             set(sp(1 : (rr - 1)), 'xticklabel', []);
             set(sp(2: 2: rr), 'yticklabel', []);
             tightfig;
