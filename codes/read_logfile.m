@@ -25,9 +25,15 @@ yearstt = tstart(1);
 yearend = tend(1);
 %find days of year for start time and end time
 tstt_str = datestr(tstart,'mm/dd/yyyy');
-[~,doystt] = system(['date -ud ',tstt_str,' +%j']);
 tend_str = datestr(tend,'mm/dd/yyyy');
-[~,doyend] = system(['date -ud ',tend_str,' +%j']);
+if strcmp('MACI64', computer)
+    [~,doystt] = system(['date -ujf "%m/%d/%Y" ',tstt_str,' +%j']);
+    [~,doyend] = system(['date -ujf "%m/%d/%Y" ',tend_str,' +%j']);
+end
+if strcmp('GLNXA64', computer)
+    [~,doystt] = system(['date -ud ',tstt_str,' +%j']);
+    [~,doyend] = system(['date -ud ',tend_str,' +%j']);
+end
 doystt = str2num(doystt);
 doyend = str2num(doyend);
 % find gps times(gps week and second) for start time and end time

@@ -42,7 +42,7 @@ MEGA_MSP = [];
 MSP_days = [];
 SCINTEVENTS = [];
 %specify signal
-signal_type = 0 %[0 2]
+signal_type = 2 %[0 2]
 for yearnum = yearlist
     year = num2str(yearnum, '%04i')
     % for doy = yesterday
@@ -214,9 +214,9 @@ for yearnum = yearlist
         %         keyboard;
         TSP_hr0_short = TSP_hr0(1:10,:);
         TSP_hrv0_short = TSP_hrv0(1:10,:);
-        TSP_hr = TSP_hr0;
+        TSP_hr = TS4_hr0;
         
-        %         keyboard;
+%                 keyboard;
         % continue;
         %%
         %receiver structure of high rate data, different from that of low rate as
@@ -251,7 +251,7 @@ for yearnum = yearlist
         %         flag = 'multiple';
         if strcmp(flag, 'single')
             prnlist = unique(TSP_hr(:, 1), 'stable');
-            prnlist = prnlist(1);
+%             prnlist = prnlist(1);
         else
             prnlist = e_common(:, 1);
             %             t_common = unique(e_common(:,2:3),'rows','stable');
@@ -263,6 +263,9 @@ for yearnum = yearlist
             %                 prnlist = [23,10,13];
             %     case '050'
             %         prnlist = [17];
+            case '233'
+                prnlist = [2,12,25];
+                prnlist = [12];
             case '051'
                 prnlist = [29];
             case '076'
@@ -273,7 +276,7 @@ for yearnum = yearlist
                 %         prnlist = 1;
         end
         length(prnlist)
-        for kk = 1:min(3, length(prnlist))
+        for kk = 1:min(7, length(prnlist))
             %  for kk = 1
             % for kk = 1:min(length(prnlist),5)
             prn = prnlist(kk)
@@ -329,6 +332,12 @@ for yearnum = yearlist
                     %             case 1
                     %                 init_time = datenum([2015 3 18 15 2 0]);
                     %                 xtime = [-600;600];
+                end
+                
+                if strcmp(doy, '233')
+                    init_time = datenum([2017 8 21 18 0 0]);
+                    xtime = [0;3600];
+                    
                 end
                 
                 %                         keyboard;

@@ -10,10 +10,12 @@ sep = filesep;
 switch signal_type
     case 0
         signal = 'L1CA';
+        freq = 1575.42 * 10 ^ 6;
     case 1
         signal = 'L2CM';
     case 2
         signal = 'L2CL';
+        freq = 1227.60 * 10 ^ 6;
     case 3
         signal = 'L2CLM';
     case 4
@@ -46,8 +48,15 @@ tlim = (tspan_d' - init_time') * 24 * 3600;
 RCVRNAME = {};
 [sitenum_op] = rx2site(rcvr_op);
 
-hr_results = ['/data1/home/ysu27/PFRR_Data/hrplot_', ...
-    year, '_', doy, '_PRN', num2str(prn), datestr(tspan_d(1,:), '_HHMMUT'), '_zoom', num2str(zcounter), '.mat']
+if strcmp('MACI64', computer)
+    matfolder = '';
+end
+if strcmp('GLNXA64', computer)
+     matfolder = 'PFRR_Data';
+end
+
+hr_results = [home_dir, sep, matfolder,sep, ...
+    'hrplot_', year, '_', doy, '_PRN', num2str(prn), datestr(tspan_d(1,:), '_HHMMUT'), '_zoom', num2str(zcounter), '.mat']
 tic;
 % keyboard;
 % if isempty(dir(hr_results))
@@ -75,7 +84,9 @@ if 1
         if isempty(dir(infilename))
             disp('No existing data stored; first time reading data for this particular time period')
             DATAM2 = Fn_ReadHighRate_CASESdata_sdb(prn, op_path, cases_folder, rcvr_name, signal_type, tstt, tend);
-            save(infilename, 'DATAM2');
+            if ~isempty(DATAM2)
+                save(infilename, 'DATAM2');
+            end
         else
             load(infilename);
         end
@@ -107,6 +118,9 @@ if 1
             
             %specify time interval
             if 1<0
+            elseif strcmp(year, '2017') && strcmp(doy, '233')
+                    ttt = data_PRN([1 end],1);
+%                     ttt = [20*60;40*60];
 %                 elseif prn == 27 && strcmp(year, '2015') && strcmp(doy, '076')
                 %         ttt = data_PRN([1 end],1);
                 %         ttt = [660;721];
@@ -122,7 +136,9 @@ if 1
 % %             override the time limits from low rate detection
             tlim = ttt';
             data_PRN = data_PRN(data_PRN(:, 1) <= ttt(end) & data_PRN(:, 1) >= ttt(1),:);
-                       
+            if size(data_PRN,1) == 0
+                data_PRN = NaN * ones(1,4);
+            end
             obstime = data_PRN(:, 1);
             %1/12/2015 make time labels in :MM:SS format
             obstime = obstime / 24 / 3600 + init_time;
@@ -190,17 +206,17 @@ if 1
                     rotang = 25;
                 end
                 
-%                 subplot(2, 1, 1);
-%                 plot(obstime_e, 10*log10(power_e), 'Color', color, 'Linewidth', 0.25);
-%                 set(gca, 'xticklabelrotation', rotang);
-%                 str = strcat('Detrended Power $P_{f}$ and', ...
-%                     {' Phase $\Phi_f$ for '}, signal, ', PRN:', num2str(prn));
-%                 title(str);
-%                 %         axis([tlim/24/3600+init_time -log10(max(maxpwr))*10*1.5 log10(max(maxpwr))*10*1.5]);                
-%                 axis([tlim / 24 / 3600 + init_time, -10, 5]);
-%                 datetick('x', ticklbl, 'keeplimits');
-%                 %         set(gca,'XTick',(ttt(1):10:ttt(2))/24/3600+init_time);
-%                 ylabel('(a) Power $P_f$ [dB]');
+                subplot(2, 1, 1);
+                plot(obstime_e, 10*log10(power_e), 'Color', color, 'Linewidth', 0.25);
+                set(gca, 'xticklabelrotation', rotang);
+                str = strcat('Detrended Power $P_{f}$ and', ...
+                    {' Phase $\Phi_f$ for '}, signal, ', PRN:', num2str(prn));
+                title(str);
+                %         axis([tlim/24/3600+init_time -log10(max(maxpwr))*10*1.5 log10(max(maxpwr))*10*1.5]);                
+                axis([tlim / 24 / 3600 + init_time, -10, 5]);
+                datetick('x', ticklbl, 'keeplimits');
+                %         set(gca,'XTick',(ttt(1):10:ttt(2))/24/3600+init_time);
+                ylabel('(a) Power $P_f$ [dB]');
 
                 
                 hold on;
@@ -310,7 +326,8 @@ if 1
         '_zoom', num2str(zcounter), ...
         '_', num2str(tlim(1)), '-', num2str(tlim(2)), ...
         's_after_', datestr(init_time, 'HHMM'), 'UT'];
-    plotpath = [op_path, plot_name, '_phonly','.eps'];
+    plotpath = [op_path, plot_name,'.eps'];
+%     plotpath = [op_path, plot_name, '_phonly','.eps'];
     saveas(gcf, plotpath, 'epsc2');
     % plotpath = [op_path,plot_name,'.png'];
     % saveas(gcf,plotpath,'png');

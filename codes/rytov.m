@@ -1,0 +1,11 @@
+L = 200; z = 600; k = linspace(0, 20, 100) / z;
+num = 1 - 2 / L ./ k .* sin(L/2*k) .* cos(k*(z-L/2));
+den = 1 + 2 / L ./ k .* sin(L/2*k) .* cos(k*(z-L/2));
+plot(k, num ./ den);
+hold on;
+L = 200; z = 1000; k = linspace(0, 20, 100) / z;
+num = 1 - 2 / L ./ k .* sin(L/2*k) .* cos(k*(z-L/2));
+den = 1 + 2 / L ./ k .* sin(L/2*k) .* cos(k*(z-L/2));
+plot(k, num ./ den);
+title('L = 200');
+legend({'z = 600', 'z = 1000'});
