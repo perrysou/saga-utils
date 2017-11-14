@@ -117,6 +117,7 @@ for rr = 1:size(rcvr_struct,1)
     read_navsol(offsetyear,offsetdoy,in_path_offset,...
         doy,year,sep,in_path,op_path,signal);
     read_iono(doy,year,sep,in_path,op_path,signal);
+    read_channel(doy,year,sep,in_path,op_path,signal);
     %repacking
     %2017/9/11 commented out repack commands just to be safe
 %     repack_comm = ['sh ',home_dir,'repack_v1.sh ',in_path_tmp,' ',op_path];

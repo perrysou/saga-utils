@@ -17,18 +17,19 @@ cases_folder = [p1, sep, 'SolarEclipse', sep, 'tests', sep];
 home_dir = '/data1/home/ysu27/';
 home_dir = [p1, sep, 'SolarEclipse', sep];
 
-%find yesterday in doy
-comm = 'date -u -d "a day ago" +%j';
-[~, yesterday] = system(comm);
-yesterday = str2num(yesterday);
-
-comm1 = 'date -u -d "a day ago" +%Y';
-[~, year] = system(comm1);
-
 if nargin == 2
     yearlist = yearin;
     doylist = doyin;
 else
+    
+    %find yesterday in doy
+    comm = 'date -u -d "a day ago" +%j';
+    [~, yesterday] = system(comm);
+    yesterday = str2num(yesterday);
+
+    comm1 = 'date -u -d "a day ago" +%Y';
+    [~, year] = system(comm1);
+
     yearlist = str2num(year);
     doylist = yesterday;
     
@@ -245,7 +246,7 @@ for yearnum = yearlist
         end
         
         rcvr_op_hr;
-        %         continue;
+                continue;
         %% High-rate processing w/{w/o} specified PRNs or time intervals
         flag = 'single';
         %         flag = 'multiple';
@@ -265,7 +266,8 @@ for yearnum = yearlist
             %         prnlist = [17];
             case '233'
                 prnlist = [2,12,25];
-                prnlist = [12];
+                prnlist = [25, 12];
+                % no L2 for prn2 
             case '051'
                 prnlist = [29];
             case '076'

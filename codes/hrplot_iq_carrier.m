@@ -120,7 +120,7 @@ if 1
             if 1<0
             elseif strcmp(year, '2017') && strcmp(doy, '233')
                     ttt = data_PRN([1 end],1);
-%                     ttt = [20*60;40*60];
+                    ttt = [20*60;40*60];
 %                 elseif prn == 27 && strcmp(year, '2015') && strcmp(doy, '076')
                 %         ttt = data_PRN([1 end],1);
                 %         ttt = [660;721];

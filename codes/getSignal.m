@@ -26,6 +26,7 @@ function [signal, freq] = getSignal(signal_type)
 %         case 9
 %             signal = 'CDMA-UHF-SYNC';
         otherwise
-            error('Unknown signal.')
+            signal = '';
+            freq = NaN;
     end
 end
