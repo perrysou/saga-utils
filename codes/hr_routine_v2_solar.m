@@ -43,7 +43,7 @@ MEGA_MSP = [];
 MSP_days = [];
 SCINTEVENTS = [];
 %specify signal
-signal_type = 2 %[0 2]
+signal_type = 0 %[0 2]
 for yearnum = yearlist
     year = num2str(yearnum, '%04i')
     % for doy = yesterday
@@ -122,7 +122,7 @@ for yearnum = yearlist
         end
         
         %         exit;
-        %         return;
+                return;
         
         %save MSP for each day into MEGA_MSP
         % datevec(MSP([1 end],1))

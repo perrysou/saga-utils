@@ -1,15 +1,16 @@
+function [obs_time, prn, tecl_, tecp_] = getRinex()
 dbstop if error;
 clear;
 [~, ipath, opath] = ver_chk;
-cd(strjoin({ipath, 'SolarEclipse', 'CORS_RINEX_MOJK'}, filesep));
+cd(strjoin({ipath, 'SolarEclipse'}, filesep));
 filename = 'dataout_170821_1642_1942.o';
 % filename = 'mojk2330.17o';
 % filename = 'dataout_2013_342_0326.obs';
 % filename = 'brew2330.17o';
 % filename = 'dsrc2330.17o';
 outfmt = '.mat';
-fpath = strjoin({ipath, 'SolarEclipse', 'CORS_RINEX_MOJK', filename}, filesep);
-matpath = strjoin({ipath, 'SolarEclipse', 'CORS_RINEX_MOJK', [filename, outfmt]}, filesep);
+fpath = strjoin({ipath, 'SolarEclipse', filename}, filesep);
+matpath = strjoin({ipath, 'SolarEclipse', [filename, outfmt]}, filesep);
 if ~exist(matpath, 'file')
     [obs,obs_qual,type_str,clk_off] = rd_rnx_o6(filename);
 else
@@ -17,6 +18,7 @@ else
 end
 [gps_time, prn, obsout] = refrinex3(obs, obs_qual, clk_off);
 obs_time = datenum(gps2utc(gps_time(:,1:2), gps_time(:,3)));
+obs_time = datenum(gps2utc(gps_time(:,1:2)));
 
 
 for i = 1:size(type_str, 1)
@@ -33,18 +35,22 @@ for i = 1:size(type_str, 1)
     end
 end
 
-ax1 = subplot(2,1,1);
-ax2 = subplot(2,1,2);
-hold(ax1, 'on');
-hold(ax2, 'on');
-for j = 1:length(prn)       
-    [tecl_, tecp_] = getStec(l1(:, j), l2(:, j), p1(:, j), p2(:, j));    
-    plot(ax1, obs_time, tecl_, '.'); 
-    plot(ax2, obs_time, tecp_, '.'); 
+
+[tecl_, tecp_] = getStec(l1, l2, p1, p2);    
+
+% ax1 = subplot(2,1,1);
+% ax2 = subplot(2,1,2);
+% hold(ax1, 'on');
+% hold(ax2, 'on');
+% for j = 1:length(prn)       
+%     [tecl_, tecp_] = getStec(l1(:, j), l2(:, j), p1(:, j), p2(:, j));    
+%     plot(ax1, obs_time, tecl_, '.'); 
+%     plot(ax2, obs_time, tecp_, '.'); 
+% end
+% title(ax1, ['Phase Slant TEC, PRN:']);
+% title(ax2, ['Code Slant TEC, PRN:']);
+% legend(ax2, num2str(prn));
+% datetick(ax1, 'x', 'HH:MM');
+% datetick(ax2, 'x', 'HH:MM');
 end
-title(ax1, ['Phase Slant TEC, PRN:']);
-title(ax2, ['Code Slant TEC, PRN:']);
-legend(ax2, num2str(prn));
-datetick(ax1, 'x', 'HH:MM');
-datetick(ax2, 'x', 'HH:MM');
     

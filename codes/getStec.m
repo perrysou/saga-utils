@@ -1,5 +1,4 @@
 function [tecl_, tecp_] = getStec(l1, l2, p1, p2)
-
 l1(l1==0) = NaN;
 l2(l2==0) = NaN;
 p1(p1==0) = NaN;
@@ -17,4 +16,11 @@ tecl = 1 / k * (f1 * f2)^2 / (f1^2 - f2^2) * (l1 * lambdaArr(1) - l2 * lambdaArr
 tecl_ = (l1 / fArr(1) - l2 / fArr(2)) * 10^9 * ns2tecu;
 tecp = 1 / k * (f1 * f2)^2 / (f1^2 - f2^2) * (p2 - p1) / 10^16;
 tecp_ = (p2 - p1) / c * 10^9 * ns2tecu;
+
+if isempty(tecl_)
+    tecl_ = NaN;
+end
+if isempty(tecp_)
+    tecp_ = NaN;
+end
 end
