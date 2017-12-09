@@ -85,6 +85,9 @@ end
 cb = colorbar;
 set(cb,prop,clim);
 set(get(cb,'YLabel'),'String',cblabel,'interpreter','latex');
+% if lrdata(end, 1) - lrdata(1, 1) <= 0.5
+%     tlim = lrdata([1 end], 1);
+% end
 xlim(tlim);
 datetick('x','HH','keeplimits');
 box on;
@@ -109,10 +112,10 @@ saveas(gca,[op_path2,signal,'_',plot_str,'_lr_prn_stackplot_',num2str(year),'_',
 saveas(gca,[op_path2,signal,'_',plot_str,'_lr_prn_stackplot_',num2str(year),'_',...
     num2str(doy,'%03i'),'_',num2str(mask),'.eps'],'epsc2');
 saveas(gca,[op_path,signal,'_',plot_str,'_lr_prn_stackplot_',num2str(year),'_',...
-    num2str(doy,'%03i'),'_',num2str(mask),'.eps'],'epsc2');
+    num2str(doy,'%03i'),'_',num2str(mask),'.png'],'png');
 catch
 saveas(gca,[op_path,signal,'_',plot_str,'_lr_prn_stackplot_',num2str(year),'_',...
-    num2str(doy,'%03i'),'_',num2str(mask),'.eps'],'epsc2');
+    num2str(doy,'%03i'),'_',num2str(mask),'.png'],'png');
 end
 close;
 toc

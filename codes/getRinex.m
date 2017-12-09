@@ -1,13 +1,7 @@
-function [obs_time, prn, tecl_, tecp_] = getRinex()
+function [obs_time, prn, tecl_, tecp_] = getRinex(filename)
 dbstop if error;
-clear;
 [~, ipath, opath] = ver_chk;
 cd(strjoin({ipath, 'SolarEclipse'}, filesep));
-filename = 'dataout_170821_1642_1942.o';
-% filename = 'mojk2330.17o';
-% filename = 'dataout_2013_342_0326.obs';
-% filename = 'brew2330.17o';
-% filename = 'dsrc2330.17o';
 outfmt = '.mat';
 fpath = strjoin({ipath, 'SolarEclipse', filename}, filesep);
 matpath = strjoin({ipath, 'SolarEclipse', [filename, outfmt]}, filesep);

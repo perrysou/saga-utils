@@ -97,22 +97,22 @@ for signal_type = [0, 2]
             % rcvr_struct = ['grid108';'grid154';'grid160';'grid161';'grid162';'grid163'];
             
             if ~isempty(MSP)
-%                 lr_rx_stackplot(lrdata,year,doy,rcvr_struct,op_path,'sp');
-%                 lr_prn_stackplot(lrdata,year,doy,rcvr_struct,op_path,'sp');
+                lr_rx_stackplot(lrdata,year,doy,rcvr_struct,op_path,'sp');
+                lr_prn_stackplot(lrdata,year,doy,rcvr_struct,op_path,'sp');
             else % no enough scintillation data to conitue, considered a quiet day
                 disp(['doy:', doy, ' of ', year, ' is a quiet day']);
             end
             
             if ~isempty(MS4)
-%                 lr_rx_stackplot(lrdata,year,doy,rcvr_struct,op_path,'s4');
-%                 lr_prn_stackplot(lrdata,year,doy,rcvr_struct,op_path,'s4');
+                lr_rx_stackplot(lrdata,year,doy,rcvr_struct,op_path,'s4');
+                lr_prn_stackplot(lrdata,year,doy,rcvr_struct,op_path,'s4');
             else % no enough scintillation data to conitue, considered a quiet day
                 disp(['doy:', doy, ' of ', year, ' is a quiet day']);
                 continue;
             end
             
             %         exit;
-            %         return;
+                    continue;
             
             %save MSP for each day into MEGA_MSP
             % datevec(MSP([1 end],1))

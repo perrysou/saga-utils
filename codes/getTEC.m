@@ -13,7 +13,14 @@ el_threshold = 30;
 % tf = datenum([2017, 8, 21, 18, 40, 0]);
 
 %%
-[obs_time_rinex, prn_rinex, tecl_rinex, tecp_rinex] = getRinex();
+filename = 'dataout_170821_1642_1942.o';
+% filename = 'dataout_2013_342.obs';
+% filename = 'mojk2330.17o';
+% filename = 'dataout_2013_342_0326.obs';
+% filename = 'brew2330.17o';
+% filename = 'dsrc2330.17o';
+
+[obs_time_rinex, prn_rinex, tecl_rinex, tecp_rinex] = getRinex(filename);
 tecl_rinex = [zeros(1, length(prn_rinex)); diff(tecl_rinex, 1, 1)];
 
 %%
@@ -98,7 +105,7 @@ datetick('x', 'HH:MM', 'keeplimits');
 tightfig;
 saveas(gcf, ['SolarEclipse/PRNall_of_1Hz.pdf']);
 
-tecveq_rinex(el_rinex<=el_threshold) = NaN;
+tecveq_rinex(el_rinex <= el_threshold) = NaN;
 figure;
 subplot(1, 1, 1);
 plot(obs_time_rinex, tecveq_rinex);
@@ -115,7 +122,7 @@ saveas(gcf, ['SolarEclipse/PRNall_rinex_TEC_1Hz.pdf']);
 figure;
 subplot(1, 1, 1);
 [tecveq_, of_] = stec2vtec(rtec_rinex, atec_rinex, deg2rad(el_rinex), prn_rinex);
-tecveq_(el_rinex<=el_threshold) = NaN;
+tecveq_(el_rinex <= el_threshold) = NaN;
 plot(obs_time_rinex, tecveq_);
 [tecmax, imax] = max(tecveq_);
 text(obs_time_rinex(imax), tecmax, num2str(prn_rinex), textkw{:});
@@ -167,7 +174,7 @@ for iprn = 1:length(prn_rinex)
     
     subplot(1, 1, 1);
     %     [t_l1_e, tecveq_e] = discont_proc(t_common, tecveq, 2 / 24 / 3600);
-    tecveq(el_<=el_threshold) = NaN;
+    tecveq(el_ <= el_threshold) = NaN;
     plot(t_common, tecveq); hold on;
     [tecmax, imax] = max(tecveq);
     text(t_common(imax), tecmax, num2str(prn_rinex(iprn)), textkw{:});
