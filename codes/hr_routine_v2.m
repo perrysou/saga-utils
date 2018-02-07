@@ -112,7 +112,7 @@ for signal_type = [0, 2]
             end
             
             %         exit;
-                    continue;
+%                     continue;
             
             %save MSP for each day into MEGA_MSP
             % datevec(MSP([1 end],1))
