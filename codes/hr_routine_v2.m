@@ -1,4 +1,5 @@
 function [] = hr_routine_v2(yearin, doyin)
+
 %% Initialization
 close all;
 dbstop if error;
@@ -43,6 +44,7 @@ for signal_type = [0, 2]
             %day of year in string
             doy = num2str(doynum, '%03i')
             year;
+            
             %% Process low-rate data
             %first sigmaphi threshold in [rad]
             spmask = 0; s4mask = 0;
@@ -71,6 +73,7 @@ for signal_type = [0, 2]
                     continue;
                 end
             end
+            
             %% Generate low-rate sigmaphi stackplots
             %load low rate results
             lrfile = [op_path, 'lrdata_', num2str(signal_type), '_', year, '_', doy, '.mat'];
@@ -97,22 +100,22 @@ for signal_type = [0, 2]
             % rcvr_struct = ['grid108';'grid154';'grid160';'grid161';'grid162';'grid163'];
             
             if ~isempty(MSP)
-                lr_rx_stackplot(lrdata,year,doy,rcvr_struct,op_path,'sp');
-                lr_prn_stackplot(lrdata,year,doy,rcvr_struct,op_path,'sp');
+                lr_rx_stackplot(lrdata, year, doy, rcvr_struct, op_path, 'sp');
+                lr_prn_stackplot(lrdata, year, doy, rcvr_struct, op_path, 'sp');
             else % no enough scintillation data to conitue, considered a quiet day
                 disp(['doy:', doy, ' of ', year, ' is a quiet day']);
             end
             
             if ~isempty(MS4)
-                lr_rx_stackplot(lrdata,year,doy,rcvr_struct,op_path,'s4');
-                lr_prn_stackplot(lrdata,year,doy,rcvr_struct,op_path,'s4');
+                lr_rx_stackplot(lrdata, year, doy, rcvr_struct, op_path, 's4');
+                lr_prn_stackplot(lrdata, year, doy, rcvr_struct, op_path, 's4');
             else % no enough scintillation data to conitue, considered a quiet day
                 disp(['doy:', doy, ' of ', year, ' is a quiet day']);
                 continue;
             end
             
             %         exit;
-                    continue;
+            continue;
             
             %save MSP for each day into MEGA_MSP
             % datevec(MSP([1 end],1))
@@ -125,6 +128,7 @@ for signal_type = [0, 2]
             % datevec(MSP_hours([1 end],:))
             MEGA_MSP = [MEGA_MSP; [MSP_hours, MSP(:, 2:end)]];
             % datevec(MEGA_MSP([1 end],1))
+            
             %% Discard scintillation values below certain thresholds
             %daily mean
             meansp_doy = mean(MSP(:, 2));
@@ -176,6 +180,7 @@ for signal_type = [0, 2]
             fid1 = fopen('/data1/home/ysu27/Dropbox/research/sd.txt', 'a+');
             fprintf(fid1, '%d %03d %d %d %d %d %.3f %d %.3f %d %d\n', sd_num');
             % continue;
+            
             %% Generate a list of time intervals used for downloading high-rate data
             dt = 3600 / 24 / 3600 / 2;
             if spth_hr1 <= spth_hr0
@@ -212,6 +217,7 @@ for signal_type = [0, 2]
             
             %         keyboard;
             % continue;
+            
             %%
             %receiver structure of high rate data, different from that of low rate as
             %receivers are in site ID order instead
@@ -240,6 +246,7 @@ for signal_type = [0, 2]
             
             rcvr_op_hr;
             %         continue;
+            
             %% High-rate processing w/{w/o} specified PRNs or time intervals
             flag = 'single';
             %         flag = 'multiple';
@@ -361,4 +368,3 @@ for signal_type = [0, 2]
     end
 end
 % fclose(fid1);
-

@@ -1,4 +1,5 @@
 function [] = hr_routine_v2_solar(yearin, doyin)
+
 %% Initialization
 close all;
 dbstop if error;
@@ -6,7 +7,7 @@ dbstop if error;
 [~, p1, p2] = ver_chk;
 
 %file separator "/" in linux
-sep = filesep; 
+sep = filesep;
 
 %where cases data are stored
 % cases_folder = '/data1/public/Data/cases/pfrr/';
@@ -26,10 +27,10 @@ else
     comm = 'date -u -d "a day ago" +%j';
     [~, yesterday] = system(comm);
     yesterday = str2num(yesterday);
-
+    
     comm1 = 'date -u -d "a day ago" +%Y';
     [~, year] = system(comm1);
-
+    
     yearlist = str2num(year);
     doylist = yesterday;
     
@@ -51,6 +52,7 @@ for yearnum = yearlist
         %day of year in string
         doy = num2str(doynum, '%03i')
         year;
+        
         %% Process low-rate data
         %first sigmaphi threshold in [rad]
         spmask = 0; s4mask = 0;
@@ -81,6 +83,7 @@ for yearnum = yearlist
                 continue;
             end
         end
+        
         %% Generate low-rate sigmaphi stackplots
         %load low rate results
         lrfile = [op_path, 'lrdata_', num2str(signal_type), '_', year, '_', doy, '.mat'];
@@ -107,27 +110,27 @@ for yearnum = yearlist
         % rcvr_struct = ['grid108';'grid154';'grid160';'grid161';'grid162';'grid163'];
         
         if ~isempty(MSP)
-            lr_rx_stackplot(lrdata,year,doy,rcvr_struct,op_path,'sp');
-            lr_prn_stackplot(lrdata,year,doy,rcvr_struct,op_path,'sp');
+            lr_rx_stackplot(lrdata, year, doy, rcvr_struct, op_path, 'sp');
+            lr_prn_stackplot(lrdata, year, doy, rcvr_struct, op_path, 'sp');
         else % no enough scintillation data to conitue, considered a quiet day
             disp(['doy:', doy, ' of ', year, ' is a quiet day']);
         end
         
         if ~isempty(MS4)
-            lr_rx_stackplot(lrdata,year,doy,rcvr_struct,op_path,'s4');
-            lr_prn_stackplot(lrdata,year,doy,rcvr_struct,op_path,'s4');
+            lr_rx_stackplot(lrdata, year, doy, rcvr_struct, op_path, 's4');
+            lr_prn_stackplot(lrdata, year, doy, rcvr_struct, op_path, 's4');
         else % no enough scintillation data to conitue, considered a quiet day
             disp(['doy:', doy, ' of ', year, ' is a quiet day']);
             continue;
         end
         
         %         exit;
-                return;
+        return;
         
         %save MSP for each day into MEGA_MSP
         % datevec(MSP([1 end],1))
         if strcmp(year, '2014') == 1 || strcmp(year, '2013') == 1
-            MSP = MSP(MSP(:, 1) <= datenum([2015, 1, 1, 0, 0, 0]) & MSP(:, 1) >= datenum([2013, 12, 1, 0, 0, 0]),:);
+            MSP = MSP(MSP(:, 1) <= datenum([2015, 1, 1, 0, 0, 0]) & MSP(:, 1) >= datenum([2013, 12, 1, 0, 0, 0]), :);
         end
         
         MSP_hours = MSP(:, 1) - str2num(doy) + 1;
@@ -135,6 +138,7 @@ for yearnum = yearlist
         % datevec(MSP_hours([1 end],:))
         MEGA_MSP = [MEGA_MSP; [MSP_hours, MSP(:, 2:end)]];
         % datevec(MEGA_MSP([1 end],1))
+        
         %% Discard scintillation values below certain thresholds
         %daily mean
         meansp_doy = mean(MSP(:, 2));
@@ -149,22 +153,22 @@ for yearnum = yearlist
         MSP_NUM = [];
         MSP_NUM0 = [];
         for rr = 1:size(rcvr_op, 1)
-            if ~isempty(MSP(MSP(:, 4) == rr,:))
-                MSP_NUM = [MSP_NUM; size(MSP(MSP(:, 4) == rr,:), 1)];
-                RCVR_OP = [RCVR_OP; rcvr_op(rr,:)];
+            if ~isempty(MSP(MSP(:, 4) == rr, :))
+                MSP_NUM = [MSP_NUM; size(MSP(MSP(:, 4) == rr, :), 1)];
+                RCVR_OP = [RCVR_OP; rcvr_op(rr, :)];
             end
-            MSP_NUM0 = [MSP_NUM0; size(MSP(MSP(:, 4) == rr,:), 1)];
+            MSP_NUM0 = [MSP_NUM0; size(MSP(MSP(:, 4) == rr, :), 1)];
         end
         
         RCVR_OP
         rcvr_op
         spth_hr0 = sp_fixed;
         s4th_hr0 = s4_fixed;
-        MSP_hr0 = MSP(MSP(:, 2) >= spth_hr0,:);
+        MSP_hr0 = MSP(MSP(:, 2) >= spth_hr0, :);
         MSP_hr0 = sortrows(MSP_hr0, 1);
         spth_hr1 = meansp_doy;
         s4th_hr1 = means4_doy;
-        MSP_hr1 = MSP(MSP(:, 2) >= spth_hr1,:);
+        MSP_hr1 = MSP(MSP(:, 2) >= spth_hr1, :);
         MSP_hr1 = sortrows(MSP_hr1, 1);
         
         MSP_hr = floor([size(MSP_hr0, 1); size(MSP_hr1, 1)]/size(RCVR_OP, 1));
@@ -186,12 +190,13 @@ for yearnum = yearlist
         ONES = ones(size(MSP, 1), 1);
         MSP_day = [doynum * ONES, length(unique(MSP(:, 4))) * ONES, MSP(:, 2:end)];
         MSP_days = [MSP_days; MSP_day];
-        fid1 = fopen([p2,'sd.txt'], 'a+');
+        fid1 = fopen([p2, 'sd.txt'], 'a+');
         fprintf(fid1, '%d %03d %d %d %d %d %.3f %d %.3f %d %d\n', sd_num');
         % continue;
+        
         %% Generate a list of time intervals used for downloading high-rate data
         dt = 3600 / 24 / 3600 / 2;
-                 
+        
         lrtimesfile = [p2, 'lrtimes', '_', year, '_', doy, '.mat']
         if isempty(dir(lrtimesfile))
             disp([lrtimesfile, 'does not exist']);
@@ -205,7 +210,7 @@ for yearnum = yearlist
             load(lrtimesfile);
         end
         TSP_hrv0
-        TS4_hrv0        
+        TS4_hrv0
         %         keyboard;
         e_common = findhrtimes(year, doy);
         t0 = datevec(e_common(:, 2));
@@ -213,12 +218,13 @@ for yearnum = yearlist
         e_common0 = [e_common(:, 1), t0(:, 4), t0(:, 5), ...
             tf(:, 4), tf(:, 5), e_common(:, end)]
         %         keyboard;
-        TSP_hr0_short = TSP_hr0(1:10,:);
-        TSP_hrv0_short = TSP_hrv0(1:10,:);
+        TSP_hr0_short = TSP_hr0(1:10, :);
+        TSP_hrv0_short = TSP_hrv0(1:10, :);
         TSP_hr = TS4_hr0;
         
-%                 keyboard;
+        %                 keyboard;
         % continue;
+        
         %%
         %receiver structure of high rate data, different from that of low rate as
         %receivers are in site ID order instead
@@ -230,10 +236,10 @@ for yearnum = yearlist
             'grid154'];
         rcvr_op_hr = [];
         for rr = 1:size(rcvr_struct_hr, 1)
-            rcvr_name = rcvr_struct_hr(rr,:);
+            rcvr_name = rcvr_struct_hr(rr, :);
             if ismember(rcvr_name, RCVR_OP, 'rows')
                 [~, rr_op] = ismember(rcvr_name, RCVR_OP, 'rows');
-                rcvr_op_hr = [rcvr_op_hr; RCVR_OP(rr_op,:)];
+                rcvr_op_hr = [rcvr_op_hr; RCVR_OP(rr_op, :)];
             end
         end
         
@@ -246,13 +252,14 @@ for yearnum = yearlist
         end
         
         rcvr_op_hr;
-                continue;
+        continue;
+        
         %% High-rate processing w/{w/o} specified PRNs or time intervals
         flag = 'single';
         %         flag = 'multiple';
         if strcmp(flag, 'single')
             prnlist = unique(TSP_hr(:, 1), 'stable');
-%             prnlist = prnlist(1);
+            %             prnlist = prnlist(1);
         else
             prnlist = e_common(:, 1);
             %             t_common = unique(e_common(:,2:3),'rows','stable');
@@ -265,9 +272,9 @@ for yearnum = yearlist
             %     case '050'
             %         prnlist = [17];
             case '233'
-                prnlist = [2,12,25];
+                prnlist = [2, 12, 25];
                 prnlist = [25, 12];
-                % no L2 for prn2 
+                % no L2 for prn2
             case '051'
                 prnlist = [29];
             case '076'
@@ -294,7 +301,7 @@ for yearnum = yearlist
                     duration = TSP_hr(trow(irow), 4);
                     sp_median = TSP_hr(trow(irow), 5);
                 else
-                    tt = t_common(trow(irow),:)';
+                    tt = t_common(trow(irow), :)';
                     duration = diff(tt) * 24 * 60;
                 end
                 
@@ -337,8 +344,8 @@ for yearnum = yearlist
                 end
                 
                 if strcmp(doy, '233')
-                    init_time = datenum([2017 8 21 18 0 0]);
-                    xtime = [0;3600];
+                    init_time = datenum([2017, 8, 21, 18, 0, 0]);
+                    xtime = [0; 3600];
                     
                 end
                 
@@ -377,5 +384,3 @@ for yearnum = yearlist
     
 end
 % fclose(fid1);
-
-

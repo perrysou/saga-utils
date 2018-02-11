@@ -1,8 +1,8 @@
 function [tecl_, tecp_] = getStec(l1, l2, p1, p2)
-l1(l1==0) = NaN;
-l2(l2==0) = NaN;
-p1(p1==0) = NaN;
-p2(p2==0) = NaN;
+l1(l1 == 0) = NaN;
+l2(l2 == 0) = NaN;
+p1(p1 == 0) = NaN;
+p2(p2 == 0) = NaN;
 % constants
 k = 40.308193;
 c = 299792458;

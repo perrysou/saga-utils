@@ -90,6 +90,7 @@ for sv = 1:length(prn_rinex)
     el1 = el_rinex0(~isnan(el_rinex0(:, sv)), sv);
     el_rinex(:, sv) = interp1(t1, el1, obs_time_rinex);
 end
+
 %%
 figure;
 [tecveq_rinex, of_rinex] = stec2vtec(tecl_rinex, tecp_rinex, deg2rad(el_rinex), prn_rinex);
@@ -135,6 +136,7 @@ tightfig;
 saveas(gcf, ['SolarEclipse/PRNall_saga_TEC_1Hz.pdf']);
 % keyboard;
 % close all;
+
 %%
 load('SolarEclipse/mat/grid108/2017/233/prn_files_L1CA/channeldata.mat');
 isSlipped = CHANNELDATA(:, 6) == 1;
@@ -188,6 +190,7 @@ tightfig;
 saveas(gcf, ['SolarEclipse/PRNall_raw_TEC_1Hz.pdf']);
 
 return;
+
 %%
 % high-rate
 load(['SolarEclipse/mat/grid108/2017/233/hr_prn_files_L1CA/PRN', num2str(prn), '_1800UT_zoom1.mat']);

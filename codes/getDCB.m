@@ -22,5 +22,5 @@ while ~feof(p1p2)
     end
 end
 fclose(p1p2);
-b_sat = (bias_p1p2(:, 2) - bias_p1c1(:, 2)) * - 2.852;
+b_sat = (bias_p1p2(:, 2) - bias_p1c1(:, 2)) * -2.852;
 end
