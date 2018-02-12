@@ -6,8 +6,8 @@ function [R_rytov, k_v, index_valid, R_rytov_Bust] = Lz(V, Psi_v, az, ze, thickn
 % See also spectral
 
 %convert L,z to km
-thickness = thickness;
-height = height;
+% thickness = thickness;
+% height = height;
 
 %speed of light in vaccum
 c = 299792458;
@@ -19,7 +19,7 @@ k_v = 2 * pi * f / V;
 
 %limit the wavenumber within [10^-3, 0.5*10^-2]
 %     k_par_ind = find(k_par<=10^-1&k_par>=10^-3);
-index_valid = find(k_v >= 0);
+% index_valid = find(k_v >= 0);
 index_valid = find(f > 0.2 & k_v <= 0.11);
 % index_valid = find(f > 0.2);
 

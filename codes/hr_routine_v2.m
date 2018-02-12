@@ -6,14 +6,32 @@ dbstop if error;
 % maxNumCompThreads(4);
 
 %file separator "/" in linux
+global sep;
 sep = filesep;
 
 %where cases data are stored
+global cases_folder;
 cases_folder = '/data1/public/Data/cases/pfrr/';
 %case_folder = '/data1/public/Data/cases/calg/';
 
 %where output data and plots are stored
-home_dir = '/data1/home/ysu27/';
+global home_dir;
+global mat_dir;
+home_dir = ['$HOME', sep];
+
+if strcmp(cases_folder(end-4:end-1), 'pfrr')
+    %path for Poker Flat data
+    mat_dir = ['PFRR_Data', sep];
+else
+    %folder_path for 2013 Calgary data
+    mat_dir = ['Calgary_Data', sep];
+end
+
+[~, op_path] = ver_chk();
+
+%create parent directories
+comm = strjoin({'mkdir -p', [home_dir, sep, mat_dir, sep]});
+system(comm);
 
 %find yesterday in doy
 comm = 'date -u -d "a day ago" +%j';
@@ -36,7 +54,7 @@ MEGA_MSP = [];
 MSP_days = [];
 SCINTEVENTS = [];
 %specify signal
-for signal_type = [0, 2]
+for signal_type = 0 %[0, 2]
     for yearnum = yearlist
         year = num2str(yearnum, '%04i')
         % for doy = yesterday
@@ -48,15 +66,7 @@ for signal_type = [0, 2]
             %% Process low-rate data
             %first sigmaphi threshold in [rad]
             spmask = 0; s4mask = 0;
-            
-            if strcmp(cases_folder(end-4:end-1), 'pfrr')
-                %folder_path for 2013 Poker Flat data
-                op_path = [home_dir, 'PFRR_Data/'];
-            else
-                %folder_path for 2013 Calgary data
-                op_path = [home_dir, 'Calgary_Data/'];
-            end
-            
+                        
             %check if low rate data has already been processed
             matfile = dir([op_path, 'lrdata_', num2str(signal_type), '_', year, '_', doy, '.mat'])
             if ~isempty(matfile) && matfile.datenum >= datenum([2015, 5, 30, 0, 0, 0])

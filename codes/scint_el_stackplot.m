@@ -1,30 +1,6 @@
 function [MSP,MS4,FLTRDATA,CST,rcvr_op,tlim,splim,s4lim,signal] = scint_el_stackplot(cases_folder,home_dir,signal_type,doy,year,spmask,s4mask)
 sep = filesep;
-%specify signal type
-switch signal_type
-   case 0
-      signal = 'L1CA';  %// GPS L1 legacy civil code 
-   case 1
-      signal = 'L2CM';  %// GPS L2 civil L code
-   case 2
-      signal = 'L2CL';  %// GPS L2 M+L combined tracking
-   case 3
-      signal = 'L2CLM';  %// GPS L5 civil in-phase
-   case 4
-      signal = 'L5I';   %// GPS L5 civil quadrature
-   case 5
-      signal = 'L5Q';
-   case 6
-      signal = 'L5IQ';
-   case 7
-      signal = 'L1CA-ALT1';
-   case 8
-      signal = 'CDMA-UHF-PILOT';
-   case 9
-      signal = 'CDMA-UHF-SYNC';
-   otherwise
-      error('Unknown signal.')
-end
+signal = getSignal(signal_type);
 %specify path
 % case_folder = '/media/Misc/MMAE552/~sdattaba/downloads/';
 % case_folder = '/home/yang/cases/';

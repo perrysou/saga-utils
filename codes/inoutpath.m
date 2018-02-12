@@ -11,7 +11,7 @@ sep = filesep;
 if strcmp(cases_folder(end-4:end-1),'pfrr')
     %folder_path for 2013 Poker Flat data 
     in_path = [cases_folder,year,sep,doy,sep,rcvr_name,sep]; 
-    op_path = [home_dir,'PFRR_Data/',rcvr_name,sep,year,sep,doy,sep];
+    op_path = [home_dir,sep,mat_dir,sep,rcvr_name,sep,year,sep,doy,sep];
 elseif strcmp(cases_folder(end-5:end-1),'tests')
     in_path = [cases_folder,year,sep,doy,sep,rcvr_name,sep]; 
     op_path = [home_dir,'mat/',rcvr_name,sep,year,sep,doy,sep];

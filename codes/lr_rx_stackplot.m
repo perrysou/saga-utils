@@ -13,13 +13,6 @@ function [] = lr_rx_stackplot(lrdata, year, doy, rcvr_struct, op_path, plot_str)
 % %where output data and plots are stored
 % home_dir = '/data1/home/ysu27/';
 %
-% if strcmp(case_folder(end-4:end-1),'pfrr')
-%     %folder_path for 2013 Poker Flat data
-%     op_path = [home_dir,'PFRR_Data/'];
-% else
-%     %folder_path for 2013 Calgary data
-%     op_path = [home_dir,'Calgary_Data/'];
-% end
 %
 % %load lrdata
 % load([op_path,'lrdata_',year,'_',doy,'.mat']);
@@ -119,7 +112,7 @@ for rr = 1:size(rcvr_struct, 1)
     text(tlim(1), rr-0.5, {rcvr_name; char(sitenum_struct(rr, :))}, 'HorizontalAlignment', 'right');
 end
 
-% save('./Dropbox/statistics.mat','meandata','stddata','megadata');
+% save('statistics.mat','meandata','stddata','megadata');
 % cb = colorbar('YTick',mask:0.5:datalim);
 cb = colorbar;
 set(cb, prop, clim);

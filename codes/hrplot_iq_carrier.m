@@ -7,32 +7,7 @@ sep = filesep;
 %     load('../../local.mat');
 %     [~, op_path] = ver_chk;
 % catch   
-switch signal_type
-    case 0
-        signal = 'L1CA';
-        freq = 1575.42 * 10 ^ 6;
-    case 1
-        signal = 'L2CM';
-    case 2
-        signal = 'L2CL';
-        freq = 1227.60 * 10 ^ 6;
-    case 3
-        signal = 'L2CLM';
-    case 4
-        signal = 'L5I';
-    case 5
-        signal = 'L5Q';
-    case 6
-        signal = 'L5IQ';
-    case 7
-        signal = 'L1CA-ALT1';
-    case 8
-        signal = 'CDMA-UHF-PILOT';
-    case 9
-        signal = 'CDMA-UHF-SYNC';
-    otherwise
-        error('Unknown signal.')
-end
+signal = getSignal(signal_type);
 
 % High-rate data processing and plotting
 
@@ -48,14 +23,9 @@ tlim = (tspan_d' - init_time') * 24 * 3600;
 RCVRNAME = {};
 [sitenum_op] = rx2site(rcvr_op);
 
-if strcmp('MACI64', computer)
-    matfolder = '';
-end
-if strcmp('GLNXA64', computer)
-     matfolder = 'PFRR_Data';
-end
+mat_dir = 'PFRR_Data';
 
-hr_results = [home_dir, sep, matfolder,sep, ...
+hr_results = [home_dir, sep, mat_dir,sep, ...
     'hrplot_', year, '_', doy, '_PRN', num2str(prn), datestr(tspan_d(1,:), '_HHMMUT'), '_zoom', num2str(zcounter), '.mat']
 tic;
 % keyboard;
@@ -351,7 +321,7 @@ disp(['Finished preprocessing for PRN', num2str(prn)]);
 % Cross-correlation for pairs of receivers
 % xcorr_results = [home_dir,'/PFRR_Data/','xcorr_',...
 %     year,'_',doy,'_PRN',num2str(prn),'_zoom',num2str(zcounter),'.mat']
-xcorr_results = [home_dir, 'Dropbox/research/', 'xcorr_', ...
+xcorr_results = [home_dir, sep, mat_dir,sep, 'xcorr_', ...
     year, '_', doy, '_PRN', num2str(prn), datestr(tspan_d(1,:), '_HHMMUT'), ...
     '_zoom', num2str(zcounter), '_60s.mat']
 tic;
@@ -668,7 +638,7 @@ for i_dtau = 1:length(v_dtau)
             azprn = AZ' * 180 / pi;
             elprn = EL' * 180 / pi;
             prnprn = prn * ones(size(rcvr_op, 1), 1);
-            save(['/data1/home/ysu27/Dropbox/research/skyplotdata_PRN', ...
+            save([home_dir, sep, mat_dir, sep, 'skyplotdata_PRN', ...
                 num2str(prn), '_', year, '_', doy, '_zoom', num2str(zcounter), '.mat'], ...
                 'beamid', 'beamAZ', 'beamEL', 'azprn', 'elprn', 'prnprn');
             %                 skyPlot(AZ'*180/pi,EL'*180/pi,prn*ones(size(rcvr_op,1),1));

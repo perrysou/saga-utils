@@ -9,7 +9,7 @@ B_rs(B_rs == 0) = NaN;
 tec = tecl + repmat(B_rs, size(tecl, 1), 1);
 tecs = tec - repmat(bsat, size(tec, 1), 1) - brx;
 
-of = cos(asin(RE/(RE + h)*sin(pi / 2 + el)));
+% of = cos(asin(RE/(RE + h)*sin(pi / 2 + el)));
 of_ = cos(asin(RE/(RE + h)*cos(el)));
 
 tecveq = tecs .* of_;
