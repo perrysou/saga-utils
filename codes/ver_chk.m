@@ -1,7 +1,7 @@
 function [prop, out_path, in_path] = ver_chk()
 %check matlab version for proper configurations
 
-global home_dir mat_dir sep;
+global cases_folder home_dir mat_dir sep;
 if verLessThan('matlab', '8.4.0')
     prop = 'clim';
 else

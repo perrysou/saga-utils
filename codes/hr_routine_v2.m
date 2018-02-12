@@ -17,7 +17,8 @@ cases_folder = '/data1/public/Data/cases/pfrr/';
 %where output data and plots are stored
 global home_dir;
 global mat_dir;
-home_dir = ['$HOME', sep];
+[~, dummy] = system('echo $HOME');
+home_dir = [dummy(1:end - 1), sep];
 
 if strcmp(cases_folder(end-4:end-1), 'pfrr')
     %path for Poker Flat data
@@ -125,7 +126,7 @@ for signal_type = 0 %[0, 2]
             end
             
             %         exit;
-            continue;
+            pause(5);
             
             %save MSP for each day into MEGA_MSP
             % datevec(MSP([1 end],1))
