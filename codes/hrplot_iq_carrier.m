@@ -23,7 +23,7 @@ tlim = (tspan_d' - init_time') * 24 * 3600;
 RCVRNAME = {};
 [sitenum_op] = rx2site(rcvr_op);
 
-mat_dir = 'PFRR_Data';
+global mat_dir;
 
 hr_results = [home_dir, sep, mat_dir,sep, ...
     'hrplot_', year, '_', doy, '_PRN', num2str(prn), datestr(tspan_d(1,:), '_HHMMUT'), '_zoom', num2str(zcounter), '.mat']
