@@ -1,4 +1,4 @@
-function [] = hr_routine_v2(yearin, doyin)
+function [] = main(yearin, doyin)
 
 %% Initialization
 close all;
@@ -23,6 +23,7 @@ home_dir = [dummy(1:end - 1), sep];
 if strcmp(cases_folder(end-4:end-1), 'pfrr')
     %path for Poker Flat data
     mat_dir = ['PFRR_Data', sep];
+    mat_dir = ['matfiles', sep];
 else
     %folder_path for 2013 Calgary data
     mat_dir = ['Calgary_Data', sep];
