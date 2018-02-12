@@ -188,7 +188,7 @@ for signal_type = 0 %[0, 2]
             ONES = ones(size(MSP, 1), 1);
             MSP_day = [doynum * ONES, length(unique(MSP(:, 4))) * ONES, MSP(:, 2:end)];
             MSP_days = [MSP_days; MSP_day];
-            fid1 = fopen('/data1/home/ysu27/Dropbox/research/sd.txt', 'a+');
+            fid1 = fopen(op_path, 'sd.txt', 'a+');
             fprintf(fid1, '%d %03d %d %d %d %d %.3f %d %.3f %d %d\n', sd_num');
             % continue;
             
@@ -204,7 +204,7 @@ for signal_type = 0 %[0, 2]
             
             %spth_hr is always the larger one of the two
             
-            lrtimesfile = [home_dir, 'Dropbox/research/lrtimes', '_', year, '_', doy, '.mat']
+            lrtimesfile = [op_path, lrtimes', '_', year, '_', doy, '.mat']
             if isempty(dir(lrtimesfile))
                 disp([lrtimesfile, 'doesn not exist']);
                 [mega_t, TSP_hr0, TSP_hrv0] = find_general_times(MSP, rcvr_op, spth_hr);
@@ -371,10 +371,10 @@ for signal_type = 0 %[0, 2]
         
         length(doyin)
         if length(doyin) >= 365 && ~isempty(SD) && ~isempty(MEGA_MSP) && ~isempty(MSP_days)
-            save(['/data1/home/ysu27/Dropbox/research/sd_', year, '.mat'], 'SD', 'MEGA_MSP', 'MSP_days', 'SCINTEVENTS');
+            save([op_path, 'sd_', year, '.mat'], 'SD', 'MEGA_MSP', 'MSP_days', 'SCINTEVENTS');
         end
         
-        csvwrite([home_dir, 'Dropbox', sep, 'ScintillationEvents_short_', year, '.csv'], SCINTEVENTS);
+        csvwrite([op_path, 'ScintillationEvents_short_', year, '.csv'], SCINTEVENTS);
         
     end
 end

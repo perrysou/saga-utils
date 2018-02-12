@@ -380,23 +380,6 @@ for rr = 1:size(rcvr_op, 1)
     xtdata{rr} = xtdata{rr}';
 end
 
-if 2 > 3
-    %save high rate data for Dr Bust
-    save(['/data1/home/ysu27/Dropbox/Bust_PRN', ...
-        num2str(prn), '_', year, '_', doy, '.mat'], ...
-        'signal', 'prn', 'xdata_PRN', 'tlim', 'init_t_utc', 'rcvr_op', 'sitenum_op');
-    for rr = 1:size(rcvr_op, 1)
-        for iiii = 1:size(xdata_PRN{1, rr}, 1)
-            obstime_num = datenum(init_t_utc) + xdata_PRN{1, rr}(iiii, 1) / 24 / 3600;
-            t_struct = julian_calculation(obstime_num);
-            tttt{rr}(iiii,:) = t_struct.day;
-        end
-        tap = [tttt{rr}, xdata_PRN{1, rr}(:, 2:3)];
-        save(['/data1/home/ysu27/Dropbox/Bust_PRN', num2str(prn), ...
-            '_', year, '_', doy, '_', rcvr_op(rr,:), '_', sitenum_op{rr,:}, '.txt'], ...
-            'tap', '-ascii', '-double');
-    end
-end
 % return;
 
 % Find continuous segment for all operational receivers
