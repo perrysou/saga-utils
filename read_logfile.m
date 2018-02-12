@@ -13,7 +13,7 @@ function [ file ] = read_logfile(filetype,tstart,tend,rcvr_name,cases_folder,op_
 %test end
 %---------
 
-sep = filesep;
+global sep
 %remove xdata.log from previous aborted data processing
 % comm = ['find ',op_path,' -name ''xdata.log'' -exec rm {} \;'];
 comm = ['rm -v ',op_path,'xdata.log'];
@@ -46,7 +46,7 @@ cases_year = [cases_folder,num2str(yearstt,'%04i'),sep];
 DATA = [];
 if strcmp(filetype,'iq*') == 1 %read iqdata
     %find offsetdata
-    if hourstt == 0;
+    if hourstt == 0
         offsett_str = datestr(datenum(tstart)-3600/24/3600,'mm/dd/yyyy HH:MM:SS');
         [~,offsett] = system(['date -ud ''',offsett_str,''' +%Y%j%H']);       
         offsetyear = str2num(offsett(1:4));
@@ -69,79 +69,13 @@ if strcmp(filetype,'iq*') == 1 %read iqdata
     elseif hourstt<=hourend %mostly used condition, refer here for other conditions
         hour = hourstt-1;
         while hour<=hourend+1
-%             %iq binaries in /data1/from_usb/
-%             in_path0 = strcat(['/data1/from_usb/',num2str(yearstt,'%04i'),sep,num2str(doyend,'%03i'),sep,rcvr_name,sep]);
-%             flag0 = dir([in_path0,'bin',sep,'*',filetype,'_',num2str(hour,'%02i'),'*.bin']);
-%             %iq binaries downloaded on demand in /data1/public/Data/cases/pfrr/from_usb
-%             in_path1 = strcat([cases_folder,sep,'from_usb',sep,num2str(yearstt,'%04i'),sep,num2str(doyend,'%03i'),sep,rcvr_name,sep]);
-%             flag1 = dir([in_path1,'bin',sep,'*',filetype,'_',num2str(hour,'%02i'),'*.bin']);
-%             %iq binaries already downloaded in /data1/public/Data/cases/pfrr/
-%             in_path2 = strcat([cases_year,num2str(doyend,'%03i'),sep,rcvr_name,sep]);
-%             flag2 = dir([in_path2,'bin',sep,'*',filetype,'_',num2str(hour,'%02i'),'*.bin']);
-%             
-%             if isempty(flag0) && isempty(flag1) && isempty(flag2)
-%                 disp(['Unable to find any binaries for hr:',num2str(hour,'%02i'),' on the server, please download manually']);
-%                 hour = hour+1;
-%                 continue;
-%             elseif ~isempty(flag2)
-%                 in_path = in_path2;
-%             elseif ~isempty(flag0)
-%                 in_path = in_path0;
-%             elseif ~isempty(flag1)
-%                 in_path = in_path1; 
-%             end
-%             logfile_path = [op_path(1:end-4),num2str(doystt,'%03i'),sep];
-%             if isempty(dir([logfile_path,'txt',sep,filetype,'_',num2str(hour,'%02i'),'*.log'])) 
-%                 unpack_comm = ['sh ',pwd,sep,'unpack_v1.sh ',in_path,' ',logfile_path,' ',filetype,num2str(hour,'%02i'),'??'];
-%                 system(unpack_comm);
-%             else
-%                 disp(['iq binaries already unpacked; locate logfiles in ',logfile_path,'txt',sep]);  
-%             end
-%             comm = ['awk ''$3==',num2str(gpswstt),...
-%                 '&&$4<=',num2str(gpssend),'&&$4>=',num2str(gpssstt),...
-%                 ' {print $0;}'' ',logfile_path,'txt',sep,...
-%                 filetype,num2str(hour,'%02i'),'??.log',' >>',op_path,'xdata.log'];
-%             system(comm);
             sub_read_logfile(yearstt,doyend,sep,rcvr_name,hour,filetype,...
                 cases_folder,cases_year,op_path,gpswstt,gpssend,gpssstt);
             hour = hour+1;
         end
     end
     
-% else %read scintdata
-%     %find offsetdata
-%     if hourstt == 0;
-%     offsetdoy = doystt-1;
-%     offsethour = 23;
-%     logfile_path = strcat([folder_name,num2str(offsetdoy),sep,'txt',sep]);
-%     comm = ['awk ''$1==',num2str(gpswstt),'&&$2<=',num2str(gpssend),'&&$2>=',num2str(gpssstt),' {print $0;}'' ',logfile_path,filetype,num2str(offsethour,'%02i'),'??.log',' >',op_path,'xdata.log'];
-%     system(comm);
-%     % add lines to read offset data;
-%     end
-%     if hourstt>hourend 
-%         hour = hourstt-1;
-%         while hour <= 23
-%             logfile_path = strcat([folder_name,num2str(doystt),sep,'txt',sep]);
-%             comm = ['awk ''$1==',num2str(gpswstt),'&&$2<=',num2str(gpssend),'&&$2>=',num2str(gpssstt),' {print $0;}'' ',logfile_path,filetype,num2str(hour,'%02i'),'??.log',' >>',op_path,'xdata.log'];
-%             system(comm);
-%             hour = hour+1;
-%         end 
-%         hour = hour-24;
-%         while hour<=hourend+1
-%             logfile_path = strcat([folder_name,num2str(doyend),sep,'txt',sep]);
-%             comm = ['awk ''$1==',num2str(gpswstt),'&&$2<=',num2str(gpssend),'&&$2>=',num2str(gpssstt),' {print $0;}'' ',logfile_path,filetype,num2str(hour,'%02i'),'??.log',' >>',op_path,'xdata.log'];
-%             system(comm);
-%             hour = hour+1;
-%         end
-%     elseif hourstt<=hourend
-%         hour = hourstt-1;
-%         while hour<=hourend+1
-%             logfile_path = strcat([folder_name,num2str(doystt),sep,'txt',sep]);
-%             comm = ['awk ''$1==',num2str(gpswstt),'&&$2<=',num2str(gpssend),'&&$2>=',num2str(gpssstt),' {print $0;}'' ',logfile_path,filetype,num2str(hour,'%02i'),'??.log',' >>',op_path,'xdata.log'];
-%             system(comm);
-%             hour = hour+1;
-%         end
-%     end
+
 end
 % !head -n 1 /data1/home/ysu27/PFRR_Data/grid108/2014/019/xdata.log
 % !tail -n 1 /data1/home/ysu27/PFRR_Data/grid108/2014/019/xdata.log
@@ -161,6 +95,7 @@ end
 
 function [] = sub_read_logfile(yearstt,doyend,sep,rcvr_name,hour,filetype,...
     cases_folder,cases_year,op_path,gpswstt,gpssend,gpssstt)
+global home_dir;
 %iq binaries in /data1/from_usb/
 in_path0 = strcat(['/data1/from_usb/',num2str(yearstt,'%04i'),sep,num2str(doyend,'%03i'),sep,rcvr_name,sep]);
 flag0 = dir([in_path0,'bin',sep,'*',filetype,'_',num2str(hour,'%02i'),'*.bin']);
@@ -170,7 +105,13 @@ flag1 = dir([in_path1,'bin',sep,'*',filetype,'_',num2str(hour,'%02i'),'*.bin']);
 %iq binaries already downloaded in /data1/public/Data/cases/pfrr/
 in_path2 = strcat([cases_year,num2str(doyend,'%03i'),sep,rcvr_name,sep]);
 flag2 = dir([in_path2,'bin',sep,'*',filetype,'_',num2str(hour,'%02i'),'*.bin']);
+[in_, ~] = inoutpath(cases_folder, home_dir, ...
+    num2str(yearstt,'%04i'), num2str(doyend,'%03i'), rcvr_name);
 
+if strcmp(rcvr_name,'ASTRArx')
+    flag2 = dir([in_,'txt',sep,'*',filetype,'_',num2str(hour,'%02i'),'*.log']);
+%     keyboard;
+end
 if isempty(flag0) && isempty(flag1) && isempty(flag2)
     disp(['Unable to find any binaries for hr:',num2str(hour,'%02i'),' on the server, please download manually']);
     %exception for IIT-13 data for doy 342, 2013 since only logfiles are
@@ -193,7 +134,7 @@ if isempty(dir(logfile_name))
     if strcmp(rcvr_name,'ASTRArx')
 %         return;
     else
-    unpack_comm = ['sh ',pwd,sep,'unpack_v1.sh ',in_path,' ',logfile_dir,' ',filetype,num2str(hour,'%02i'),'??'];
+    unpack_comm = ['sh ','/data1/home/ysu27',sep,'unpack_v1.sh ',in_path,' ',logfile_dir,' ',filetype,num2str(hour,'%02i'),'??'];
     system(unpack_comm);
     end
 else
@@ -207,8 +148,8 @@ if ~strcmp(rcvr_name,'ASTRArx')
 else
      comm = ['awk ''$3==',num2str(gpswstt),...
         '&&$4<=',num2str(gpssend),'&&$4>=',num2str(gpssstt),...
-        ' {print $0;}'' ',logfile_dir,'txt',sep,...
-        filetype,'??','??.log',' >> ',op_path,'xdata.log']; 
+        ' {print $0;}'' ',in_,'txt',sep,...
+        filetype,num2str(hour,'%02i'),'??.log',' >> ',op_path,'xdata.log']; 
 end
 system(comm);
 end

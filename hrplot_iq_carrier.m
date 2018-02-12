@@ -296,11 +296,12 @@ if 1
         '_zoom', num2str(zcounter), ...
         '_', num2str(tlim(1)), '-', num2str(tlim(2)), ...
         's_after_', datestr(init_time, 'HHMM'), 'UT'];
-    plotpath = [op_path, plot_name,'.eps'];
+%     plotpath = [op_path, plot_name,'.eps'];
 %     plotpath = [op_path, plot_name, '_phonly','.eps'];
-    saveas(gcf, plotpath, 'epsc2');
-    % plotpath = [op_path,plot_name,'.png'];
-    % saveas(gcf,plotpath,'png');
+%     saveas(gcf, plotpath, 'epsc2');
+    [~, hr_path, ~] = ver_chk;
+    plotpath = [hr_path,plot_name,'.png'];
+    saveas(gcf,plotpath,'png');
     close;
     
     init_t_utc = datevec(init_time);
@@ -719,7 +720,7 @@ for i_dtau = 1:length(v_dtau)
 %         keyboard;
         
         %creat folders for figures
-        op_path = strjoin({op_path, 'research-misc', 'ION2017', 'figs', ...
+        op_path = strjoin({op_path, 'spectral', ...
             normflag, debugflag, zeropadflag, overlapflag, fitflag, filesep}, filesep);
         mkdir = strjoin({'mkdir -p', op_path});
         system(mkdir);
@@ -995,7 +996,7 @@ ts_cc = [tlim(1), tlim(2)];
 % plotmisc(xcorr_results,year,doy,prn);
 
 % plotSAGAvsPFISR(prn,tstt,'ve_vn');
-% plotSAGAvsPFISR(prn, tstt, 'debug');
+plotSAGAvsPFISR(prn, tstt, 'debug');
 
 % plotprnvs(prn,year,doy);
 disp(['Finished processing for PRN', num2str(prn)]);

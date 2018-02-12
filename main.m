@@ -1,8 +1,8 @@
-function [] = main(yearin, doyin)
-
+function [] = main(yearin, doyin, lronlyflag)
 %% Initialization
 close all;
 dbstop if error;
+init();
 % maxNumCompThreads(4);
 
 %file separator "/" in linux
@@ -43,12 +43,14 @@ yesterday = str2num(yesterday);
 comm1 = 'date -u -d "a day ago" +%Y';
 [~, year] = system(comm1);
 
-if nargin == 2
+if nargin == 3
     yearlist = yearin;
     doylist = doyin;
 else
     yearlist = str2num(year);
     doylist = yesterday;
+    doyin = yesterday;
+    lronlyflag = 1;
 end
 
 SD = [];
@@ -127,7 +129,12 @@ for signal_type = 0 %[0, 2]
             end
             
             %         exit;
-            pause(5);
+            disp('Quick look plots generated.');
+            pause(2);
+            if lronlyflag
+                continue;
+            end
+            
             
             %save MSP for each day into MEGA_MSP
             % datevec(MSP([1 end],1))
@@ -189,7 +196,7 @@ for signal_type = 0 %[0, 2]
             ONES = ones(size(MSP, 1), 1);
             MSP_day = [doynum * ONES, length(unique(MSP(:, 4))) * ONES, MSP(:, 2:end)];
             MSP_days = [MSP_days; MSP_day];
-            fid1 = fopen(op_path, 'sd.txt', 'a+');
+            fid1 = fopen([op_path, 'sd.txt'], 'a+');
             fprintf(fid1, '%d %03d %d %d %d %d %.3f %d %.3f %d %d\n', sd_num');
             % continue;
             
@@ -205,7 +212,7 @@ for signal_type = 0 %[0, 2]
             
             %spth_hr is always the larger one of the two
             
-            lrtimesfile = [op_path, lrtimes', '_', year, '_', doy, '.mat']
+            lrtimesfile = [op_path, 'lrtimes', '_', year, '_', doy, '.mat']
             if isempty(dir(lrtimesfile))
                 disp([lrtimesfile, 'doesn not exist']);
                 [mega_t, TSP_hr0, TSP_hrv0] = find_general_times(MSP, rcvr_op, spth_hr);

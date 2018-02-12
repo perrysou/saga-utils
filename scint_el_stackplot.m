@@ -40,47 +40,7 @@ for rr = 1:size(rcvr_struct,1)
     if isempty(in_path) && isempty(in_path_tmp)
         continue;
     end
-%     [in_path0,op_path] = inoutpath(cases_folder,home_dir,year,doy,rcvr_name);
-%     flag0 = dir([in_path0,'bin',sep,'*',year,'_',doy,'_*.bin']);
-%     %in_path1: /data1/public/Data/cases/pfrr/from_usb/
-%     in_path1 = [cases_folder,'from_usb',sep,year,sep,doy,sep,rcvr_name,sep]; 
-%     flag1 = dir([in_path1,'bin',sep,'*',year,'_',doy,'_*.bin']);
-%     %in_path2: /data1/from_usb/
-%     in_path2 = ['/data1/from_usb',sep,year,sep,doy,sep,rcvr_name,sep];
-%     flag2 = dir([in_path2,'bin',sep,'*',year,'_',doy,'_*.bin']);
-%     if isempty(flag0) && isempty(flag1) && isempty(flag2)
-%         disp(['Unable to find any binaries for ',rcvr_name,' on the server, please download manually']);
-%         continue;
-%     elseif ~isempty(flag0)
-%         in_path = in_path0;
-%     elseif ~isempty(flag1)
-%         in_path = in_path1;
-%     elseif ~isempty(flag2)
-%         in_path = in_path2; 
-%     end
-%     in_path
-%     in_path_tmp = in_path;
-%     %repack and unpack processing
-%     
-% %     %repack first to remove any log files during uncompleted unpacking
-% %     repack_comm = ['sh ',home_dir,'repack_v1.sh ',in_path,' ',op_path];
-% %     system(repack_comm);
-%     
-%     %if binaries have been already unpacked (before automatic on-demand unpacking)
-%     logflagout = dir([op_path,'txt',sep,'*',year,'_',doy,'_*.log']);
-%     logflagin = dir([in_path,'txt',sep,'*',year,'_',doy,'_*.log']);
-% %     keyboard;
-%     if ~isempty(logflagin) && strcmp(in_path,in_path0)
-%         disp(['binaries already unpacked;locate logfiles in ',in_path,'txt',sep]);
-%     elseif isempty(logflagout)
-%         %unpack 
-%         unpack_comm = ['sh ',home_dir,'unpack_v1.sh ',in_path,' ',op_path]
-%         system(unpack_comm); 
-%         in_path = op_path;
-%     else
-%         disp(['binaries already unpacked;locate logfiles in ',op_path,'txt',sep]);
-%         in_path = op_path;
-%     end 
+
     rcvr_op = [rcvr_op; rcvr_name];  
     %Create output data folders
     command = strcat('mkdir -p ',{' '},op_path,'prn_files_',signal);
@@ -307,7 +267,9 @@ flag1 = dir([in_path1,'bin',sep,'*',year,'_',doy,'_*.bin']);
 %in_path2: /data1/from_usb/
 in_path2 = ['/data1/from_usb',sep,year,sep,doy,sep,rcvr_name,sep];
 if strcmp(rcvr_name,'ASTRArx')
-    flag2 = dir([in_path2,'bin',sep,'*.bin']);
+    flag0 = dir([in_path0,'txt',sep,'*.log']);
+%     keyboard;
+    flag2 = dir([in_path0,'bin',sep,'*.bin']);
 else
     flag2 = dir([in_path2,'bin',sep,'*',year,'_',doy,'_*.bin']);
 end
@@ -347,7 +309,7 @@ if ~isempty(logflagin) && strcmp(in_path,in_path0)
     disp(['binaries already unpacked;locate logfiles in ',in_path,'txt',sep]);
 elseif isempty(logflagout)
     %unpack 
-    unpack_comm = ['sh ',home_dir,'unpack_v1.sh ',in_path,' ',op_path]
+    unpack_comm = ['sh ','/data1/home/ysu27',sep,'unpack_v1.sh ',in_path,' ',op_path]
     system(unpack_comm); 
     in_path = op_path;
 else

@@ -1,5 +1,7 @@
-[~,~,dir] = ver_chk;
-addpath(genpath(dir));
+restoredefaultpath;
+folder = mfilename('fullpath');
+cwd = fileparts(folder);
+addpath(genpath([cwd, filesep]));
 
 set(groot, 'DefaultLineLineWidth', 2, ...
            'DefaultTextInterpreter', 'LaTeX', ...
@@ -34,5 +36,5 @@ set(groot, 'DefaultFigureUnits', 'inches', ...
            'DefaultFigurePaperPosition', [0, 0, 8, 6], ...
            'DefaultFigurePaperSize', [8.5, 6.5], ...
            'DefaultFigurePosition', [0, 0, 8, 6]);    
-disp('Welcome back to Matlab, Yang');
+disp(['Welcome to saga-utils. The current working folder is', cwd]);
 format short g;

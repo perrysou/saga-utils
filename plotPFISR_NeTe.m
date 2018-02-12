@@ -26,7 +26,7 @@ else
 end
 
 %creat folders for figures
-op_path = strjoin({op_path, 'research-misc', 'ION2017', 'figs', ...
+op_path = strjoin({op_path, 'spectral', ...
     flag, deltaflag, filesep}, filesep);
 mkdir = strjoin({'mkdir -p', op_path});
 system(mkdir);

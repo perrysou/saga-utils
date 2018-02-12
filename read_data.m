@@ -3,6 +3,7 @@ function [DATA,DATA_el,REFPRN] = read_data(offsetyear,offsetdoy,in_path_offset,.
 %% scint
 %Read and combine scint files
 if strcmp(folder_path(end-7:end-1),'ASTRArx') || strcmp(folder_path(end-16:end-10),'ASTRArx')
+%     keyboard;
     scintfilestruct = dir([folder_path,'txt',sep,'scint*.log']);
     scintfilestruct0 = [];
 else
@@ -22,9 +23,9 @@ if ~isempty(scintfilestruct)
     for jj=1:size(scintfilestruct,1)
         scintfile = scintfilestruct(jj,:);
         scintfilename = dlmread(strcat([folder_path,'txt',sep,scintfile.name]));
-        st = datestr(gps2utc(scintfilename(1,1:2)),'HHMM-');
-        se = datestr(gps2utc(scintfilename(end,1:2)),'HHMM UT');
-        disp([scintfile.name,' actually has data for ',st,se]);
+%         st = datestr(gps2utc(scintfilename(1,1:2)),'HHMM-');
+%         se = datestr(gps2utc(scintfilename(end,1:2)),'HHMM UT');
+%         disp([scintfile.name,' actually has data for ',st,se]);
         SCINT = [SCINT;scintfilename];
     end
     SCINT = [SCINT;scintfilename0];

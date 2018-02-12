@@ -49,7 +49,7 @@ factor = 1; %0.5
 format = 'png';
 
 %creat folders for figures
-op_path = char(strjoin({op_path, 'research-misc', 'ION2017', 'figs', ...
+op_path = char(strjoin({op_path, 'spectral', ...
     normflag, debugflag, overlapflag, fitflag, filesep}, filesep));
 mkdir = strjoin({'mkdir -p', op_path});
 system(char(mkdir));

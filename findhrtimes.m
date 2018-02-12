@@ -133,8 +133,10 @@ xlabel(['Time [HH UT] on ', datestr(Tick(1), 'mm/dd/yyyy')]);
 title(['Potential Scintillating Times after $\sigma_{\Phi}$ threshold [rad]: ', ...
     num2str(spth_hr')]);
 plotname = ['hrtimes_', year, '_', doy];
-plotpath = [op_path, plotname, '.eps'];
-saveas(gcf, plotpath, 'epsc2');
+% plotpath = [op_path, plotname, '.eps'];
+% saveas(gcf, plotpath, 'epsc2');
+plotpath = [op_path, plotname, '.png'];
+saveas(gcf, plotpath, 'png');
 close;
 
 
