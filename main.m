@@ -113,14 +113,14 @@ for signal_type = 0 %[0, 2]
             rcvr_struct = ['grid108'; 'grid154'; 'grid160'; 'grid161'; 'grid162'; 'grid163'; 'ASTRArx'];
             % rcvr_struct = ['grid108';'grid154';'grid160';'grid161';'grid162';'grid163'];
             
-            if ~isempty(MSP)
+            if ~isempty(MSP) && lronlyflag
                 lr_rx_stackplot(lrdata, year, doy, rcvr_struct, op_path, 'sp');
                 lr_prn_stackplot(lrdata, year, doy, rcvr_struct, op_path, 'sp');
             else % no enough scintillation data to conitue, considered a quiet day
                 disp(['doy:', doy, ' of ', year, ' is a quiet day']);
             end
             
-            if ~isempty(MS4)
+            if ~isempty(MS4) && lronlyflag
                 lr_rx_stackplot(lrdata, year, doy, rcvr_struct, op_path, 's4');
                 lr_prn_stackplot(lrdata, year, doy, rcvr_struct, op_path, 's4');
             else % no enough scintillation data to conitue, considered a quiet day

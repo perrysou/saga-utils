@@ -1,4 +1,4 @@
-restoredefaultpath;
+% restoredefaultpath;
 folder = mfilename('fullpath');
 cwd = fileparts(folder);
 addpath(genpath([cwd, filesep]));
