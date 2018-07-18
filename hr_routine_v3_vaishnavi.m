@@ -1,4 +1,5 @@
 function [] = hr_routine_v2(yearin, doyin)
+
 %% Initialization
 close all;
 dbstop if error;
@@ -36,8 +37,8 @@ MSP_days = [];
 SCINTEVENTS = [];
 %specify signal
 signal_type = 2 %[0 2]
-WSNlist=[];
-WSNS4list=[];
+WSNlist = [];
+WSNS4list = [];
 for yearnum = yearlist
     year = num2str(yearnum, '%04i')
     % for doy = yesterday
@@ -45,9 +46,11 @@ for yearnum = yearlist
         %day of year in string
         doy = num2str(doynum, '%03i')
         year;
+        
         %% Process low-rate data
         %first sigmaphi threshold in [rad]
-        spmask = 0; s4mask = 0;
+        spmask = 0;
+        s4mask = 0;
         
         if strcmp(cases_folder(end-4:end-1), 'pfrr')
             %folder_path for 2013 Poker Flat data
@@ -73,6 +76,7 @@ for yearnum = yearlist
                 continue;
             end
         end
+        
         %% Generate low-rate sigmaphi stackplots
         %load low rate results
         lrfile = [op_path, 'lrdata_', num2str(signal_type), '_', year, '_', doy, '.mat'];
@@ -80,11 +84,16 @@ for yearnum = yearlist
         tlim_vec = datevec(lrdata{5})
         hr_times = [];
         hrtimes = [];
-        MSP = lrdata{1}; HITDATA = lrdata{2};
-        CST = lrdata{3}; rcvr_op = lrdata{4};
-        tlim = lrdata{5}; splim = lrdata{6};
-        signal = lrdata{7}; spmask = lrdata{8};
-        MS4 = lrdata{9}; s4mask = lrdata{10};
+        MSP = lrdata{1};
+        HITDATA = lrdata{2};
+        CST = lrdata{3};
+        rcvr_op = lrdata{4};
+        tlim = lrdata{5};
+        splim = lrdata{6};
+        signal = lrdata{7};
+        spmask = lrdata{8};
+        MS4 = lrdata{9};
+        s4mask = lrdata{10};
         s4lim = lrdata{11};
         span = 60;
         
@@ -99,27 +108,27 @@ for yearnum = yearlist
         % rcvr_struct = ['grid108';'grid154';'grid160';'grid161';'grid162';'grid163'];
         
         if ~isempty(MSP)
-%             lr_rx_stackplot(lrdata,year,doy,rcvr_struct,op_path,'sp');
-%             lr_prn_stackplot(lrdata,year,doy,rcvr_struct,op_path,'sp');
+            %             lr_rx_stackplot(lrdata,year,doy,rcvr_struct,op_path,'sp');
+            %             lr_prn_stackplot(lrdata,year,doy,rcvr_struct,op_path,'sp');
         else % no enough scintillation data to conitue, considered a quiet day
             disp(['doy:', doy, ' of ', year, ' is a quiet day']);
         end
         
         if ~isempty(MS4)
-%             lr_rx_stackplot(lrdata,year,doy,rcvr_struct,op_path,'s4');
-%             lr_prn_stackplot(lrdata,year,doy,rcvr_struct,op_path,'s4');
+            %             lr_rx_stackplot(lrdata,year,doy,rcvr_struct,op_path,'s4');
+            %             lr_prn_stackplot(lrdata,year,doy,rcvr_struct,op_path,'s4');
         else % no enough scintillation data to conitue, considered a quiet day
             disp(['doy:', doy, ' of ', year, ' is a quiet day']);
             continue;
         end
         
-%         exit;
-%         return;
+        %         exit;
+        %         return;
         
         %save MSP for each day into MEGA_MSP
         % datevec(MSP([1 end],1))
         if strcmp(year, '2014') == 1 || strcmp(year, '2013') == 1
-            MSP = MSP(MSP(:, 1) <= datenum([2015, 1, 1, 0, 0, 0]) & MSP(:, 1) >= datenum([2013, 12, 1, 0, 0, 0]),:);
+            MSP = MSP(MSP(:, 1) <= datenum([2015, 1, 1, 0, 0, 0]) & MSP(:, 1) >= datenum([2013, 12, 1, 0, 0, 0]), :);
         end
         
         MSP_hours = MSP(:, 1) - str2num(doy) + 1;
@@ -127,6 +136,7 @@ for yearnum = yearlist
         % datevec(MSP_hours([1 end],:))
         MEGA_MSP = [MEGA_MSP; [MSP_hours, MSP(:, 2:end)]];
         % datevec(MEGA_MSP([1 end],1))
+        
         %% Discard scintillation values below certain thresholds
         %daily mean
         meansp_doy = mean(MSP(:, 2));
@@ -142,42 +152,42 @@ for yearnum = yearlist
         MSP_NUM = [];
         MSP_NUM0 = [];
         for rr = 1:size(rcvr_op, 1)
-            if ~isempty(MSP(MSP(:, 4) == rr,:))
-                MSP_NUM = [MSP_NUM; size(MSP(MSP(:, 4) == rr,:), 1)];
-                RCVR_OP = [RCVR_OP; rcvr_op(rr,:)];
+            if ~isempty(MSP(MSP(:, 4) == rr, :))
+                MSP_NUM = [MSP_NUM; size(MSP(MSP(:, 4) == rr, :), 1)];
+                RCVR_OP = [RCVR_OP; rcvr_op(rr, :)];
             end
-            MSP_NUM0 = [MSP_NUM0; size(MSP(MSP(:, 4) == rr,:), 1)];
+            MSP_NUM0 = [MSP_NUM0; size(MSP(MSP(:, 4) == rr, :), 1)];
         end
         
         RCVR_OP
         rcvr_op
         spth_hr0 = sp_fixed;
-        MSP_hr0 = MSP(MSP(:, 2) >= spth_hr0,:);
+        MSP_hr0 = MSP(MSP(:, 2) >= spth_hr0, :);
         MSP_hr0 = sortrows(MSP_hr0, 1);
         spth_hr1 = meansp_doy;
-        MSP_hr1 = MSP(MSP(:, 2) >= spth_hr1,:);
+        MSP_hr1 = MSP(MSP(:, 2) >= spth_hr1, :);
         MSP_hr1 = sortrows(MSP_hr1, 1);
         
         MSP_hr = floor([size(MSP_hr0, 1); size(MSP_hr1, 1)]/size(RCVR_OP, 1));
         spth_hr = [spth_hr0; spth_hr1];
         WSN = floor((MSP_hr' * spth_hr)/sum(spth_hr));
         
-        WSNlist=[WSNlist;[str2num(doy) WSN]];
+        WSNlist = [WSNlist; [str2num(doy), WSN]];
         
         %Calculating WSN for S4
         %-------------------------------------
         s4th_hr0 = s4_fixed;
-        MS4_hr0 = MS4(MS4(:, 2) >= s4th_hr0,:);
+        MS4_hr0 = MS4(MS4(:, 2) >= s4th_hr0, :);
         MS4_hr0 = sortrows(MS4_hr0, 1);
         s4th_hr1 = means4_doy;
-        MS4_hr1 = MS4(MS4(:, 2) >= s4th_hr1,:);
+        MS4_hr1 = MS4(MS4(:, 2) >= s4th_hr1, :);
         MS4_hr1 = sortrows(MS4_hr1, 1);
         
         MS4_hr = floor([size(MS4_hr0, 1); size(MS4_hr1, 1)]/size(RCVR_OP, 1));
         s4th_hr = [s4th_hr0; s4th_hr1];
         WSNS4 = floor((MS4_hr' * s4th_hr)/sum(s4th_hr));
         
-        WSNS4list=[WSNS4list;[str2num(doy) WSNS4]];
+        WSNS4list = [WSNS4list; [str2num(doy), WSNS4]];
         %---------------------------------------------
         
         disp(['There are totally ', num2str(size(MSP, 1)), ' points for this day']);
@@ -197,6 +207,7 @@ for yearnum = yearlist
         fid1 = fopen('./sd.txt', 'a+');
         fprintf(fid1, '%d %03d %d %d %d %d %.3f %d %.3f %d %d\n', sd_num');
         % continue;
+        
         %% Generate a list of time intervals used for downloading high-rate data
         dt = 3600 / 24 / 3600 / 2;
         if spth_hr1 <= spth_hr0
@@ -212,29 +223,30 @@ for yearnum = yearlist
         lrtimesfile = ['./L2_S4', '_', year, '_', doy, '.mat']
         if isempty(dir(lrtimesfile))
             disp([lrtimesfile, 'already exists']);
-            [mega_t, TSP_hr0, TSP_hrv0] = find_general_times(MS4, rcvr_op,0.2);
+            [mega_t, TSP_hr0, TSP_hrv0] = find_general_times(MS4, rcvr_op, 0.2);
             TSP_hrv0
-%             save(lrtimesfile,'MSP','rcvr_op','spth_hr','TSP_hr0','TSP_hrv0');
-            save(lrtimesfile,'MS4','rcvr_op','TSP_hr0','TSP_hrv0');
+            %             save(lrtimesfile,'MSP','rcvr_op','spth_hr','TSP_hr0','TSP_hrv0');
+            save(lrtimesfile, 'MS4', 'rcvr_op', 'TSP_hr0', 'TSP_hrv0');
         else
-            load(lrtimesfile);            
+            load(lrtimesfile);
             TSP_hrv0
         end
         
-              
-%         keyboard;
-%         e_common = findhrtimes(year, doy);
-%         t0 = datevec(e_common(:,2));
-%         tf = datevec(e_common(:,3));
-%         e_common0 = [e_common(:,1), t0(:,4), t0(:,5), ...
-%             tf(:,4), tf(:,5), e_common(:,end)]
-%         keyboard;
-%         TSP_hr0_short = TSP_hr0(1:10,:);
-%         TSP_hrv0_short = TSP_hrv0(1:10,:);
+        
+        %         keyboard;
+        %         e_common = findhrtimes(year, doy);
+        %         t0 = datevec(e_common(:,2));
+        %         tf = datevec(e_common(:,3));
+        %         e_common0 = [e_common(:,1), t0(:,4), t0(:,5), ...
+        %             tf(:,4), tf(:,5), e_common(:,end)]
+        %         keyboard;
+        %         TSP_hr0_short = TSP_hr0(1:10,:);
+        %         TSP_hrv0_short = TSP_hrv0(1:10,:);
         TSP_hr = TSP_hr0;
         
-%         keyboard;
+        %         keyboard;
         % continue;
+        
         %%
         %receiver structure of high rate data, different from that of low rate as
         %receivers are in site ID order instead
@@ -246,10 +258,10 @@ for yearnum = yearlist
             'grid154'];
         rcvr_op_hr = [];
         for rr = 1:size(rcvr_struct_hr, 1)
-            rcvr_name = rcvr_struct_hr(rr,:);
+            rcvr_name = rcvr_struct_hr(rr, :);
             if ismember(rcvr_name, RCVR_OP, 'rows')
                 [~, rr_op] = ismember(rcvr_name, RCVR_OP, 'rows');
-                rcvr_op_hr = [rcvr_op_hr; RCVR_OP(rr_op,:)];
+                rcvr_op_hr = [rcvr_op_hr; RCVR_OP(rr_op, :)];
             end
         end
         
@@ -263,34 +275,35 @@ for yearnum = yearlist
         
         rcvr_op_hr;
         continue;
+        
         %% High-rate processing w/{w/o} specified PRNs or time intervals
         flag = 'single';
-%         flag = 'multiple';
+        %         flag = 'multiple';
         if strcmp(flag, 'single')
-            prnlist = unique(TSP_hr(:, 1), 'stable'); 
+            prnlist = unique(TSP_hr(:, 1), 'stable');
             prnlist = prnlist(1);
-        else         
-            prnlist = e_common(:,1);
-%             t_common = unique(e_common(:,2:3),'rows','stable');
-            t_common = e_common(:,2:3);
+        else
+            prnlist = e_common(:, 1);
+            %             t_common = unique(e_common(:,2:3),'rows','stable');
+            t_common = e_common(:, 2:3);
         end
-%         keyboard;
+        %         keyboard;
         switch doy
-%             case '342'
-%                 prnlist = [23,10,13];
-                %     case '050'
-                %         prnlist = [17];
+            %             case '342'
+            %                 prnlist = [23,10,13];
+            %     case '050'
+            %         prnlist = [17];
             case '051'
                 prnlist = [29];
             case '076'
-                prnlist = [27 22 18];
+                prnlist = [27, 22, 18];
                 %         prnlist = [27];
                 %     case '077'
                 %         prnlist = [25 29 31];
                 %         prnlist = 1;
         end
         length(prnlist)
-        for kk = 1:min(3,length(prnlist))
+        for kk = 1:min(3, length(prnlist))
             %  for kk = 1
             % for kk = 1:min(length(prnlist),5)
             prn = prnlist(kk)
@@ -300,15 +313,15 @@ for yearnum = yearlist
                 trow = find(prnlist == prn);
             end
             length(trow)
-            for irow = 1%:length(trow)
+            for irow = 1 %:length(trow)
                 if strcmp(flag, 'single')
-                    tt = TSP_hr(trow(irow), 2:3)';   
+                    tt = TSP_hr(trow(irow), 2:3)';
                     duration = TSP_hr(trow(irow), 4);
                     sp_median = TSP_hr(trow(irow), 5);
                 else
-                    tt =  t_common(trow(irow),:)';
+                    tt = t_common(trow(irow), :)';
                     duration = diff(tt) * 24 * 60;
-               end
+                end
                 
                 %         datevec(tt)
                 %         if (isempty(t_old) && diff(tt)<=dt)
@@ -320,11 +333,11 @@ for yearnum = yearlist
                 %         end
                 %         tt = tt_new;
                 datevec(tt)
-%                 keyboard;
+                %                 keyboard;
                 init_time = datevec(tt(1));
-                init_time = datenum([init_time(1:4), 0, 0])                
+                init_time = datenum([init_time(1:4), 0, 0])
                 xtime = (tt - init_time) * 24 * 3600;
-
+                
                 %
                 %         specify times of interest used in the case study
                 switch prn
@@ -337,9 +350,9 @@ for yearnum = yearlist
                     %             case {21}
                     %                 init_time = datenum([2015 3 17 11 0 0]);
                     %                 xtime = [0;3600*3];
-%                                 case {10,13}
-%                                     init_time = datenum([2013 12 8 3 0 0]);
-%                                     xtime = [2604.4;4648.9];
+                    %                                 case {10,13}
+                    %                                     init_time = datenum([2013 12 8 3 0 0]);
+                    %                                     xtime = [2604.4;4648.9];
                     %             case {31,29,25}
                     %                 init_time = datenum([2015 3 18 7 50 0]);
                     %                 xtime = [0;2400];
@@ -348,7 +361,7 @@ for yearnum = yearlist
                     %                 xtime = [-600;600];
                 end
                 
-%                         keyboard;
+                %                         keyboard;
                 %         xtime = [3600;2*3600+45*60];
                 %         xtime = [3600+1800;2*3600];
                 tt = init_time + xtime / 24 / 3600;
@@ -359,30 +372,28 @@ for yearnum = yearlist
                 dt = diff(tt) * 1.1;
                 % test with all 5 receivers including ASTRA
                 %         disp('All 5 receivers including ASTRA');
-%                 [tstt, tend] = zoomin_hrplot_iq_carrier(irow, tt, dt, signal_type, home_dir, cases_folder, year, doy, prn, rcvr_op_hr);
+                %                 [tstt, tend] = zoomin_hrplot_iq_carrier(irow, tt, dt, signal_type, home_dir, cases_folder, year, doy, prn, rcvr_op_hr);
                 %
-%                 try
-%                     SCINTEVENTS = [SCINTEVENTS; ...
-%                         [yearnum, doynum, prn, tstt(4:5), tend(4:5), duration, veststats']]
-%                 catch
-%                     SCINTEVENTS = [SCINTEVENTS; ...
-%                         [yearnum, doynum, prn, tstt(4:5), tend(4:5), duration]]
-% 
-%                 end
+                %                 try
+                %                     SCINTEVENTS = [SCINTEVENTS; ...
+                %                         [yearnum, doynum, prn, tstt(4:5), tend(4:5), duration, veststats']]
+                %                 catch
+                %                     SCINTEVENTS = [SCINTEVENTS; ...
+                %                         [yearnum, doynum, prn, tstt(4:5), tend(4:5), duration]]
+                %
+                %                 end
             end
         end
         % plotprnvs(prnlist,year,doy);
     end
     
     length(doyin)
-    save('WSN_L2_S4_2015.mat','WSNS4list');
-%     if length(doyin) >= 365 && ~isempty(SD) && ~isempty(MEGA_MSP) && ~isempty(MSP_days)
-%         save(['/data1/home/ysu27/Dropbox/research/sd_', year, '.mat'], 'SD', 'MEGA_MSP', 'MSP_days', 'SCINTEVENTS');
-%     end
+    save('WSN_L2_S4_2015.mat', 'WSNS4list');
+    %     if length(doyin) >= 365 && ~isempty(SD) && ~isempty(MEGA_MSP) && ~isempty(MSP_days)
+    %         save(['/data1/home/ysu27/Dropbox/research/sd_', year, '.mat'], 'SD', 'MEGA_MSP', 'MSP_days', 'SCINTEVENTS');
+    %     end
     
-%     csvwrite([home_dir, 'Dropbox', sep, 'ScintillationEvents_short_', year, '.csv'], SCINTEVENTS);
+    %     csvwrite([home_dir, 'Dropbox', sep, 'ScintillationEvents_short_', year, '.csv'], SCINTEVENTS);
     
 end
 % fclose(fid1);
-
-

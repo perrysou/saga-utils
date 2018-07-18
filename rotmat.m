@@ -1,4 +1,4 @@
-function R = rotmat(thx,thy,thz)
+function R = rotmat(thx, thy, thz)
 
 % thx = deg2rad(45);
 

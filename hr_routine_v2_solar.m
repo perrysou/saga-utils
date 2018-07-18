@@ -55,7 +55,8 @@ for yearnum = yearlist
         
         %% Process low-rate data
         %first sigmaphi threshold in [rad]
-        spmask = 0; s4mask = 0;
+        spmask = 0;
+        s4mask = 0;
         
         if strcmp(cases_folder(end-4:end-1), 'pfrr')
             %folder_path for 2013 Poker Flat data
@@ -91,11 +92,16 @@ for yearnum = yearlist
         tlim_vec = datevec(lrdata{5})
         hr_times = [];
         hrtimes = [];
-        MSP = lrdata{1}; HITDATA = lrdata{2};
-        CST = lrdata{3}; rcvr_op = lrdata{4};
-        tlim = lrdata{5}; splim = lrdata{6};
-        signal = lrdata{7}; spmask = lrdata{8};
-        MS4 = lrdata{9}; s4mask = lrdata{10};
+        MSP = lrdata{1};
+        HITDATA = lrdata{2};
+        CST = lrdata{3};
+        rcvr_op = lrdata{4};
+        tlim = lrdata{5};
+        splim = lrdata{6};
+        signal = lrdata{7};
+        spmask = lrdata{8};
+        MS4 = lrdata{9};
+        s4mask = lrdata{10};
         s4lim = lrdata{11};
         span = 60;
         

@@ -10,10 +10,10 @@ dbstop if error;
 if nargin == 0
     year = '2013';
     doy = '342';
-%     year = '2014';
-%     doy = '051';
-%     year = '2015';
-%     doy = '076';
+    %     year = '2014';
+    %     doy = '051';
+    %     year = '2015';
+    %     doy = '076';
 end
 load([mat_path, 'lrtimes_', year, '_', doy, '.mat']);
 
@@ -35,7 +35,7 @@ prnlist = unique(TSP_hr0(:, 1));
 
 tseg = cell(1, length(prnlist));
 for kk = 1:size(prnlist, 1)
-    prn = prnlist(kk,:);
+    prn = prnlist(kk, :);
     t0 = TSP_hr0(TSP_hr0(:, 1) == prn, 2);
     tf = TSP_hr0(TSP_hr0(:, 1) == prn, 3);
     weight = TSP_hr0(TSP_hr0(:, 1) == prn, 5);
@@ -61,25 +61,25 @@ for kk = 1:size(prnlist, 1)
     h_mean = plot(time, reshape(repmat(weight', [3, 1]), [], 1), 'k', 'linewidth', 1);
     %     text(t0,weight,num2str(prn),'VerticalAlignment','Baseline','HorizontalAlignment',...
     %             'Left');
-%     text(t0(1), kk-1, num2str(prn), 'VerticalAlignment', 'Baseline', ...
-%         'HorizontalAlignment', 'right');
+    %     text(t0(1), kk-1, num2str(prn), 'VerticalAlignment', 'Baseline', ...
+    %         'HorizontalAlignment', 'right');
     
 end
 
 [T, C] = find_common_times_v2(tseg);
-pairs = 1:size(T,1);
+pairs = 1:size(T, 1);
 events = [];
 for row = pairs
-    validind(row) = ~isempty(vertcat(T{row,:})); 
-    npair(row) = size(C{row,:},2);
+    validind(row) = ~isempty(vertcat(T{row, :}));
+    npair(row) = size(C{row, :}, 2);
 end
 
 maxvalid = min(pairs(validind));
-for iii = pairs(validind)   
+for iii = pairs(validind)
     for jjj = 1:size(T, 2)
-        if ~isempty(T{iii, jjj}) 
+        if ~isempty(T{iii, jjj})
             t = T{iii, jjj};
-            prn_scint = prnlist(C{iii,:}(jjj,:));
+            prn_scint = prnlist(C{iii, :}(jjj, :));
             nscint = length(prn_scint);
             tcommon = reshape(t, 2, [])';
             t00 = tcommon(:, 1);
@@ -89,17 +89,17 @@ for iii = pairs(validind)
                 h_scatter = scatter( ...
                     MSP(ind, 1), MSP(ind, 2)/datalim-1+maxvalid-iii, [], MSP(ind, 2), '.');
                 hold on;
-%                 if iii == maxvalid  
-%                     text(tff(i), -1+maxvalid-iii, num2str(prn_scint','%02i,'), ...
-%                         'VerticalAlignment', 'Baseline', ...
-%                         'HorizontalAlignment', 'left', ...
-%                         'edgecolor',[0 0 0]);
-%                 end
-                if iii == maxvalid 
-                    rectangle('position',[t00(i),...
-                        find(prnlist==min(prn_scint))-1+maxvalid-iii,...
-                        tff(i)-t00(i),...
-                        find(prnlist==max(prn_scint))-find(prnlist==min(prn_scint))+1]);
+                %                 if iii == maxvalid
+                %                     text(tff(i), -1+maxvalid-iii, num2str(prn_scint','%02i,'), ...
+                %                         'VerticalAlignment', 'Baseline', ...
+                %                         'HorizontalAlignment', 'left', ...
+                %                         'edgecolor',[0 0 0]);
+                %                 end
+                if iii == maxvalid
+                    rectangle('position', [t00(i), ...
+                        find(prnlist == min(prn_scint)) - 1 + maxvalid - iii, ...
+                        tff(i) - t00(i), ...
+                        find(prnlist == max(prn_scint)) - find(prnlist == min(prn_scint)) + 1]);
                 end
             end
             t_overlap = reshape([reshape(t, 2, []); NaN(1, size(t, 1)/2)], [], 1);
@@ -113,20 +113,20 @@ for iii = pairs(validind)
 end
 
 events = sortrows(events, [-4, 2]);
-events = events(events(:, end) == max(events(:, 4)),:);
+events = events(events(:, end) == max(events(:, 4)), :);
 
 legend([h_scatter, h_mean], {'value', 'mean'});
 cb = colorbar;
 set(cb, prop, clim);
 label = get(cb, 'Label');
-set(label, 'String', cblabel,'interpreter','latex');
+set(label, 'String', cblabel, 'interpreter', 'latex');
 
 xlim(tlim);
 datetick('x', 'HH', 'keeplimits');
-pairlabel = num2str(flip(npair(validind)'),'$N_{set}$ = %i');
-prnlabel = num2str(prnlist,'PRN%02i');
-a = {pairlabel;prnlabel};
-set(gca, 'XGrid', 'on', 'YGrid', 'on', 'Ytick', (maxvalid-kk):kk-1, ...
+pairlabel = num2str(flip(npair(validind)'), '$N_{set}$ = %i');
+prnlabel = num2str(prnlist, 'PRN%02i');
+a = {pairlabel; prnlabel};
+set(gca, 'XGrid', 'on', 'YGrid', 'on', 'Ytick', (maxvalid - kk):kk-1, ...
     'YTickLabel', a);
 Tick = get(gca, 'xtick');
 xlabel(['Time [HH UT] on ', datestr(Tick(1), 'mm/dd/yyyy')]);
@@ -138,5 +138,3 @@ plotname = ['hrtimes_', year, '_', doy];
 plotpath = [op_path, plotname, '.png'];
 saveas(gcf, plotpath, 'png');
 close;
-
-

@@ -13,7 +13,6 @@ Vc0 = sqrt((a .* b - h.^2)./(a .* g.^2 - 2 * f .* g .* h + b .* f.^2)-1) .* v;
 Vc1 = sqrt((a.^3 + 2 * a .* h.^2 + b .* h.^2)./(g .* h + a .* f).^2-1) .* v;
 
 
-
 % Vc2 = sqrt((b^3+2*b*h^2+a*h^2)/(f*h+b*g)^2-1)*V;
 % Vc0 = (Vc1+Vc2)/2;
 
@@ -28,12 +27,6 @@ thetabar = mean(theta);
 arbar = mean(ar);
 psibar = mean(psi);
 vcbar = mean(vc);
-
-
-
-
-
-
 
 
 return;

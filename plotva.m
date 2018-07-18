@@ -26,35 +26,40 @@ i = 1;
 % COMBOS(ii,:)
 if max(CCVAL) > rho_c
     while rho_c + (i - 1) * dt < max(CCVAL)
-        HYCC_tmp = HYCC(HYCC(:, 7) >= rho_c+i*dt,:);
-        ERR_tmp = CCERR(HYCC(:, 7) >= rho_c+i*dt,:);
-        rhoc(i,:) = rho_c + i * dt;
+        HYCC_tmp = HYCC(HYCC(:, 7) >= rho_c+i*dt, :);
+        ERR_tmp = CCERR(HYCC(:, 7) >= rho_c+i*dt, :);
+        rhoc(i, :) = rho_c + i * dt;
         H = HYCC_tmp(:, 1:end-2);
         Y = HYCC_tmp(:, end-1);
         CC = HYCC_tmp(:, end);
-        X = pinv(H)*Y;
+        X = pinv(H) * Y;
         if ~isempty(X)
             X = num2cell(X);
             [a, h, b, f, g] = X{:};
             if a * b - h^2 > 0 && a > 0 && b > 0
-                [vmag(i,:), vang(i,:), ar(i,:), Psi_a(i,:), Vc(i,:)] = drvel(a, h, b, f, g);
-                args(i,:) = [a, h, b, f, g];
-                                
-%                 [ccmax2 a*xij^2 + 2*h*xij*yij + b*yij^2]
-
-                %                 disp('Valid Result');                              
-                %store valid cut-offs                
-                rhoc_old = rhoc(i,:);
+                [vmag(i, :), vang(i, :), ar(i, :), Psi_a(i, :), Vc(i, :)] = drvel(a, h, b, f, g);
+                args(i, :) = [a, h, b, f, g];
+                
+                %                 [ccmax2 a*xij^2 + 2*h*xij*yij + b*yij^2]
+                
+                %                 disp('Valid Result');
+                %store valid cut-offs
+                rhoc_old = rhoc(i, :);
             else
                 %                 disp('Invalid Result');
-                vmag(i,:) = NaN; vang(i,:) = NaN; ar(i,:) = NaN; Psi_a(i,:) = NaN; Vc(i,:) = NaN;
-                args(i,:) = NaN(1, 5);
+                vmag(i, :) = NaN;
+                vang(i, :) = NaN;
+                ar(i, :) = NaN;
+                Psi_a(i, :) = NaN;
+                Vc(i, :) = NaN;
+                args(i, :) = NaN(1, 5);
             end
         end
         i = i + 1;
     end
     
     disp('Finished');
+    
     %%
     vctov = Vc ./ vmag;
     vge = vmag .* cos(vang);
@@ -132,7 +137,7 @@ set(gcf, 'papersize', [8, 12], ...
     'position', [0, 0, 8, 12]);
 [sp, ~] = tight_subplot(size(vest, 2), 1, [0.02, 0], [0.075, 0.05], [0.15, 0.01]);
 for subi = 1:size(vest, 2)
-%     sp(subi) = subplot(size(vest, 2), 1, subi);
+    %     sp(subi) = subplot(size(vest, 2), 1, subi);
     plot(sp(subi), rhoc, vest(:, subi), 'k');
     switch subi
         case 1
@@ -144,36 +149,35 @@ for subi = 1:size(vest, 2)
         case 2
             lblstr = ['(b) $\theta$ [$^\circ$]'];
             set(sp(subi), 'ytick', -180:90:180);
-            ylim(sp(subi),[-180, 180]);
+            ylim(sp(subi), [-180, 180]);
         case 3
             lblstr = ['(c) $v_{ge}$'];
         case 4
             lblstr = ['(d) $v_{gn}$'];
         case 5
             lblstr = ['(e) AR'];
-            ylim(sp(subi),[0, 10]);
+            ylim(sp(subi), [0, 10]);
         case 6
             lblstr = ['(f) $\Psi_{\alpha}$ [$^\circ$]'];
             set(sp(subi), 'ytick', -180:90:180);
-            ylim(sp(subi),[-180, 180]);
+            ylim(sp(subi), [-180, 180]);
         case 7
             lblstr = ['(g) $v_c / v $'];
     end
-    ylabel(sp(subi),lblstr);
-    xlim(sp,[rho_c, 1]);
+    ylabel(sp(subi), lblstr);
+    xlim(sp, [rho_c, 1]);
     xtick0 = get(sp(subi), 'xtick');
-%     set(sp(subi),'xtick',sort([min(CCVAL) xtick0 max(CCVAL)]));
+    %     set(sp(subi),'xtick',sort([min(CCVAL) xtick0 max(CCVAL)]));
     if subi ~= size(vest, 2)
         set(sp(subi), 'XTickLabel', []);
     else
         str2 = ['SAGA estimates vs $\rho_{cutoff}$', ...
             ', $\rho_{min}$ = ', num2str(min(CCVAL), '%0.3f'), ...
-            ', $\rho_{{max}}$ = ', num2str(max(CCVAL), '%0.3f')];        
-        title(sp(1),str2);
+            ', $\rho_{{max}}$ = ', num2str(max(CCVAL), '%0.3f')];
+        title(sp(1), str2);
         xlabel('$\rho_{cutoff}$');
-    end    
+    end
 end
-saveas(gcf,'../rhoc.eps','epsc2');
+saveas(gcf, '../rhoc.eps', 'epsc2');
 close;
 end
-

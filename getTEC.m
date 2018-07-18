@@ -152,8 +152,10 @@ for iprn = 1:length(prn_rinex)
     rows_l1 = isBetween & CHANNELDATA(:, end-1) == 0; % CHANNELDATA(:, end) == prn
     rows_l2 = isBetween & CHANNELDATA(:, end-1) == 2;
     
-    p1 = CHANNELDATA(rows_l1, 4); p2 = CHANNELDATA(rows_l2, 4);
-    l1 = CHANNELDATA(rows_l1, 3); l2 = CHANNELDATA(rows_l2, 3); % cycles
+    p1 = CHANNELDATA(rows_l1, 4);
+    p2 = CHANNELDATA(rows_l2, 4);
+    l1 = CHANNELDATA(rows_l1, 3);
+    l2 = CHANNELDATA(rows_l2, 3); % cycles
     
     t_l1 = time_ch(rows_l1);
     t_l2 = time_ch(rows_l2);
@@ -177,7 +179,8 @@ for iprn = 1:length(prn_rinex)
     subplot(1, 1, 1);
     %     [t_l1_e, tecveq_e] = discont_proc(t_common, tecveq, 2 / 24 / 3600);
     tecveq(el_ <= el_threshold) = NaN;
-    plot(t_common, tecveq); hold on;
+    plot(t_common, tecveq);
+    hold on;
     [tecmax, imax] = max(tecveq);
     text(t_common(imax), tecmax, num2str(prn_rinex(iprn)), textkw{:});
 end

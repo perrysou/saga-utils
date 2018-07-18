@@ -1,4 +1,5 @@
 function [] = main(yearin, doyin, lronlyflag)
+
 %% Initialization
 close all;
 dbstop if error;
@@ -18,7 +19,7 @@ cases_folder = '/data1/public/Data/cases/pfrr/';
 global home_dir;
 global mat_dir;
 [~, dummy] = system('echo $HOME');
-home_dir = [dummy(1:end - 1), sep];
+home_dir = [dummy(1:end-1), sep];
 
 if strcmp(cases_folder(end-4:end-1), 'pfrr')
     %path for Poker Flat data
@@ -69,8 +70,9 @@ for signal_type = 0 %[0, 2]
             
             %% Process low-rate data
             %first sigmaphi threshold in [rad]
-            spmask = 0; s4mask = 0;
-                        
+            spmask = 0;
+            s4mask = 0;
+            
             %check if low rate data has already been processed
             matfile = dir([op_path, 'lrdata_', num2str(signal_type), '_', year, '_', doy, '.mat'])
             if ~isempty(matfile) && matfile.datenum >= datenum([2015, 5, 30, 0, 0, 0])
@@ -95,11 +97,16 @@ for signal_type = 0 %[0, 2]
             tlim_vec = datevec(lrdata{5})
             hr_times = [];
             hrtimes = [];
-            MSP = lrdata{1}; HITDATA = lrdata{2};
-            CST = lrdata{3}; rcvr_op = lrdata{4};
-            tlim = lrdata{5}; splim = lrdata{6};
-            signal = lrdata{7}; spmask = lrdata{8};
-            MS4 = lrdata{9}; s4mask = lrdata{10};
+            MSP = lrdata{1};
+            HITDATA = lrdata{2};
+            CST = lrdata{3};
+            rcvr_op = lrdata{4};
+            tlim = lrdata{5};
+            splim = lrdata{6};
+            signal = lrdata{7};
+            spmask = lrdata{8};
+            MS4 = lrdata{9};
+            s4mask = lrdata{10};
             s4lim = lrdata{11};
             span = 60;
             
@@ -125,7 +132,6 @@ for signal_type = 0 %[0, 2]
                 lr_prn_stackplot(lrdata, year, doy, rcvr_struct, op_path, 's4');
             else % no enough scintillation data to conitue, considered a quiet day
                 disp(['doy:', doy, ' of ', year, ' is a quiet day']);
-                continue;
             end
             
             %         exit;
@@ -291,6 +297,8 @@ for signal_type = 0 %[0, 2]
                     %     case '077'
                     %         prnlist = [25 29 31];
                     %         prnlist = 1;
+                case '280'
+                    prnlist = [3];
             end
             length(prnlist)
             for kk = 1:min(3, length(prnlist))
@@ -349,6 +357,9 @@ for signal_type = 0 %[0, 2]
                         %             case 1
                         %                 init_time = datenum([2015 3 18 15 2 0]);
                         %                 xtime = [-600;600];
+                        case {3}
+                            init_time = datenum([2015, 10, 7, 6, 0, 0]);
+                            xtime = [120; 1200];
                     end
                     
                     %                         keyboard;

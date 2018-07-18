@@ -32,22 +32,22 @@ mkdir = strjoin({'mkdir -p', op_path});
 system(mkdir);
 
 data = [datenum(PFISR_data(:, 1:6)), PFISR_data(:, 7:end)];
-data = data(data(:, 1) <= datenum(tf)+360/24/3600 & data(:, 1) >= datenum(t0)-360/24/3600,:);
+data = data(data(:, 1) <= datenum(tf)+360/24/3600 & data(:, 1) >= datenum(t0)-360/24/3600, :);
 if ~isempty(data)
     beamid = unique(data(:, 4), 'stable');
     for ibeam = length(beamid)
-        AZb(ibeam,:) = unique(data(data(:, 4) == beamid(ibeam), 2));
-        ELb(ibeam,:) = unique(data(data(:, 4) == beamid(ibeam), 3));
+        AZb(ibeam, :) = unique(data(data(:, 4) == beamid(ibeam), 2));
+        ELb(ibeam, :) = unique(data(data(:, 4) == beamid(ibeam), 3));
         beamstr = strjoin({num2str(beamid(ibeam)), ...
-            [num2str(AZb(ibeam,:)), '$^\circ$ az'], [num2str(ELb(ibeam,:)), '$^\circ$ el']}, ', ');
-%         subplot(2,1,2);
-        data_beam = data(data(:, 4) == beamid(ibeam),:);
+            [num2str(AZb(ibeam, :)), '$^\circ$ az'], [num2str(ELb(ibeam, :)), '$^\circ$ el']}, ', ');
+        %         subplot(2,1,2);
+        data_beam = data(data(:, 4) == beamid(ibeam), :);
         ranges = unique(data_beam(:, 5), 'stable');
         times = unique(data_beam(:, 1), 'stable');
         ne = 10.^data_beam(:, cols);
         te = data_beam(:, 10);
         negrid = reshape(ne, length(ranges), []);
-%         continue;
+        %         continue;
         difftimenegrid = [diff(negrid, 1, 2), NaN(length(ranges), 1)] ./ ...
             [diff(times) * 24 * 3600; NaN]';
         diffrangenegrid = [diff(negrid, 1, 1); NaN(1, length(times))] ./ ...
@@ -73,7 +73,7 @@ if ~isempty(data)
                 '$\log_{10}{N_e} [m^{-3}]$', ...
                 'interpreter', 'latex');
         end
-        shading flat;       
+        shading flat;
         set(gca, 'layer', 'top');
         grid off;
         xlabel('Time [HH:MM UT]');
@@ -92,5 +92,3 @@ else
 end
 % close all;
 end
-
-
