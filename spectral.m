@@ -65,14 +65,17 @@ if ~isnan(vmag) && ~isnan(vang)
     Fs = 100;
     
     %get time-shifted signals
-%     [ph_truncated, pwr_truncated] = ...
-%         plot_shifted(xdata, tpeak, rcvr_op, sitenum_op, combos, Fs);
+    %     [ph_truncated, pwr_truncated] = ...
+    %         plot_shifted(xdata, tpeak, rcvr_op, sitenum_op, combos, Fs);
     for rr = 1:size(rcvr_op, 1)
-        if strcmp(rcvr_op(rr,:), 'ASTRArx') && strcmp(doy, '342') && strcmp(year, '2013')
+        if strcmp(rcvr_op(rr, :), 'ASTRArx') && strcmp(doy, '342') && strcmp(year, '2013')
             AZ(tt, rr) = mean(AZ(tt, [1:rr - 1, rr + 1:end]));
             ZE(tt, rr) = mean(ZE(tt, [1:rr - 1, rr + 1:end]));
         end
-        zmin = 100e3; zmax = 1000e3; Lmin = 25e3; step = 25e3;
+        zmin = 100e3;
+        zmax = 1000e3;
+        Lmin = 25e3;
+        step = 25e3;
         
         %Amplitude and phase of the receivered signal
         
@@ -128,12 +131,12 @@ if ~isnan(vmag) && ~isnan(vang)
                         [R_rytov, k_par, k_par_index, R_Bust] = Lz(vmag, vang, AZ(tt, rr), ZE(tt, rr), L, z, f);
                         R_obs_c = R_obs(k_par_index, rr);
                     else
-                        [R_rytov, k_par, k_par_index, R_Bust] = Lz(vmag, vang, AZ(tt,:), ZE(tt,:), L, z, f);
-                        R_obs_c = R_obs(k_par_index,:);
+                        [R_rytov, k_par, k_par_index, R_Bust] = Lz(vmag, vang, AZ(tt, :), ZE(tt, :), L, z, f);
+                        R_obs_c = R_obs(k_par_index, :);
                     end
                     
-                    R_rytov_c = R_rytov(k_par_index,:);
-                    R_Bust_c = R_Bust(k_par_index,:);
+                    R_rytov_c = R_rytov(k_par_index, :);
+                    R_Bust_c = R_Bust(k_par_index, :);
                     
                     % normalized?
                     if normalize == 0
@@ -165,18 +168,20 @@ if ~isnan(vmag) && ~isnan(vang)
         hold on;
         %                 plot3(L_hat/10^3,z_hat/10^3,ep_min,'ro');
         plot(L_hat(:, rr)/10^3, z_hat(:, rr)/10^3, 'ro');
-        xlabel('Thickness $L$ [km] '); ylabel('Top height $z$ [km]'); zlabel('$\epsilon^2$');
+        xlabel('Thickness $L$ [km] ');
+        ylabel('Top height $z$ [km]');
+        zlabel('$\epsilon^2$');
         title(['$\hat{L} = $', num2str(L_hat(:, rr)/10^3), ', ', ...
             '$\hat{z} = $', num2str(z_hat(:, rr)/10^3), ', ', ...
             '$\epsilon^2_{min} = $', num2str(ep_min(:, rr)), ', ', ...
-            'for ', sitenum_op{rr,:}]);
+            'for ', sitenum_op{rr, :}]);
         %                 set(gca, 'Zscale', 'log');
         %         zlim([0 10]);
         %                 view([45,15]);
         tightfig;
         cb = colorbar;
         set(get(cb, 'YLabel'), 'String', '$\epsilon^2$', 'interpreter', 'latex');
-        plotname = [year, '_', doy, '_PRN', num2str(prn), '_', sitenum_op{rr,:}, '_CostFunction_', ...
+        plotname = [year, '_', doy, '_PRN', num2str(prn), '_', sitenum_op{rr, :}, '_CostFunction_', ...
             num2str(tslist(tt), '%.0f'), '-', num2str(telist(tt), '%.0f'), 's_after_', ...
             datestr(init_time, 'HHMM'), 'UT_', num2str(factor), '_', num2str(zmax)];
         plotpath = [op_path, plotname];
@@ -201,10 +206,10 @@ if ~isnan(vmag) && ~isnan(vang)
         %                     set(gca,'YTick',[1e-5 1e-4 1e-3 1e-2 1e-1 1e0 1e1 1e2]);
         title('Observed Log-Amplitude to Phase Power Spectrum Ratio');
         legend({'Log-Amplitude', 'Phase', 'Ratio'}, 'location', 'southwest');
-        xlabel(['Wavenumber along Drift Velocity Direction $k_{\parallel}$ [rad/m], ', sitenum_op{rr,:}]);
+        xlabel(['Wavenumber along Drift Velocity Direction $k_{\parallel}$ [rad/m], ', sitenum_op{rr, :}]);
         %                     legend({'Phase','Log_{10} Power'},'location','best')
         tightfig;
-        plotname = [year, '_', doy, '_PRN', num2str(prn), '_', sitenum_op{rr,:}, '_ObservedRatio_', ...
+        plotname = [year, '_', doy, '_PRN', num2str(prn), '_', sitenum_op{rr, :}, '_ObservedRatio_', ...
             num2str(tslist(tt), '%.0f'), '-', num2str(telist(tt), '%.0f'), 's_after_', ...
             datestr(init_time, 'HHMM'), 'UT'];
         plotpath = [op_path, plotname];
@@ -224,8 +229,8 @@ if ~isnan(vmag) && ~isnan(vang)
             AZ(tt, rr), ZE(tt, rr), L_hat(:, rr), z_hat(:, rr), f);
         [R_rytov_fixed, ~, k_par_index_Bust, R_Bust_fixed] = Lz(vmag, vang, ...
             AZ(tt, rr), ZE(tt, rr), 500e3, 200e3, f);
-        k_par_c = k_par(k_par_index,:);
-        R_rytov_hat_c(:, rr) = R_rytov_hat(k_par_index,:);
+        k_par_c = k_par(k_par_index, :);
+        R_rytov_hat_c(:, rr) = R_rytov_hat(k_par_index, :);
         R_obs_c(:, rr) = R_obs(k_par_index, rr);
         if debug
             loglog(sp(rr), k_par_c, R_obs_c(:, rr), 'r', ...
@@ -233,7 +238,7 @@ if ~isnan(vmag) && ~isnan(vang)
                 k_par_c, R_Bust(k_par_index), 'k', ...
                 k_par_c, R_rytov_fixed(k_par_index), 'g', ...
                 k_par_c, R_Bust_fixed(k_par_index), 'b');
-            legend(sp(rr), ['Observed, ', sitenum_op{rr,:}], ...
+            legend(sp(rr), ['Observed, ', sitenum_op{rr, :}], ...
                 ['R, $\hat{L}=', num2str(L_hat(:, rr)/10^3), '$, $\hat{z}=', num2str(z_hat(:, rr)/10^3), '$'], ...
                 'B, -', ...
                 'R, $\hat{L}=500$, $\hat{z}=200$', ...
@@ -242,7 +247,7 @@ if ~isnan(vmag) && ~isnan(vang)
         else
             loglog(sp(rr), k_par_c, R_obs_c(:, rr), 'r', ...
                 k_par_c, R_rytov_hat_c(:, rr), 'c');
-            legend(sp(rr), ['Observed, ', sitenum_op{rr,:}], ...
+            legend(sp(rr), ['Observed, ', sitenum_op{rr, :}], ...
                 ['Rytov, $\hat{L}=', num2str(L_hat(:, rr)/10^3), ...
                 '$, $\hat{z}=', num2str(z_hat(:, rr)/10^3), '$'], ...
                 'location', 'southeast');
@@ -251,7 +256,7 @@ if ~isnan(vmag) && ~isnan(vang)
         ylim(sp(rr), [10^-5, 10^2.5]);
         %                     set(gca,'YTick',[1e-5 1e-4 1e-3 1e-2 1e-1 1e0 1e1 1e2]);
         %                     ylim([1e-5*0.99 1e2*1.01]);
-        MEGA_LZ(tt, rr,:) = [datenum(tslist(tt)/24/3600+init_time), ...
+        MEGA_LZ(tt, rr, :) = [datenum(tslist(tt)/24/3600+init_time), ...
             datenum(telist(tt)/24/3600+init_time), ...
             L_hat(:, rr) / 10^3, z_hat(:, rr) / 10^3, ep_min(:, rr)];
     end
@@ -261,7 +266,7 @@ if ~isnan(vmag) && ~isnan(vang)
     set(sp(1:(rr - 1)), 'xticklabel', []);
     set(sp(2:2:rr), 'yticklabel', []);
     tightfig;
-    plotname = [year, '_', doy, '_PRN', num2str(prn), '_', sitenum_op{rr,:}, '_RytovObserved_', ...
+    plotname = [year, '_', doy, '_PRN', num2str(prn), '_', sitenum_op{rr, :}, '_RytovObserved_', ...
         num2str(tslist(tt), '%.0f'), '-', num2str(telist(tt), '%.0f'), 's_after_', ...
         datestr(init_time, 'HHMM'), 'UT_', num2str(factor), '_', num2str(zmax)];
     plotpath = [op_path, plotname];
@@ -272,7 +277,7 @@ if ~isnan(vmag) && ~isnan(vang)
     close;
 else
     for rr = 1:size(rcvr_op, 1)
-        MEGA_LZ(tt, rr,:) = [datenum(tslist(tt)/24/3600+init_time), ...
+        MEGA_LZ(tt, rr, :) = [datenum(tslist(tt)/24/3600+init_time), ...
             datenum(telist(tt)/24/3600+init_time), ...
             NaN, NaN, NaN];
     end
@@ -285,5 +290,3 @@ end
 %         end
 %     end
 % end
-
-

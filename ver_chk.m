@@ -14,7 +14,7 @@ if strcmp('GLNXA64', computer)
     out_path = [home_dir, sep, mat_dir, sep];
     in_path = [home_dir, sep, mat_dir, sep];
     
-elseif strcmp('PCWIN64', computer) && verLessThan('matlab','8.7')
+elseif strcmp('PCWIN64', computer) && verLessThan('matlab', '8.7')
     %on the lab windows desktop
     out_path = [home_dir, sep, mat_dir, sep];
     in_path = [home_dir, sep, mat_dir, sep];
@@ -31,5 +31,3 @@ else
 end
 
 end
-
-

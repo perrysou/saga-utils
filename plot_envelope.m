@@ -7,9 +7,10 @@ y = y(~isnan(y));
 
 hold on;
 if isrow(x) && isrow(y) && isrow(e)
-    x = x'; y = y'; e = e';
+    x = x';
+    y = y';
+    e = e';
 end
-fill([x;flipud(x)],[y-e;flipud(y+e)],...
-    c,'facecolor',c,'facealpha',0.1,'edgecolor','none');
+fill([x; flipud(x)], [y - e; flipud(y+e)], ...
+    c, 'facecolor', c, 'facealpha', 0.1, 'edgecolor', 'none');
 % patch([x; flip(x)], [y; flip(y+e)], c, 'facecolor', c, 'facealpha', 0.1, 'edgecolor', 'none');
-

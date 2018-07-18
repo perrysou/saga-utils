@@ -43,16 +43,15 @@ if debug_flag
 end
 
 %number of receivers, from all to a pair
-for tol = length(trx):- 1:2
-    combos{length(trx)-tol+1,:} = nchoosek(1:length(trx), tol);
+for tol = length(trx):-1:2
+    combos{length(trx)-tol+1, :} = nchoosek(1:length(trx), tol);
 end
-
 
 
 tmat = cell(length(combos), size(nchoosek(1:length(trx), tol), 1));
 for numrx = 1:length(combos)
-    for numc = 1:size(combos{numrx,:}, 1)
-        rxnum = combos{numrx,:}(numc, 1:end);
+    for numc = 1:size(combos{numrx, :}, 1)
+        rxnum = combos{numrx, :}(numc, 1:end);
         if size(trx, 2) > 1
             for ind = 1:length(rxnum) - 1
                 n = 1;
@@ -118,5 +117,3 @@ else
     % axis([-4 20 0 8]);
     set(gca, 'yticklabel', []);
 end
-
-

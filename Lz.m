@@ -75,4 +75,3 @@ R_rytov_Bust = S_minus_Bust ./ S_plus_Bust;
 %     fprintf('%f\n', diff_sqr);
 
 end
-

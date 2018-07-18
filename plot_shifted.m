@@ -42,7 +42,8 @@ for rr = 1:size(rcvr_op, 1)
     pwr_truncated{rr} = pwr_shifted{rr}(1:length(pwr_shifted{rr_lag}));
     plot(sp(2), ph_truncated{rr}, 'color', rx_color(rcvr_op(rr, :)));
     plot(sp(1), pwr_truncated{rr}, 'color', rx_color(rcvr_op(rr, :)));
-    hold(sp(1), 'on'); hold(sp(end), 'on');
+    hold(sp(1), 'on');
+    hold(sp(end), 'on');
 end
 set(sp(1:(end -1)), 'xticklabel', []);
 legend(sp(1), sitenum_op, 'orientation', 'horizontal');
@@ -68,4 +69,3 @@ set(sp(2:2:end), 'yticklabel', []);
 tightfig;
 saveas(fig_each, '../../../each', 'png');
 close;
-

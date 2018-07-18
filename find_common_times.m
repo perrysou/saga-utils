@@ -43,7 +43,7 @@ if size(trx, 2) > 1
             t1 = t;
         end
         t2 = trx_{rxnum+1};
-        for jj = 1:size(t1, 2)            
+        for jj = 1:size(t1, 2)
             for kk = 1:size(t2, 2)
                 if t2(1, kk) < t1(1, jj)
                     if t2(2, kk) >= t1(1, jj) && t2(2, kk) <= t1(2, jj)
@@ -55,7 +55,7 @@ if size(trx, 2) > 1
                     else
                         t(1, n) = NaN;
                         t(2, n) = NaN;
-                    end                    
+                    end
                 elseif t2(1, kk) >= t1(1, jj) && t2(1, kk) <= t1(2, jj)
                     t(1, n) = t2(1, kk);
                     if t2(2, kk) <= t1(2, jj)
@@ -65,7 +65,7 @@ if size(trx, 2) > 1
                     end
                 else
                     t(1, n) = NaN;
-                    t(2, n) = NaN;                    
+                    t(2, n) = NaN;
                 end
                 n = n + 1;
             end
@@ -85,22 +85,20 @@ return;
 %for plotting purposes
 tstt = t(1:2:end);
 tend = t(2:2:end);
-t_ = [tstt';tend'];
-for tt = 1:size(t_,2)
-    plot(t_(:,tt),zeros(size(t_(:,tt))),'.-r');
+t_ = [tstt'; tend'];
+for tt = 1:size(t_, 2)
+    plot(t_(:, tt), zeros(size(t_(:, tt))), '.-r');
     hold on;
-    plot([t_(1,tt) t_(1,tt)],[0 length(trx_)],'--k');
-    plot([t_(2,tt) t_(2,tt)],[0 length(trx_)],'--k');
+    plot([t_(1, tt), t_(1, tt)], [0, length(trx_)], '--k');
+    plot([t_(2, tt), t_(2, tt)], [0, length(trx_)], '--k');
 end
-text(-2,0,'overlaps');
+text(-2, 0, 'overlaps');
 % plot(rand(20,1)+5,'k');
 % axis([-4 20 0 8]);
-set(gca,'yticklabel',[]);
-set(findall(gcf,'-property','FontSize'),'FontSize',14)
+set(gca, 'yticklabel', []);
+set(findall(gcf, '-property', 'FontSize'), 'FontSize', 14)
 % set(gca,'Visible','off');
 % op_path = '/data1/home/ysu27/Dropbox/';
 % op_path = '/home/yang/Dropbox/research-misc/ION_2015/';
 % saveas(gcf,[op_path,'findcommon.eps'],'epsc2');
 close;
-
-

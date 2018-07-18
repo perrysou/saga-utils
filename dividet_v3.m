@@ -37,4 +37,3 @@ for ti = 1:length(tl)
 end
 [newtslist, newtelist, newtelist - newtslist]
 end
-

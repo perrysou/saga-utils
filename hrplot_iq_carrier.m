@@ -3,10 +3,10 @@ function [tstt, tend] = hrplot_iq_carrier(signal_type, home_dir, cases_folder, y
 
 close all
 sep = filesep;
-% try 
+% try
 %     load('../../local.mat');
 %     [~, op_path] = ver_chk;
-% catch   
+% catch
 signal = getSignal(signal_type);
 
 % High-rate data processing and plotting
@@ -15,8 +15,8 @@ signal = getSignal(signal_type);
 % tspan_d(2,:) = tspan_d(2,:)+600/24/3600;
 
 tspan_utc = datevec(tspan_d);
-tstt = tspan_utc(1,:);
-tend = tspan_utc(2,:);
+tstt = tspan_utc(1, :);
+tend = tspan_utc(2, :);
 hour = tstt(4);
 init_time = datenum([tspan_utc(1, 1:3), hour, 0, 0]);
 tlim = (tspan_d' - init_time') * 24 * 3600;
@@ -25,15 +25,15 @@ RCVRNAME = {};
 
 global mat_dir;
 
-hr_results = [home_dir, sep, mat_dir,sep, ...
-    'hrplot_', year, '_', doy, '_PRN', num2str(prn), datestr(tspan_d(1,:), '_HHMMUT'), '_zoom', num2str(zcounter), '.mat']
+hr_results = [home_dir, sep, mat_dir, sep, ...
+    'hrplot_', year, '_', doy, '_PRN', num2str(prn), datestr(tspan_d(1, :), '_HHMMUT'), '_zoom', num2str(zcounter), '.mat']
 tic;
 % keyboard;
 % if isempty(dir(hr_results))
 if 1
     for rr = 1:size(rcvr_op, 1)
-        rcvr_name = rcvr_op(rr,:);
-        sitenum = sitenum_op{rr,:};
+        rcvr_name = rcvr_op(rr, :);
+        sitenum = sitenum_op{rr, :};
         %     if strcmp(case_folder(end-4:end-1),'pfrr')
         %         %folder_path for 2013 Poker Flat data
         %         op_path = strcat([home_dir,'PFRR_Data/',rcvr_name,sep,year,sep,doy,sep]);
@@ -61,13 +61,13 @@ if 1
             load(infilename);
         end
         
-%         if rcvr_name == 'ASTRArx'
-%             keyboard;
-%         end
+        %         if rcvr_name == 'ASTRArx'
+        %             keyboard;
+        %         end
         rcvr_name
         size(DATAM2)
         %     DATAM2([1 end],:)
-%         keyboard;
+        %         keyboard;
         if ~isempty(DATAM2)
             RCVRNAME = [RCVRNAME; sitenum];
             if strcmp(set_plot, 'A') == 1
@@ -84,37 +84,37 @@ if 1
             load(outfilename);
             data_PRN = data_PRN';
             size(data_PRN);
-            data_PRN([1, end],:);
+            data_PRN([1, end], :);
             
             %specify time interval
-            if 1<0
+            if 1 < 0
             elseif strcmp(year, '2017') && strcmp(doy, '233')
-                    ttt = data_PRN([1 end],1);
-                    ttt = [20*60;40*60];
-%                 elseif prn == 27 && strcmp(year, '2015') && strcmp(doy, '076')
+                ttt = data_PRN([1, end], 1);
+                ttt = [20 * 60; 40 * 60];
+                %                 elseif prn == 27 && strcmp(year, '2015') && strcmp(doy, '076')
                 %         ttt = data_PRN([1 end],1);
                 %         ttt = [660;721];
                 %     elseif prn == 22 && strcmp(year,'2015') && strcmp(doy,'076')
                 %         ttt = [600;900];
-%             elseif (prn == 23 || prn == 10 || prn == 13) && strcmp(year,'2013') && strcmp(doy,'342')
-%                 ttt = [2615;2660];
+                %             elseif (prn == 23 || prn == 10 || prn == 13) && strcmp(year,'2013') && strcmp(doy,'342')
+                %                 ttt = [2615;2660];
                 %    elseif prn == 29 && strcmp(year,'2014') && strcmp(doy,'051')
                 %        ttt = [2685;2729];
             else
                 ttt = data_PRN([1, end], 1);
             end
-% %             override the time limits from low rate detection
+            % %             override the time limits from low rate detection
             tlim = ttt';
-            data_PRN = data_PRN(data_PRN(:, 1) <= ttt(end) & data_PRN(:, 1) >= ttt(1),:);
-            if size(data_PRN,1) == 0
-                data_PRN = NaN * ones(1,4);
+            data_PRN = data_PRN(data_PRN(:, 1) <= ttt(end) & data_PRN(:, 1) >= ttt(1), :);
+            if size(data_PRN, 1) == 0
+                data_PRN = NaN * ones(1, 4);
             end
             obstime = data_PRN(:, 1);
             %1/12/2015 make time labels in :MM:SS format
             obstime = obstime / 24 / 3600 + init_time;
             piqpowdata = data_PRN(:, 2);
             piqphdata = data_PRN(:, 3);
-                        
+            
             dt = max(unique(diff(obstime)));
             dt = 0.015 / 24 / 3600;
             [obstime_e, power_e] = discont_proc(obstime, piqpowdata, dt);
@@ -182,15 +182,15 @@ if 1
                 str = strcat('Detrended Power $P_{f}$ and', ...
                     {' Phase $\Phi_f$ for '}, signal, ', PRN:', num2str(prn));
                 title(str);
-                %         axis([tlim/24/3600+init_time -log10(max(maxpwr))*10*1.5 log10(max(maxpwr))*10*1.5]);                
+                %         axis([tlim/24/3600+init_time -log10(max(maxpwr))*10*1.5 log10(max(maxpwr))*10*1.5]);
                 axis([tlim / 24 / 3600 + init_time, -10, 5]);
                 datetick('x', ticklbl, 'keeplimits');
                 %         set(gca,'XTick',(ttt(1):10:ttt(2))/24/3600+init_time);
                 ylabel('(a) Power $P_f$ [dB]');
-
+                
                 
                 hold on;
-                                
+                
                 %         legend(RCVRNAME,'Location','NorthEastOutside');
                 if 2 < 1
                     %         if rr == size(rcvr_op,1) && strcmp(doy,'342')
@@ -214,15 +214,15 @@ if 1
                 ylabel('Phase $\Phi_f$ [rad]');
                 hold on;
                 %phase peaks
-%                 [pks, locs, width , prominence] = ...
-%                     findpeaks(piqphdata, obstime, 'MinPeakHeight', 1.5, ...
-%                     'Annotate','extents');
+                %                 [pks, locs, width , prominence] = ...
+                %                     findpeaks(piqphdata, obstime, 'MinPeakHeight', 1.5, ...
+                %                     'Annotate','extents');
                 
-                %         axis([tlim/24/3600+init_time -max(maxph)*1.5 max(maxph)*1.5]);               
+                %         axis([tlim/24/3600+init_time -max(maxph)*1.5 max(maxph)*1.5]);
                 axis([tlim / 24 / 3600 + init_time, -2 * pi, 2 * pi]);
                 datetick('x', ticklbl, 'keeplimits');
                 %         set(gca,'XTick',(ttt(1):10:ttt(2))/24/3600+init_time);
-           
+                
                 if rr == size(rcvr_op, 1) && strcmp(doy, '342') && 2 < 1
                     %1/12/2015 red line snapshot times
                     for tpp = tpp_s / 24 / 3600 + init_time
@@ -277,12 +277,12 @@ if 1
             xdata_PRN{rr} = [];
         end
     end
-    gcabottom = get(phasesp,'outerposition');
+    gcabottom = get(phasesp, 'outerposition');
     lg = legend(h, RCVRNAME, 'Location', ...
         'north', 'Orientation', 'horizontal');
-    lgpos = get(lg,'position');    
+    lgpos = get(lg, 'position');
     lg = legend(h, RCVRNAME, 'Position', ...
-        [lgpos(1) + 0.001, gcabottom(2)+gcabottom(4), lgpos(3:4)], 'Orientation', 'horizontal');
+        [lgpos(1) + 0.001, gcabottom(2) + gcabottom(4), lgpos(3:4)], 'Orientation', 'horizontal');
     
     %save the plot
     if strcmp(set_plot, 'A') == 1
@@ -296,12 +296,16 @@ if 1
         '_zoom', num2str(zcounter), ...
         '_', num2str(tlim(1)), '-', num2str(tlim(2)), ...
         's_after_', datestr(init_time, 'HHMM'), 'UT'];
-%     plotpath = [op_path, plot_name,'.eps'];
-%     plotpath = [op_path, plot_name, '_phonly','.eps'];
-%     saveas(gcf, plotpath, 'epsc2');
+    %     plotpath = [op_path, plot_name,'.eps'];
+    %     plotpath = [op_path, plot_name, '_phonly','.eps'];
+    %     saveas(gcf, plotpath, 'epsc2');
     [~, hr_path, ~] = ver_chk;
-    plotpath = [hr_path,plot_name,'.png'];
-    saveas(gcf,plotpath,'png');
+    
+    % save high_rate data as matfiles
+    save([hr_path, 'high_rate', '.mat'], 'xdata_PRN', 'init_time', 'RCVRNAME', 'rcvr_op');
+    
+    plotpath = [hr_path, plot_name, '.png'];
+    saveas(gcf, plotpath, 'png');
     close;
     
     init_t_utc = datevec(init_time);
@@ -314,16 +318,16 @@ hrplot_te = toc;
 
 disp(['Finished preprocessing for PRN', num2str(prn)]);
 % tic;
-% continuteflag = input('Proceed to estimation? [y]/n','s');
-% if strcmp(continuteflag,'n')
-%     return;
-% end
+continuteflag = input('Proceed to estimation? [y]/n', 's');
+if strcmp(continuteflag, 'n')
+    return;
+end
 
 % Cross-correlation for pairs of receivers
 % xcorr_results = [home_dir,'/PFRR_Data/','xcorr_',...
 %     year,'_',doy,'_PRN',num2str(prn),'_zoom',num2str(zcounter),'.mat']
-xcorr_results = [home_dir, sep, mat_dir,sep, 'xcorr_', ...
-    year, '_', doy, '_PRN', num2str(prn), datestr(tspan_d(1,:), '_HHMMUT'), ...
+xcorr_results = [home_dir, sep, mat_dir, sep, 'xcorr_', ...
+    year, '_', doy, '_PRN', num2str(prn), datestr(tspan_d(1, :), '_HHMMUT'), ...
     '_zoom', num2str(zcounter), '_60s.mat']
 tic;
 
@@ -335,7 +339,7 @@ for iii = 1:size(xdata_PRN, 2)
     if ~isempty(xdata_PRN{iii})
         DRX = [DRX, xdata_PRN{iii}];
     else
-        rcvr_op_xcorr = setdiff(rcvr_op_xcorr, rcvr_op(iii,:), 'rows');
+        rcvr_op_xcorr = setdiff(rcvr_op_xcorr, rcvr_op(iii, :), 'rows');
     end
 end
 rcvr_op = rcvr_op_xcorr;
@@ -350,12 +354,12 @@ end
 
 if ~isempty(dir(xcorr_results))
     fprintf('Estimation analysis results exist\n');
-%     plotSAGAvsPFISR(prn, tstt, 'debug');
+    %     plotSAGAvsPFISR(prn, tstt, 'debug');
     % plotprnvs(prn,year,doy);
     disp(['Finished processing for PRN', num2str(prn)]);
-    rerunflag = input('Rerun the analysis? y/[n]','s');
-    if strcmp(rerunflag,'y')
-        renamecomm = strjoin({'mv',xcorr_results,[xcorr_results,'.bak']});
+    rerunflag = input('Rerun the analysis? y/[n]', 's');
+    if strcmp(rerunflag, 'y')
+        renamecomm = strjoin({'mv', xcorr_results, [xcorr_results, '.bak']});
         system(renamecomm);
     else
         return;
@@ -369,7 +373,7 @@ for rr = 1:size(rcvr_op, 1)
     xdata_PRN{rr}(:, 1) = round(xdata_PRN{rr}(:, 1)*100) / 100;
     checkrows = find(diff(xdata_PRN{rr}(:, 1) == 0));
     uniquerows = setdiff(1:numel(xdata_PRN{rr}(:, 1)), checkrows);
-    xdata_PRN{rr} = xdata_PRN{rr}(uniquerows,:);
+    xdata_PRN{rr} = xdata_PRN{rr}(uniquerows, :);
     %the same with timestamps
     xt = xdata_PRN{rr}(:, 1);
     disc = find(diff(xt) >= dt);
@@ -399,18 +403,18 @@ for i_dtau = 1:length(v_dtau)
     dtau = v_dtau(i_dtau);
     [tslist, telist] = dividet_v2(t, dtau, 10);
     [tslist, telist] = dividet_v1(t, dtau, 10);
-%     [tslist, telist] = dividet_v3(t, dtau*3/4, 10);
-    [tslist telist telist - tslist]
+    %     [tslist, telist] = dividet_v3(t, dtau*3/4, 10);
+    [tslist, telist, telist - tslist]
     for tt = 1:length(telist)
         for rr = 1:size(rcvr_op, 1)
             time = xdata_PRN{rr}(:, 1);
-            xdata{rr} = xdata_PRN{rr}(time <= telist(tt) & time >= tslist(tt),:);
+            xdata{rr} = xdata_PRN{rr}(time <= telist(tt) & time >= tslist(tt), :);
             [~, ia, ~] = unique(xdata{rr}(:, 1), 'stable');
             %         size(c)
-            xdata{rr} = xdata{rr}(ia,:);
+            xdata{rr} = xdata{rr}(ia, :);
             size(xdata{rr});
         end
-        xtime = xdata{1}(:,1);
+        xtime = xdata{1}(:, 1);
         
         fprintf('Begin estimation for period %i/%i \n', tt, length(telist));
         [tauaarrn, taucarrn, ccvalarrn, ccerrarrn, ...
@@ -427,16 +431,16 @@ for i_dtau = 1:length(v_dtau)
             num2str(tslist(tt), '%.0f'), '-', num2str(telist(tt), '%.0f'), 's_after_', ...
             datestr(init_time, 'HHMM'), 'UT'];
         plotpath = [op_path, plotname, '.png'];
-        saveas(gcf,plotpath,'png');
+        saveas(gcf, plotpath, 'png');
         close;
         
         %read origin receiver location
-        [~, op_path_0] = inoutpath(cases_folder, home_dir, year, doy, rcvr_op(1,:));
+        [~, op_path_0] = inoutpath(cases_folder, home_dir, year, doy, rcvr_op(1, :));
         load([op_path_0, 'prn_files_', signal, sep, 'navdata.mat']);
         NAVDATA_O = NAVDATA;
         [~, lla_0, ~] = compute_baselines(NAVDATA, NAVDATA_O, init_time, xtime);
         for rr = 1:size(rcvr_op, 1)
-            rcvr_name = rcvr_op(rr,:);
+            rcvr_name = rcvr_op(rr, :);
             %         if strcmp(cases_folder(end-4:end-1),'pfrr')
             %             %folder_path for 2013 Poker Flat data
             %             op_path = strcat([home_dir,'PFRR_Data/',rcvr_name,sep,year,sep,doy,sep]);
@@ -463,16 +467,17 @@ for i_dtau = 1:length(v_dtau)
             [enu, lla, xyz] = ...
                 compute_baselines(NAVDATA, NAVDATA_O, init_time, xtime);
             %         [~, DATA_el,~] = read_data(doy,year,in_path,op_path,sep,signal_type,signal);
-%             plot(enu(1), enu(2), 'o', 'Color', rx_color(rcvr_name), 'MarkerFaceColor', rx_color(rcvr_name));
-%             text(enu(1), enu(2), [num2str(lla(1:2)', '%.6g'), ['\circ N'; '\circ E']], 'VerticalAlignment', 'Bottom');
-            hold on; grid on;
+            %             plot(enu(1), enu(2), 'o', 'Color', rx_color(rcvr_name), 'MarkerFaceColor', rx_color(rcvr_name));
+            %             text(enu(1), enu(2), [num2str(lla(1:2)', '%.6g'), ['\circ N'; '\circ E']], 'VerticalAlignment', 'Bottom');
+            hold on;
+            grid on;
             ENU(:, rr) = enu';
             XYZ(:, rr) = xyz';
             LLA(:, rr) = lla';
             if ~isempty(DATA_el)
                 time_azel = (datenum(gps2utc(DATA_el(:, 1:2))) - init_time) * 24 * 3600;
                 iii = time_azel <= telist(tt) & time_azel >= tslist(tt) & DATA_el(:, 4) == prn;
-                t_azel = time_azel(iii,:);
+                t_azel = time_azel(iii, :);
                 el = DATA_el(iii, 3) * pi / 180;
                 az = DATA_el(iii, 5) * pi / 180;
                 EL(tt, rr) = mean(DATA_el(iii, 3)) * pi / 180;
@@ -486,56 +491,57 @@ for i_dtau = 1:length(v_dtau)
             if ~isempty(DATA)
                 time_scint = (datenum(gps2utc(DATA(:, 1:2))) - init_time) * 24 * 3600;
                 iii = time_scint <= telist(tt) & time_scint >= tslist(tt) & DATA(:, 4) == prn;
-%                 SP(tt, rr) = DATA(iii, 3);
+                %                 SP(tt, rr) = DATA(iii, 3);
             else
                 SP(tt, rr) = NaN;
             end
             if rr == 1
-                hvec = 1e3*(250 + 50*randn(100,1));
-                [ipplat, ipplon] = deal(zeros(length(az),length(hvec)));
-                [vge_prn, vgn_prn] = deal(zeros(length(az)-1,length(hvec)));
-                for kkk = 1:length(hvec)         
+                hvec = 1e3 * (250 + 50 * randn(100, 1));
+                [ipplat, ipplon] = deal(zeros(length(az), length(hvec)));
+                [vge_prn, vgn_prn] = deal(zeros(length(az)-1, length(hvec)));
+                for kkk = 1:length(hvec)
                     %mean ipp latitude should be the same for different ccmin
-                    [ipplat(:,kkk), ipplon(:,kkk)] = sill(az, el, ...
+                    [ipplat(:, kkk), ipplon(:, kkk)] = sill(az, el, ...
                         lla_0(1), lla_0(2), lla_0(3), hvec(kkk));
-                    ipp_xyz = wgslla2xyz(ipplat(:,kkk), ipplon(:,kkk), ...
-                        hvec(kkk)*ones(size(ipplat(:,kkk))));
-                    ipp_enu = xyz2enu_new(ipp_xyz,lla_0(1), lla_0(2), lla_0(3));
+                    ipp_xyz = wgslla2xyz(ipplat(:, kkk), ipplon(:, kkk), ...
+                        hvec(kkk)*ones(size(ipplat(:, kkk))));
+                    ipp_enu = xyz2enu_new(ipp_xyz, lla_0(1), lla_0(2), lla_0(3));
                     denu_ipp = diff(ipp_enu);
-        %             dist = sqrt(denu_ipp(:,1).^2 + denu_ipp(:,2).^2);
-                    vge_prn(:,kkk) = denu_ipp(:,1)./diff(t_azel);
-                    vgn_prn(:,kkk) = denu_ipp(:,2)./diff(t_azel);
+                    %             dist = sqrt(denu_ipp(:,1).^2 + denu_ipp(:,2).^2);
+                    vge_prn(:, kkk) = denu_ipp(:, 1) ./ diff(t_azel);
+                    vgn_prn(:, kkk) = denu_ipp(:, 2) ./ diff(t_azel);
                 end
-                vge_prnbar = mean(mean(vge_prn,2));
-                vgn_prnbar = mean(mean(vgn_prn,2));
-                evge_prn = mean(std(vge_prn,0,2));
-                evgn_prn = mean(std(vgn_prn,0,2));
+                vge_prnbar = mean(mean(vge_prn, 2));
+                vgn_prnbar = mean(mean(vgn_prn, 2));
+                evge_prn = mean(std(vge_prn, 0, 2));
+                evgn_prn = mean(std(vgn_prn, 0, 2));
             end
         end
-%         axis([-100, 3500, -1200, 400]);
-%         legend(sitenum_op);
-%         title('Operational Receviers of SAGA at PFRR');
-%         xlabel(['Time after ', datestr(init_time, 'HH:MM'), ...
-%             ' UT ', datestr(init_time, 'mm/dd/yyyy')]);
-%         plotpath = [op_path, 'PRN', num2str(prn), '_PFRR_array', '.eps'];
-%         saveas(gcf, plotpath, 'epsc2');
-%         close;
+        %         axis([-100, 3500, -1200, 400]);
+        %         legend(sitenum_op);
+        %         title('Operational Receviers of SAGA at PFRR');
+        %         xlabel(['Time after ', datestr(init_time, 'HH:MM'), ...
+        %             ' UT ', datestr(init_time, 'mm/dd/yyyy')]);
+        %         plotpath = [op_path, 'PRN', num2str(prn), '_PFRR_array', '.eps'];
+        %         saveas(gcf, plotpath, 'epsc2');
+        %         close;
         %             return;
         % Solve for drift velocity
         %     combos = nchoosek(1:size(rcvr_op,1), 2);
         [H, YN, Y, CCVALN, CCVAL, CCERR, COMBOS, RXILOC, RHO0] = deal([]);
         for i = 1:size(combos, 1)
             denu(:, i) = ENU(:, combos(i, 1)) - ENU(:, combos(i, 2));
-            x_ij = denu(1, i); y_ij = denu(2, i);
+            x_ij = denu(1, i);
+            y_ij = denu(2, i);
             %Use SAGA phase measurements to solve system for velocity
-            tau_an = tauaarrn{i,:};
-            tau_cn = taucarrn{i,:};
-            ccvaln = ccvalarrn{i,:};
-            ccerr = ccerrarrn{i,:};
+            tau_an = tauaarrn{i, :};
+            tau_cn = taucarrn{i, :};
+            ccvaln = ccvalarrn{i, :};
+            ccerr = ccerrarrn{i, :};
             
-            tau_a = tauaarr{i,:};
-            tau_c = taucarr{i,:};
-            ccval = ccvalarr{i,:};
+            tau_a = tauaarr{i, :};
+            tau_c = taucarr{i, :};
+            ccval = ccvalarr{i, :};
             
             N = size(unique(tau_cn));
             h = [ones(N) * x_ij^2, ...
@@ -551,17 +557,17 @@ for i_dtau = 1:length(v_dtau)
             CCVALN = [CCVALN; ccvaln];
             CCVAL = [CCVAL; ccval];
             CCERR = [CCERR; ccerr]; %Nx1
-            COMBOS = [COMBOS; repmat([combos(i,1) combos(i,2)], N)];
-            RHO0 = [RHO0; repmat([peak(i) altpeak(i)], N)];
-            RXILOC = [RXILOC; repmat([ENU(1:2, combos(i, 1))' ENU(1:2, combos(i, 2))'], N)];
+            COMBOS = [COMBOS; repmat([combos(i, 1), combos(i, 2)], N)];
+            RHO0 = [RHO0; repmat([peak(i), altpeak(i)], N)];
+            RXILOC = [RXILOC; repmat([ENU(1:2, combos(i, 1))', ENU(1:2, combos(i, 2))'], N)];
         end
         
-%         exit;
-%         if tt == 7
-%             exit;
-%         else
-%             continue;
-%         end
+        %         exit;
+        %         if tt == 7
+        %             exit;
+        %         else
+        %             continue;
+        %         end
         [estbar, covest, percentage, estbaro] ...
             = estimate_SAGA(H, YN, Y, CCVALN, CCVAL, CCERR, 0, COMBOS, RHO0, RXILOC, rcvr_op);
         estbarvec = num2cell(estbar);
@@ -570,43 +576,45 @@ for i_dtau = 1:length(v_dtau)
         [~, ~, ~, ~, ear, epsia, evc] = deal(eestvec{:});
         % Mapping matrix from ^scV^g to ^scV^prn
         % ^scV^prn = ^scV^g - ^prnV^g
-        M = [1 0 -1 0; 0 1 0 -1];
+        M = [1, 0, -1, 0; 0, 1, 0, -1];
         vg = M * [vge_sc; vgn_sc; vge_prnbar; vgn_prnbar];
-        vge = vg(1); vgn = vg(2);
-        covscen = covest(3:4,3:4);
-        covdrift = blkdiag(covscen,evge_prn^2,evgn_prn^2);
+        vge = vg(1);
+        vgn = vg(2);
+        covscen = covest(3:4, 3:4);
+        covdrift = blkdiag(covscen, evge_prn^2, evgn_prn^2);
         coven = M * covdrift * M';
-        evge = sqrt(coven(1,1)); evgn = sqrt(coven(2,2));
+        evge = sqrt(coven(1, 1));
+        evgn = sqrt(coven(2, 2));
         % Jacobian from [vge;vgn] to [vmag;vang]
         vmag = sqrt(vge.^2+vgn.^2);
-        vang = atan2(vgn,vge);
+        vang = atan2(vgn, vge);
         if vang < 0
             vang = 2 * pi + vang;
         end
-        J = [vge./vmag, vgn./vmag;
-            -vgn./vmag.^2, vge./vmag.^2];
+        J = [vge ./ vmag, vgn ./ vmag; ...
+            -vgn ./ vmag.^2, vge ./ vmag.^2];
         
         % covariances of ^scV^prn
         covmagang = J * M * covdrift * (J * M)';
-        evmag = sqrt(covmagang(1,1));
-        evang = sqrt(covmagang(2,2));
-    
-        ESTV(tt,:) = [datenum(tslist(tt)/24/3600+init_time), ...
+        evmag = sqrt(covmagang(1, 1));
+        evang = sqrt(covmagang(2, 2));
+        
+        ESTV(tt, :) = [datenum(tslist(tt)/24/3600+init_time), ...
             datenum(telist(tt)/24/3600+init_time), ...
-            vmag, evmag, rad2deg(vang), rad2deg(evang), vge, evge, vgn, evgn,...
+            vmag, evmag, rad2deg(vang), rad2deg(evang), vge, evge, vgn, evgn, ...
             ar, ear, rad2deg(psia), rad2deg(epsia), vc, evc, percentage];
         
-        ESTO(:,tt) = estbaro;
+        ESTO(:, tt) = estbaro;
         %save the ellipse
         plotname = ['Ellipse_PRN', num2str(prn), '_', ...
-            num2str(tslist(tt), '%.0f'), '-', num2str(telist(tt), '%.0f'),'s_after',...
+            num2str(tslist(tt), '%.0f'), '-', num2str(telist(tt), '%.0f'), 's_after', ...
             datestr(init_time, '_HHMMUT')];
         plotpath = [op_path, plotname, '.png'];
         saveas(gcf, plotpath, 'png');
         close;
         
-%         save('lz.mat'); 
-%         return;
+        %         save('lz.mat');
+        %         return;
         
         %skyplot
         if tt == length(telist) && i_dtau == 0
@@ -645,7 +653,7 @@ for i_dtau = 1:length(v_dtau)
         
         % Spectral analysis
         [~, op_path, ~] = ver_chk;
-
+        
         % flags used in the analysis
         
         % normalize the mean squared errors?
@@ -662,9 +670,9 @@ for i_dtau = 1:length(v_dtau)
             shiftedflag = 'timeshifted';
         else
             shiftedflag = 'nottimeshifted';
-        end   
+        end
         
-        % do the fit for all receivers or individually? 
+        % do the fit for all receivers or individually?
         fitall = 0;
         if fitall
             fitflag = 'fitall';
@@ -705,19 +713,23 @@ for i_dtau = 1:length(v_dtau)
         
         % filter the signal with windows?
         windowed = 1;
-
+        
         % power or amplitude?
         factor = 1; %0.5
         
         % iteration grid
-        zmin = 125e3; zmax = 600e3; Lmin = 25e3; step = 25e3;
+        zmin = 125e3;
+        zmax = 600e3;
+        Lmin = 25e3;
+        step = 25e3;
         
         % figure format, png/pdf/eps2c
-        format = 'png'; suffix = '.png';
-%         format = 'pdf'; suffix = '.pdf';
-%         format = 'epsc2'; suffix = '.eps';
+        format = 'png';
+        suffix = '.png';
+        %         format = 'pdf'; suffix = '.pdf';
+        %         format = 'epsc2'; suffix = '.eps';
         
-%         keyboard;
+        %         keyboard;
         
         %creat folders for figures
         op_path = strjoin({op_path, 'spectral', ...
@@ -734,7 +746,7 @@ for i_dtau = 1:length(v_dtau)
                     plot_shifted(xdata, tpeak, rcvr_op, sitenum_op, combos, Fs);
             end
             for rr = 1:size(rcvr_op, 1)
-                if strcmp(rcvr_op(rr,:), 'ASTRArx') && strcmp(doy, '342') && strcmp(year, '2013')
+                if strcmp(rcvr_op(rr, :), 'ASTRArx') && strcmp(doy, '342') && strcmp(year, '2013')
                     AZ(tt, rr) = mean(AZ(tt, [1:rr - 1, rr + 1:end]));
                     ZE(tt, rr) = mean(ZE(tt, [1:rr - 1, rr + 1:end]));
                 end
@@ -747,14 +759,14 @@ for i_dtau = 1:length(v_dtau)
                 %time-shifted, aligned and truncated signals
                 if shifted
                     pwr = pwr_truncated{rr}; %+ 0.25*randn(l,1);
-                    ph = ph_truncated{rr}; %+ 0.25*randn(l,1);  
+                    ph = ph_truncated{rr}; %+ 0.25*randn(l,1);
                 else
                     pwr = pwr_o; %+ 0.25*randn(l,1);
-                    ph = ph_o; %+ 0.25*randn(l,1);                     
+                    ph = ph_o; %+ 0.25*randn(l,1);
                 end
                 
                 l = length(pwr);
-                if zeropadding                    
+                if zeropadding
                     NFFT = 2^nextpow2(l);
                 else
                     NFFT = l;
@@ -766,17 +778,17 @@ for i_dtau = 1:length(v_dtau)
                 else
                     window_welch = ones(NFFT, 1);
                     window_period = ones(NFFT, 1);
-                end    
+                end
                 
                 if overlap
                     noverlap = [];
                 else
                     noverlap = 0;
-                end                    
+                end
                 [Spwr_obs_welch{tt, rr}, ~] = pwelch(factor * log(pwr), window_welch, noverlap, NFFT, Fs, 'psd');
                 [Sph_obs_welch{tt, rr}, f] = pwelch(ph, window_welch, noverlap, NFFT, Fs, 'psd');
                 
-%                 keyboard;
+                %                 keyboard;
                 
                 [Spwr_obs_period{tt, rr}, ~] = periodogram(factor * log(pwr), window_period, NFFT, Fs, 'psd');
                 [Sph_obs_period{tt, rr}, f] = periodogram(ph, window_period, NFFT, Fs, 'psd');
@@ -792,16 +804,16 @@ for i_dtau = 1:length(v_dtau)
                 R_obs = R_obs_period{tt};
             end
             
-            [Lgrid, zgrid] = meshgrid(Lmin:step:zmax,zmin:step:zmax);
+            [Lgrid, zgrid] = meshgrid(Lmin:step:zmax, zmin:step:zmax);
             for rr = 1:size(rcvr_op, 1)
                 ep = NaN(size(Lgrid));
-                for i = 1:size(Lgrid,1)
-                    for j = 1:size(Lgrid,2)
-                        L = Lgrid(i,j);
-                        z = zgrid(i,j);
+                for i = 1:size(Lgrid, 1)
+                    for j = 1:size(Lgrid, 2)
+                        L = Lgrid(i, j);
+                        z = zgrid(i, j);
                         if z - L >= 100e3
                             if fitall == 0
-                                [R_rytov, k_par, k_par_index, R_Bust] = Lz(vmag, vang, AZ(tt, rr), ZE(tt, rr), L, z, f);                                                        
+                                [R_rytov, k_par, k_par_index, R_Bust] = Lz(vmag, vang, AZ(tt, rr), ZE(tt, rr), L, z, f);
                                 R_obs_c = R_obs(k_par_index, rr);
                             else
                                 [R_rytov, k_par, k_par_index, R_Bust] = Lz(vmag, vang, AZ(tt, :), ZE(tt, :), L, z, f);
@@ -813,46 +825,48 @@ for i_dtau = 1:length(v_dtau)
                             
                             % normalized?
                             if normalize == 0
-                                sumsquared = (R_obs_c - R_rytov_c) .^2;
+                                sumsquared = (R_obs_c - R_rytov_c).^2;
                             else
-                                sumsquared = ((R_obs_c - R_rytov_c) ./ R_obs_c) .^2;
+                                sumsquared = ((R_obs_c - R_rytov_c) ./ R_obs_c).^2;
                             end
-                                                        
-                            epsqr = mean(sumsquared(:),'omitnan');
-                            ep(i,j) = epsqr;
-%                             if epsqr > 10
-%                                 ep(i,j) = NaN;
-%                                 continue;
-%                             end
+                            
+                            epsqr = mean(sumsquared(:), 'omitnan');
+                            ep(i, j) = epsqr;
+                            %                             if epsqr > 10
+                            %                                 ep(i,j) = NaN;
+                            %                                 continue;
+                            %                             end
                         end
                     end
                 end
                 figj = figure;
-
+                
                 ep_min(:, rr) = min(min(ep));
                 ep_max(:, rr) = max(max(ep));
                 L_hat(:, rr) = Lgrid(ep == ep_min(:, rr));
                 z_hat(:, rr) = zgrid(ep == ep_min(:, rr));
-%                 mesh(Lgrid/10^3, zgrid/10^3, ep, ep);
-                pcolor(Lgrid / 10^3, zgrid / 10^3, ep);
-%                 shading(gca, 'flat');
-%                 set(gca, 'layer', 'top');
-                caxis([0 5]);
+                %                 mesh(Lgrid/10^3, zgrid/10^3, ep, ep);
+                pcolor(Lgrid/10^3, zgrid/10^3, ep);
+                %                 shading(gca, 'flat');
+                %                 set(gca, 'layer', 'top');
+                caxis([0, 5]);
                 hold on;
-%                 plot3(L_hat/10^3,z_hat/10^3,ep_min,'ro');
-                plot(L_hat(:, rr) / 10^3, z_hat(:, rr) / 10^3, 'ro');
-                xlabel('Thickness $L$ [km] '); ylabel('Top height $z$ [km]'); zlabel('$\epsilon^2$');
-                title(['$\hat{L} = $', num2str(L_hat(:, rr) / 10^3), ', ', ...
-                    '$\hat{z} = $', num2str(z_hat(:, rr) / 10^3), ', ', ...
+                %                 plot3(L_hat/10^3,z_hat/10^3,ep_min,'ro');
+                plot(L_hat(:, rr)/10^3, z_hat(:, rr)/10^3, 'ro');
+                xlabel('Thickness $L$ [km] ');
+                ylabel('Top height $z$ [km]');
+                zlabel('$\epsilon^2$');
+                title(['$\hat{L} = $', num2str(L_hat(:, rr)/10^3), ', ', ...
+                    '$\hat{z} = $', num2str(z_hat(:, rr)/10^3), ', ', ...
                     '$\epsilon^2_{min} = $', num2str(ep_min(:, rr)), ', ', ...
-                    'for ', sitenum_op{rr,:}]);
-%                 set(gca, 'Zscale', 'log');
-        %         zlim([0 10]);
-%                 view([45,15]);
+                    'for ', sitenum_op{rr, :}]);
+                %                 set(gca, 'Zscale', 'log');
+                %         zlim([0 10]);
+                %                 view([45,15]);
                 tightfig;
                 cb = colorbar;
-                set(get(cb,'YLabel'), 'String', '$\epsilon^2$', 'interpreter', 'latex');
-                plotname = [year, '_', doy, '_PRN', num2str(prn), '_', sitenum_op{rr,:}, '_CostFunction_', ...
+                set(get(cb, 'YLabel'), 'String', '$\epsilon^2$', 'interpreter', 'latex');
+                plotname = [year, '_', doy, '_PRN', num2str(prn), '_', sitenum_op{rr, :}, '_CostFunction_', ...
                     num2str(tslist(tt), '%.0f'), '-', num2str(telist(tt), '%.0f'), 's_after_', ...
                     datestr(init_time, 'HHMM'), 'UT_', num2str(factor), '_', num2str(zmax/1000)];
                 plotpath = [op_path, plotname, suffix];
@@ -860,15 +874,15 @@ for i_dtau = 1:length(v_dtau)
                 close;
             end
             xl = [-inf, inf]; %xl = [1e-3 1e-1];
-%             return;
+            %             return;
             for rr = 1:size(rcvr_op, 1)
-                figall = figure; 
+                figall = figure;
                 if welch
                     loglog(k_par, Spwr_obs_welch{tt, rr}, 'b', ...
                         k_par, Sph_obs_welch{tt, rr}, 'k', ...
                         k_par, R_obs_welch{tt}(:, rr), 'r');
                 else
-%                     hold on;
+                    %                     hold on;
                     loglog(k_par, Spwr_obs_period{tt, rr}, 'c', ...
                         k_par, Sph_obs_period{tt, rr}, 'g', ...
                         k_par, R_obs_period{tt}(:, rr), 'm');
@@ -878,10 +892,10 @@ for i_dtau = 1:length(v_dtau)
                 %                     set(gca,'YTick',[1e-5 1e-4 1e-3 1e-2 1e-1 1e0 1e1 1e2]);
                 title('Observed Log-Amplitude to Phase Power Spectrum Ratio');
                 legend({'Log-Amplitude', 'Phase', 'Ratio'}, 'location', 'southwest');
-                xlabel(['Wavenumber along Drift Velocity Direction $\kappa_v$ [rad/m], ', sitenum_op{rr,:}]);
+                xlabel(['Wavenumber along Drift Velocity Direction $\kappa_v$ [rad/m], ', sitenum_op{rr, :}]);
                 %                     legend({'Phase','Log_{10} Power'},'location','best')
                 tightfig;
-                plotname = [year, '_', doy, '_PRN', num2str(prn), '_', sitenum_op{rr,:}, '_ObservedRatio_', ...
+                plotname = [year, '_', doy, '_PRN', num2str(prn), '_', sitenum_op{rr, :}, '_ObservedRatio_', ...
                     num2str(tslist(tt), '%.0f'), '-', num2str(telist(tt), '%.0f'), 's_after_', ...
                     datestr(init_time, 'HHMM'), 'UT'];
                 plotpath = [op_path, plotname, suffix];
@@ -890,18 +904,18 @@ for i_dtau = 1:length(v_dtau)
             end
             fighat = figure;
             if size(rcvr_op, 1) > 2
-                set(gcf, 'papersize', [8, 2*size(rcvr_op, 1)], ...
-                    'paperposition', [0, 0, 8, 2*size(rcvr_op, 1)], ...
+                set(gcf, 'papersize', [8, 2 * size(rcvr_op, 1)], ...
+                    'paperposition', [0, 0, 8, 2 * size(rcvr_op, 1)], ...
                     'paperpositionmode', 'auto', ...
-                    'position', [0, 0, 8, 2*size(rcvr_op, 1)]);
+                    'position', [0, 0, 8, 2 * size(rcvr_op, 1)]);
             end
             [sp, ~] = tight_subplot(size(rcvr_op, 1), 1, [0, 0.03], [0.11, 0.05], [0.11, 0.05]);
-            for rr = 1:size(rcvr_op, 1)   
+            for rr = 1:size(rcvr_op, 1)
                 [R_rytov_hat, k_par, k_par_index, R_Bust] = Lz(vmag, vang, ...
                     AZ(tt, rr), ZE(tt, rr), L_hat(:, rr), z_hat(:, rr), f);
                 [R_rytov_fixed, ~, k_par_index_Bust, R_Bust_fixed] = Lz(vmag, vang, ...
                     AZ(tt, rr), ZE(tt, rr), 500e3, 200e3, f);
-                k_par_c = k_par(k_par_index,:);
+                k_par_c = k_par(k_par_index, :);
                 R_rytov_hat_c{tt}(:, rr) = R_rytov_hat(k_par_index, :);
                 R_obs_c(:, rr) = R_obs(k_par_index, rr);
                 if debug
@@ -910,8 +924,8 @@ for i_dtau = 1:length(v_dtau)
                         k_par_c, R_Bust(k_par_index), 'k', ...
                         k_par_c, R_rytov_fixed(k_par_index), 'g', ...
                         k_par_c, R_Bust_fixed(k_par_index), 'b');
-                    legend(sp(rr), ['Observed, ', sitenum_op{rr,:}], ...
-                        ['R, $\hat{L}=', num2str(L_hat(:, rr) / 10^3), '$, $\hat{z}=', num2str(z_hat(:, rr) / 10^3), '$'], ...
+                    legend(sp(rr), ['Observed, ', sitenum_op{rr, :}], ...
+                        ['R, $\hat{L}=', num2str(L_hat(:, rr)/10^3), '$, $\hat{z}=', num2str(z_hat(:, rr)/10^3), '$'], ...
                         'B, -', ...
                         'R, $\hat{L}=500$, $\hat{z}=200$', ...
                         'B, -', ...
@@ -919,58 +933,58 @@ for i_dtau = 1:length(v_dtau)
                 else
                     loglog(sp(rr), k_par_c, R_obs_c(:, rr), 'r', ...
                         k_par_c, R_rytov_hat_c{tt}(:, rr), 'c');
-                    legend(sp(rr), ['Observed, ', sitenum_op{rr,:}], ...
-                        ['Rytov, $\hat{L}=', num2str(L_hat(:, rr) / 10^3), ...
-                        '$, $\hat{z}=', num2str(z_hat(:, rr) / 10^3), '$'], ...
+                    legend(sp(rr), ['Observed, ', sitenum_op{rr, :}], ...
+                        ['Rytov, $\hat{L}=', num2str(L_hat(:, rr)/10^3), ...
+                        '$, $\hat{z}=', num2str(z_hat(:, rr)/10^3), '$'], ...
                         'location', 'southeast');
                 end
                 xlim(sp(rr), xl);
                 ylim(sp(rr), [10^-5, 10^2.5]);
                 %                     set(gca,'YTick',[1e-5 1e-4 1e-3 1e-2 1e-1 1e0 1e1 1e2]);
                 %                     ylim([1e-5*0.99 1e2*1.01]);
-                MEGA_LZ(tt,rr,:) = [datenum(tslist(tt)/24/3600+init_time), ...
-                    datenum(telist(tt)/24/3600+init_time),...
+                MEGA_LZ(tt, rr, :) = [datenum(tslist(tt)/24/3600+init_time), ...
+                    datenum(telist(tt)/24/3600+init_time), ...
                     L_hat(:, rr) / 10^3, z_hat(:, rr) / 10^3, ep_min(:, rr)];
             end
             MEGA_LZ
             title(sp(1), 'Rytov and Observed Log-Amplitude to Phase Power Spectrum Ratio');
             xlabel(sp(rr), 'Wavenumber along Drift Velocity Direction $\kappa_v$ [rad/m]');
-            set(sp(1 : (rr - 1)), 'xticklabel', []);
-            set(sp(2: 2: rr), 'yticklabel', []);
+            set(sp(1:(rr - 1)), 'xticklabel', []);
+            set(sp(2:2:rr), 'yticklabel', []);
             tightfig;
-            plotname = [year, '_', doy, '_PRN', num2str(prn), '_', sitenum_op{rr,:}, '_RytovObserved_', ...
-                    num2str(tslist(tt), '%.0f'), '-', num2str(telist(tt), '%.0f'), 's_after_', ...
-                    datestr(init_time, 'HHMM'), 'UT_', num2str(factor), '_', num2str(zmax/1000)];
+            plotname = [year, '_', doy, '_PRN', num2str(prn), '_', sitenum_op{rr, :}, '_RytovObserved_', ...
+                num2str(tslist(tt), '%.0f'), '-', num2str(telist(tt), '%.0f'), 's_after_', ...
+                datestr(init_time, 'HHMM'), 'UT_', num2str(factor), '_', num2str(zmax/1000)];
             plotpath = [op_path, plotname, suffix];
             saveas(gcf, plotpath, format);
-%             print(gcf, [plotpath, '_pver.png'], '-dpng', '-r600');
-%                 close;
-           
+            %             print(gcf, [plotpath, '_pver.png'], '-dpng', '-r600');
+            %                 close;
+            
             close;
         else
             for rr = 1:size(rcvr_op, 1)
-                MEGA_LZ(tt,rr,:) = [datenum(tslist(tt)/24/3600+init_time), ...
-                    datenum(telist(tt)/24/3600+init_time),...
+                MEGA_LZ(tt, rr, :) = [datenum(tslist(tt)/24/3600+init_time), ...
+                    datenum(telist(tt)/24/3600+init_time), ...
                     NaN, NaN, NaN];
-            end    
+            end
         end
-%         keyboard;
+        %         keyboard;
     end
     if isempty(tslist) && isempty(telist)
         for rr = 1:size(rcvr_op, 1)
-            MEGA_LZ(tt,rr,:) = NaN(1, 5);
+            MEGA_LZ(tt, rr, :) = NaN(1, 5);
         end
     end
 end
 
-eststruct = struct('prn', prn, 't0',ESTV(:,1), 'tf',ESTV(:,2), ...
-    'v', ESTV(:,3), 'ev', ESTV(:,4), ...
-    'theta', ESTV(:,5), 'etheta', ESTV(:,6), ...
-    've', ESTV(:,7), 'eve', ESTV(:,8), 'vn', ESTV(:,9), 'evn', ESTV(:,10), ...
-    'ar', ESTV(:,11), 'ear', ESTV(:,12), ...
-    'psia', ESTV(:,13), 'epsia', ESTV(:,14), ...
-    'vc', ESTV(:,15), 'evc', ESTV(:,16), ...
-    'percentage', ESTV(:,17));
+eststruct = struct('prn', prn, 't0', ESTV(:, 1), 'tf', ESTV(:, 2), ...
+    'v', ESTV(:, 3), 'ev', ESTV(:, 4), ...
+    'theta', ESTV(:, 5), 'etheta', ESTV(:, 6), ...
+    've', ESTV(:, 7), 'eve', ESTV(:, 8), 'vn', ESTV(:, 9), 'evn', ESTV(:, 10), ...
+    'ar', ESTV(:, 11), 'ear', ESTV(:, 12), ...
+    'psia', ESTV(:, 13), 'epsia', ESTV(:, 14), ...
+    'vc', ESTV(:, 15), 'evc', ESTV(:, 16), ...
+    'percentage', ESTV(:, 17));
 
 save(xcorr_results, 'ESTV', 'eststruct', 'ESTO', ...
     'zcounter', 'tlim', 'init_time', ...
