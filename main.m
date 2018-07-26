@@ -1,5 +1,9 @@
-function [] = main(yearin, doyin, lronlyflag)
-
+function [] = main(yearin, doyin, lronlyflag, prnlist_in, init_time_in, xtime_in)
+%% usage
+% yearin, doyin : required; i.e. [2015:2017], [1:365]
+% lronlyflag [1/0] : required; 1, do low-rate only processing; 0, both hr and lr
+% prnlist_in [a vector] : optional; specify a list of PRN to override detected event satellites
+% init_time_in [datevec], xtime_in [s] : optional; i.e. [2015, 10, 7, 3, 6, 2, 0, 0], [200, 1200]
 %% Initialization
 close all;
 dbstop if error;
@@ -44,14 +48,26 @@ yesterday = str2num(yesterday);
 comm1 = 'date -u -d "a day ago" +%Y';
 [~, year] = system(comm1);
 
-if nargin == 3
-    yearlist = yearin;
-    doylist = doyin;
-else
-    yearlist = str2num(year);
-    doylist = yesterday;
-    doyin = yesterday;
-    lronlyflag = 1;
+switch nargin
+    % run for yesterday
+    case {0}
+        yearlist = str2num(year);
+        doylist = yesterday;
+        doyin = yesterday;
+        lronlyflag = 1;
+    % run for year and doy, with lronlyflag
+    case {3}
+        yearlist = yearin;
+        doylist = doyin;
+    % run for year and doy and one single specific prn w/o specific period
+    case {4, 6}
+        yearlist = yearin;
+        doylist = doyin;
+        % looks at high rate data, so lronlyflag should always be 0
+        lronlyflag = 0;
+        prnlist = prnlist_in;
+    otherwise       
+        error('Not enough inputs');
 end
 
 SD = [];
@@ -275,13 +291,15 @@ for signal_type = 0 %[0, 2]
             %% High-rate processing w/{w/o} specified PRNs or time intervals
             flag = 'single';
             %         flag = 'multiple';
-            if strcmp(flag, 'single')
-                prnlist = unique(TSP_hr(:, 1), 'stable');
-                prnlist = prnlist(1);
-            else
-                prnlist = e_common(:, 1);
-                %             t_common = unique(e_common(:,2:3),'rows','stable');
-                t_common = e_common(:, 2:3);
+            if ~exist('prnlist', 'var') 
+                if strcmp(flag, 'single')
+                    prnlist = unique(TSP_hr(:, 1), 'stable');
+                    prnlist = prnlist(1);
+                else
+                    prnlist = e_common(:, 1);
+                    %             t_common = unique(e_common(:,2:3),'rows','stable');
+                    t_common = e_common(:, 2:3);
+                end
             end
             %         keyboard;
             switch doy
@@ -291,12 +309,12 @@ for signal_type = 0 %[0, 2]
                 %         prnlist = [17];
                 case '051'
                     prnlist = [29];
-                case '076'
-                    prnlist = [27, 22, 18];
+%                 case '076'
+%                     prnlist = [27, 22, 18];
                     %         prnlist = [27];
                     %     case '077'
                     %         prnlist = [25 29 31];
-                    %         prnlist = 1;
+                    %         prnlist = 1;                    
                 case '280'
                     prnlist = [3];
             end
@@ -311,6 +329,8 @@ for signal_type = 0 %[0, 2]
                     trow = find(prnlist == prn);
                 end
                 length(trow)
+                % only take the first ranked event for a certain satellite,
+                % uncomment to get all events
                 for irow = 1 %:length(trow)
                     if strcmp(flag, 'single')
                         tt = TSP_hr(trow(irow), 2:3)';
@@ -336,6 +356,12 @@ for signal_type = 0 %[0, 2]
                     init_time = datenum([init_time(1:4), 0, 0])
                     xtime = (tt - init_time) * 24 * 3600;
                     
+                    if exist('init_time_in', 'var')
+                        init_time = datenum(init_time_in);
+                    end
+                    if exist('xtime_in', 'var')
+                        xtime = xtime_in;
+                    end
                     %
                     %         specify times of interest used in the case study
                     switch prn
@@ -357,9 +383,9 @@ for signal_type = 0 %[0, 2]
                         %             case 1
                         %                 init_time = datenum([2015 3 18 15 2 0]);
                         %                 xtime = [-600;600];
-                        case {3}
-                            init_time = datenum([2015, 10, 7, 6, 0, 0]);
-                            xtime = [120; 1200];
+%                         case {3}
+%                             init_time = datenum([2015, 10, 7, 6, 0, 0]);
+%                             xtime = [120; 1200];
                     end
                     
                     %                         keyboard;

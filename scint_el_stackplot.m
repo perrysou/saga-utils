@@ -283,9 +283,11 @@ if strcmp(rcvr_name, 'ASTRArx')
     flag2 = dir([in_path0, 'bin', sep, '*.bin']);
 else
     flag2 = dir([in_path2, 'bin', sep, '*', year, '_', doy, '_*.bin']);
-    flag3 = dir([in_path3, 'bin', sep, '*', year, '_', doy, '_*.bin']);
-    flag4 = dir([in_path4, 'bin', sep, '*', year, '_', doy, '_*.bin']);
 end
+
+flag3 = dir([in_path3, 'bin', sep, '*', year, '_', doy, '_*.bin'])
+flag4 = dir([in_path4, 'bin', sep, '*', year, '_', doy, '_*.bin'])
+
 if isempty(flag0) && isempty(flag1) && isempty(flag2) && isempty(flag3) && isempty(flag4)
     disp(['Unable to find any binaries for ', rcvr_name, ' on the server, please download manually']);
     in_path = [];

@@ -130,7 +130,8 @@ if ~isempty(data)
         for dt = 1:length(dtau)
             for subi = 1:length(col)
                 latdata = data(data(:, 3) == lat(kk) & data(:, 2) == dtau(dt), [1, col(subi), errcol(subi)]);
-                ebar(subi, kk, dt) = sqrt(meansqr(latdata(:, end)./latdata(:, end-1))) * 100;
+                ebar(subi, kk, dt) = sqrt(mean(sum(latdata(:, end)./latdata(:, end-1).^2, 'omitnan'))) * 100;
+%                 ebar(subi, kk, dt) = sqrt(meansqr(latdata(:, end)./latdata(:, end-1))) * 100;
                 latdata(isnan(latdata(:, 2)), :) = [];
                 megadata{subi, kk, dt} = latdata;
             end

@@ -7,10 +7,10 @@ weimer_path = [MEGAVEST_path, filesep, 'Weimer', filesep, 'runs', filesep];
 medium_blue = [0, 0.447, 0.741];
 light_blue = [0.301, 0.745, 0.933];
 
-if nargin == 0
+if nargin ~= 0
     dbstop if error;
-    prnlist = [23, 13, 10];
-    tstt = [2013, 12, 8, 4, 3, 0];
+%     prnlist = [23, 13, 10];
+%     tstt = [2013, 12, 8, 4, 3, 0];
     %     prnlist = [23 23];
     %     tstt = [2013, 12, 8, 3, 43, 0];
     %     prnlist = [8, 9, 26];
@@ -19,9 +19,10 @@ if nargin == 0
     %     tstt = [2015, 3, 17, 13, 0, 0];
     %     prnlist = [29];
     %     tstt = [2014, 2, 20, 11, 20, 0];
-    
+%     prnlist = [3];
+%     tstt = [2015, 10, 7, 6, 2, 0];
     switch length(prnlist)
-        case 1
+        case 0
             vflag = 'SAGA';
             args = {[0.03, 0], [0.11, 0.05], [0.11, 0.05]};
             ffflag = 1;
@@ -30,7 +31,6 @@ if nargin == 0
             args = {[0.05, 0], [0.18, 0.05], [0.11, 0.05]};
             ffflag = 1:2;
     end
-    
     prnlist = unique(prnlist, 'stable');
     
     year = num2str(tstt(1));
@@ -346,7 +346,8 @@ if nargin == 0
                 a = {'SAGA', vflag, 'PRN', tmp, year, doy, datestr(tstt, 'HHMMUT'), ...
                     num2str(0.65), num2str(tau, '%gs'), latstr, fflagstr};
                 plotfilename = strjoin(a, '_');
-                saveas(gcf, [op_path0, plotfilename, '.eps'], 'epsc2');
+%                 saveas(gcf, [op_path0, plotfilename, '.eps'], 'epsc2');
+                saveas(gcf, [op_path0, plotfilename, '.png'], 'png');
                 %         try
                 %             print([op_path0, plotfilename,'.pdf'], '-dpdf', '-fillpage');
                 %         catch

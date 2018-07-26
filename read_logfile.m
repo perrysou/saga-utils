@@ -99,12 +99,22 @@ end
 function [] = sub_read_logfile(yearstt, doyend, sep, rcvr_name, hour, filetype, ...
     cases_folder, cases_year, op_path, gpswstt, gpssend, gpssstt)
 global home_dir;
-%iq binaries in /data1/from_usb/
-in_path0 = strcat(['/data1/from_usb/', num2str(yearstt, '%04i'), sep, num2str(doyend, '%03i'), sep, rcvr_name, sep]);
+%iq binaries in /data2/from_usb/
+in_path0 = strcat(['/data2/from_usb/', num2str(yearstt, '%04i'), sep, num2str(doyend, '%03i'), sep, rcvr_name, sep]);
 flag0 = dir([in_path0, 'bin', sep, '*', filetype, '_', num2str(hour, '%02i'), '*.bin']);
+
 %iq binaries downloaded on demand in /data1/public/Data/cases/pfrr/from_usb
 in_path1 = strcat([cases_folder, sep, 'from_usb', sep, num2str(yearstt, '%04i'), sep, num2str(doyend, '%03i'), sep, rcvr_name, sep]);
 flag1 = dir([in_path1, 'bin', sep, '*', filetype, '_', num2str(hour, '%02i'), '*.bin']);
+
+%iq binaries in /data2/from_usb2/
+in_path3 = strcat(['/data2/from_usb2/', num2str(yearstt, '%04i'), sep, num2str(doyend, '%03i'), sep, rcvr_name, sep]);
+flag3 = dir([in_path3, 'bin', sep, '*', filetype, '_', num2str(hour, '%02i'), '*.bin']);
+
+%iq binaries in /data2/from_usb3/
+in_path4 = strcat(['/data2/from_usb3/', num2str(yearstt, '%04i'), sep, num2str(doyend, '%03i'), sep, rcvr_name, sep]);
+flag4 = dir([in_path4, 'bin', sep, '*', filetype, '_', num2str(hour, '%02i'), '*.bin']);
+
 %iq binaries already downloaded in /data1/public/Data/cases/pfrr/
 in_path2 = strcat([cases_year, num2str(doyend, '%03i'), sep, rcvr_name, sep]);
 flag2 = dir([in_path2, 'bin', sep, '*', filetype, '_', num2str(hour, '%02i'), '*.bin']);
@@ -115,7 +125,7 @@ if strcmp(rcvr_name, 'ASTRArx')
     flag2 = dir([in_, 'txt', sep, '*', filetype, '_', num2str(hour, '%02i'), '*.log']);
     %     keyboard;
 end
-if isempty(flag0) && isempty(flag1) && isempty(flag2)
+if isempty(flag0) && isempty(flag1) && isempty(flag2) && isempty(flag3) && isempty(flag4)
     disp(['Unable to find any binaries for hr:', num2str(hour, '%02i'), ' on the server, please download manually']);
     %exception for IIT-13 data for doy 342, 2013 since only logfiles are
     %available
@@ -128,6 +138,10 @@ elseif ~isempty(flag0)
     in_path = in_path0;
 elseif ~isempty(flag1)
     in_path = in_path1;
+elseif ~isempty(flag3)
+    in_path = in_path3;
+elseif ~isempty(flag4)
+    in_path = in_path4;
 end
 
 logfile_dir = [op_path(1:end-9), num2str(yearstt, '%04i'), sep, num2str(doyend, '%03i'), sep];

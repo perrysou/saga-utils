@@ -302,7 +302,7 @@ if 1
     [~, hr_path, ~] = ver_chk;
     
     % save high_rate data as matfiles
-    save([hr_path, 'high_rate', '.mat'], 'xdata_PRN', 'init_time', 'RCVRNAME', 'rcvr_op');
+    save([hr_path, plot_name, '.mat'], 'xdata_PRN', 'init_time', 'RCVRNAME', 'rcvr_op');
     
     plotpath = [hr_path, plot_name, '.png'];
     saveas(gcf, plotpath, 'png');
@@ -362,6 +362,7 @@ if ~isempty(dir(xcorr_results))
         renamecomm = strjoin({'mv', xcorr_results, [xcorr_results, '.bak']});
         system(renamecomm);
     else
+        plotSAGAvsPFISR(prn, tstt, 'debug');
         return;
     end
 end

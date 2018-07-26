@@ -1,0 +1,360 @@
+**** Week 878 almanac for SV-23, slot 01 ***
+ID:                          0123
+Health:                      001
+Eccentricity:                7.219314575e-04
+Time of Applicability(s):    8.269281250e+04
+Orbital Inclination(rad):    1.137954885e+00
+Rate of Right Ascen(r/s):   -7.084000000e-09
+SQRT(A) (m^1/2):             5.050549372e+03
+Right Ascen at TOA(rad):     6.473320870e-01
+Argument of Perigee(rad):    3.102955513e+00
+Mean Anom(rad):              3.180285598e+00
+Af0(s):                      0.000000000e+00
+Af1(s/s):                    0.000000000e+00
+week:                        878
+ 
+**** Week 878 almanac for SV-05, slot 02 ***
+ID:                          0205
+Health:                      000
+Eccentricity:                7.228851318e-04
+Time of Applicability(s):    8.746075000e+04
+Orbital Inclination(rad):    1.138095700e+00
+Rate of Right Ascen(r/s):   -7.084000000e-09
+SQRT(A) (m^1/2):             5.050546128e+03
+Right Ascen at TOA(rad):     6.450522761e-01
+Argument of Perigee(rad):    2.930286800e+00
+Mean Anom(rad):              3.353201899e+00
+Af0(s):                      0.000000000e+00
+Af1(s/s):                    0.000000000e+00
+week:                        878
+ 
+**** Week 878 almanac for SV-21, slot 03 ***
+ID:                          0321
+Health:                      000
+Eccentricity:                2.933502197e-03
+Time of Applicability(s):    9.258293750e+04
+Orbital Inclination(rad):    1.136987159e+00
+Rate of Right Ascen(r/s):   -7.084000000e-09
+SQRT(A) (m^1/2):             5.050546290e+03
+Right Ascen at TOA(rad):     6.456340242e-01
+Argument of Perigee(rad):   -3.065852352e+00
+Mean Anom(rad):              3.065407432e+00
+Af0(s):                      0.000000000e+00
+Af1(s/s):                    0.000000000e+00
+week:                        878
+ 
+**** Week 878 almanac for SV-12, slot 04 ***
+ID:                          0412
+Health:                      000
+Eccentricity:                4.673004150e-05
+Time of Applicability(s):    9.777143750e+04
+Orbital Inclination(rad):    1.136612652e+00
+Rate of Right Ascen(r/s):   -7.084000000e-09
+SQRT(A) (m^1/2):             5.050550913e+03
+Right Ascen at TOA(rad):     6.452929365e-01
+Argument of Perigee(rad):    8.954612849e-01
+Mean Anom(rad):              5.387796966e+00
+Af0(s):                      0.000000000e+00
+Af1(s/s):                    0.000000000e+00
+week:                        878
+ 
+**** Week 878 almanac for SV-23, slot 05 ***
+ID:                          0523
+Health:                      001
+Eccentricity:                1.468658447e-04
+Time of Applicability(s):    9.849696875e+04
+Orbital Inclination(rad):    1.138005818e+00
+Rate of Right Ascen(r/s):   -7.084000000e-09
+SQRT(A) (m^1/2):             5.050719514e+03
+Right Ascen at TOA(rad):     6.956738404e-01
+Argument of Perigee(rad):    6.024709544e-01
+Mean Anom(rad):              5.680880790e+00
+Af0(s):                      0.000000000e+00
+Af1(s/s):                    0.000000000e+00
+week:                        878
+ 
+**** Week 878 almanac for SV-13, slot 06 ***
+ID:                          0613
+Health:                      000
+Eccentricity:                9.965896606e-04
+Time of Applicability(s):    1.078176250e+05
+Orbital Inclination(rad):    1.136771443e+00
+Rate of Right Ascen(r/s):   -7.084000000e-09
+SQRT(A) (m^1/2):             5.050550588e+03
+Right Ascen at TOA(rad):     6.456723790e-01
+Argument of Perigee(rad):   -5.051590482e-01
+Mean Anom(rad):              5.041950864e-01
+Af0(s):                      0.000000000e+00
+Af1(s/s):                    0.000000000e+00
+week:                        878
+ 
+**** Week 878 almanac for SV-21, slot 07 ***
+ID:                          0721
+Health:                      000
+Eccentricity:                1.095771790e-03
+Time of Applicability(s):    1.128714688e+05
+Orbital Inclination(rad):    1.138494175e+00
+Rate of Right Ascen(r/s):   -7.084000000e-09
+SQRT(A) (m^1/2):             5.050551156e+03
+Right Ascen at TOA(rad):     6.448387245e-01
+Argument of Perigee(rad):    2.972087777e+00
+Mean Anom(rad):              3.311467531e+00
+Af0(s):                      0.000000000e+00
+Af1(s/s):                    0.000000000e+00
+week:                        878
+ 
+**** Week 878 almanac for SV-02, slot 08 ***
+ID:                          0802
+Health:                      000
+Eccentricity:                1.677513123e-03
+Time of Applicability(s):    7.674459375e+04
+Orbital Inclination(rad):    1.137966870e+00
+Rate of Right Ascen(r/s):   -7.084000000e-09
+SQRT(A) (m^1/2):             5.050530719e+03
+Right Ascen at TOA(rad):     6.472781996e-01
+Argument of Perigee(rad):    5.044879316e-01
+Mean Anom(rad):              5.780317274e+00
+Af0(s):                      0.000000000e+00
+Af1(s/s):                    0.000000000e+00
+week:                        878
+ 
+**** Week 878 almanac for SV-06, slot 09 ***
+ID:                          0906
+Health:                      000
+Eccentricity:                6.446838379e-04
+Time of Applicability(s):    8.076481250e+04
+Orbital Inclination(rad):    1.131441459e+00
+Rate of Right Ascen(r/s):   -7.084000000e-09
+SQRT(A) (m^1/2):             5.050556752e+03
+Right Ascen at TOA(rad):     2.734790263e+00
+Argument of Perigee(rad):    3.012642394e+00
+Mean Anom(rad):              3.270708797e+00
+Af0(s):                      0.000000000e+00
+Af1(s/s):                    0.000000000e+00
+week:                        878
+ 
+**** Week 878 almanac for SV-09, slot 10 ***
+ID:                          1009
+Health:                      000
+Eccentricity:                1.769065857e-03
+Time of Applicability(s):    8.584356250e+04
+Orbital Inclination(rad):    1.131794994e+00
+Rate of Right Ascen(r/s):   -7.084000000e-09
+SQRT(A) (m^1/2):             5.050556265e+03
+Right Ascen at TOA(rad):     2.736120343e+00
+Argument of Perigee(rad):    2.934792869e+00
+Mean Anom(rad):              3.349119864e+00
+Af0(s):                      0.000000000e+00
+Af1(s/s):                    0.000000000e+00
+week:                        878
+ 
+**** Week 878 almanac for SV-04, slot 11 ***
+ID:                          1104
+Health:                      000
+Eccentricity:                3.693580627e-03
+Time of Applicability(s):    9.086190625e+04
+Orbital Inclination(rad):    1.131636203e+00
+Rate of Right Ascen(r/s):   -7.084000000e-09
+SQRT(A) (m^1/2):             5.050554238e+03
+Right Ascen at TOA(rad):     2.736113490e+00
+Argument of Perigee(rad):    2.799610812e+00
+Mean Anom(rad):              3.486058295e+00
+Af0(s):                      0.000000000e+00
+Af1(s/s):                    0.000000000e+00
+week:                        878
+ 
+**** Week 878 almanac for SV-22, slot 12 ***
+ID:                          1222
+Health:                      000
+Eccentricity:                8.707046509e-04
+Time of Applicability(s):    9.605231250e+04
+Orbital Inclination(rad):    1.130650500e+00
+Rate of Right Ascen(r/s):   -7.084000000e-09
+SQRT(A) (m^1/2):             5.050557076e+03
+Right Ascen at TOA(rad):     2.738245336e+00
+Argument of Perigee(rad):    2.205193256e+00
+Mean Anom(rad):              4.079395176e+00
+Af0(s):                      0.000000000e+00
+Af1(s/s):                    0.000000000e+00
+week:                        878
+ 
+**** Week 878 almanac for SV-06, slot 13 ***
+ID:                          1306
+Health:                      000
+Eccentricity:                1.708984375e-03
+Time of Applicability(s):    1.010517500e+05
+Orbital Inclination(rad):    1.131663167e+00
+Rate of Right Ascen(r/s):   -7.084000000e-09
+SQRT(A) (m^1/2):             5.050557887e+03
+Right Ascen at TOA(rad):     2.734609781e+00
+Argument of Perigee(rad):   -4.650838001e-01
+Mean Anom(rad):              4.635526035e-01
+Af0(s):                      0.000000000e+00
+Af1(s/s):                    0.000000000e+00
+week:                        878
+ 
+**** Week 878 almanac for SV-09, slot 14 ***
+ID:                          1409
+Health:                      000
+Eccentricity:                2.498626709e-04
+Time of Applicability(s):    1.060718125e+05
+Orbital Inclination(rad):    1.130551630e+00
+Rate of Right Ascen(r/s):   -7.084000000e-09
+SQRT(A) (m^1/2):             5.050552129e+03
+Right Ascen at TOA(rad):     2.738437380e+00
+Argument of Perigee(rad):    9.120474522e-01
+Mean Anom(rad):              5.371532972e+00
+Af0(s):                      0.000000000e+00
+Af1(s/s):                    0.000000000e+00
+week:                        878
+ 
+**** Week 878 almanac for SV-04, slot 15 ***
+ID:                          1504
+Health:                      000
+Eccentricity:                1.872062683e-03
+Time of Applicability(s):    1.110362812e+05
+Orbital Inclination(rad):    1.131606242e+00
+Rate of Right Ascen(r/s):   -7.084000000e-09
+SQRT(A) (m^1/2):             5.050550751e+03
+Right Ascen at TOA(rad):     2.735907052e+00
+Argument of Perigee(rad):    2.749468815e+00
+Mean Anom(rad):              3.535149176e+00
+Af0(s):                      0.000000000e+00
+Af1(s/s):                    0.000000000e+00
+week:                        878
+ 
+**** Week 878 almanac for SV-22, slot 16 ***
+ID:                          1622
+Health:                      000
+Eccentricity:                1.529693604e-03
+Time of Applicability(s):    7.568762500e+04
+Orbital Inclination(rad):    1.130434784e+00
+Rate of Right Ascen(r/s):   -7.084000000e-09
+SQRT(A) (m^1/2):             5.050555617e+03
+Right Ascen at TOA(rad):     2.738826208e+00
+Argument of Perigee(rad):    1.601092447e-02
+Mean Anom(rad):              6.267223308e+00
+Af0(s):                      0.000000000e+00
+Af1(s/s):                    0.000000000e+00
+week:                        878
+ 
+**** Week 878 almanac for SV-24, slot 17 ***
+ID:                          1724
+Health:                      000
+Eccentricity:                5.645751953e-04
+Time of Applicability(s):    7.898175000e+04
+Orbital Inclination(rad):    1.127139122e+00
+Rate of Right Ascen(r/s):   -7.084000000e-09
+SQRT(A) (m^1/2):             5.050542316e+03
+Right Ascen at TOA(rad):     4.825773721e+00
+Argument of Perigee(rad):   -3.011491908e+00
+Mean Anom(rad):              3.011345357e+00
+Af0(s):                      0.000000000e+00
+Af1(s/s):                    0.000000000e+00
+week:                        878
+ 
+**** Week 878 almanac for SV-10, slot 18 ***
+ID:                          1810
+Health:                      000
+Eccentricity:                1.199722290e-03
+Time of Applicability(s):    8.418143750e+04
+Orbital Inclination(rad):    1.126836521e+00
+Rate of Right Ascen(r/s):   -7.084000000e-09
+SQRT(A) (m^1/2):             5.050549534e+03
+Right Ascen at TOA(rad):     4.825742105e+00
+Argument of Perigee(rad):    6.353556676e-01
+Mean Anom(rad):              5.649252592e+00
+Af0(s):                      0.000000000e+00
+Af1(s/s):                    0.000000000e+00
+week:                        878
+ 
+**** Week 878 almanac for SV-03, slot 19 ***
+ID:                          1903
+Health:                      000
+Eccentricity:                1.316070557e-03
+Time of Applicability(s):    8.916612500e+04
+Orbital Inclination(rad):    1.127354838e+00
+Rate of Right Ascen(r/s):   -7.084000000e-09
+SQRT(A) (m^1/2):             5.050542154e+03
+Right Ascen at TOA(rad):     4.830837053e+00
+Argument of Perigee(rad):   -2.779764935e+00
+Mean Anom(rad):              2.778832338e+00
+Af0(s):                      0.000000000e+00
+Af1(s/s):                    0.000000000e+00
+week:                        878
+ 
+**** Week 878 almanac for SV-01, slot 20 ***
+ID:                          2001
+Health:                      000
+Eccentricity:                6.055831909e-04
+Time of Applicability(s):    9.414875000e+04
+Orbital Inclination(rad):    1.127417756e+00
+Rate of Right Ascen(r/s):   -7.084000000e-09
+SQRT(A) (m^1/2):             5.050536234e+03
+Right Ascen at TOA(rad):     4.830457611e+00
+Argument of Perigee(rad):   -2.549284322e+00
+Mean Anom(rad):              2.548607900e+00
+Af0(s):                      0.000000000e+00
+Af1(s/s):                    0.000000000e+00
+week:                        878
+ 
+**** Week 878 almanac for SV-24, slot 21 ***
+ID:                          2124
+Health:                      000
+Eccentricity:                7.371902466e-04
+Time of Applicability(s):    9.947468750e+04
+Orbital Inclination(rad):    1.129323247e+00
+Rate of Right Ascen(r/s):   -7.084000000e-09
+SQRT(A) (m^1/2):             5.050544425e+03
+Right Ascen at TOA(rad):     4.820232827e+00
+Argument of Perigee(rad):   -6.328629488e-01
+Mean Anom(rad):              6.319913067e-01
+Af0(s):                      0.000000000e+00
+Af1(s/s):                    0.000000000e+00
+week:                        878
+ 
+**** Week 878 almanac for SV-10, slot 22 ***
+ID:                          2210
+Health:                      000
+Eccentricity:                5.788803101e-04
+Time of Applicability(s):    1.045314688e+05
+Orbital Inclination(rad):    1.127246980e+00
+Rate of Right Ascen(r/s):   -7.084000000e-09
+SQRT(A) (m^1/2):             5.050552778e+03
+Right Ascen at TOA(rad):     4.830459102e+00
+Argument of Perigee(rad):   -6.245219283e-01
+Mean Anom(rad):              6.238452130e-01
+Af0(s):                      0.000000000e+00
+Af1(s/s):                    0.000000000e+00
+week:                        878
+ 
+**** Week 878 almanac for SV-03, slot 23 ***
+ID:                          2303
+Health:                      000
+Eccentricity:                2.987861633e-03
+Time of Applicability(s):    1.093684688e+05
+Orbital Inclination(rad):    1.126995312e+00
+Rate of Right Ascen(r/s):   -7.084000000e-09
+SQRT(A) (m^1/2):             5.050541181e+03
+Right Ascen at TOA(rad):     4.825467609e+00
+Argument of Perigee(rad):   -2.733841385e+00
+Mean Anom(rad):              2.731466853e+00
+Af0(s):                      0.000000000e+00
+Af1(s/s):                    0.000000000e+00
+week:                        878
+ 
+**** Week 878 almanac for SV-01, slot 24 ***
+ID:                          2401
+Health:                      001
+Eccentricity:                4.606246948e-04
+Time of Applicability(s):    1.143723750e+05
+Orbital Inclination(rad):    1.129116519e+00
+Rate of Right Ascen(r/s):   -7.084000000e-09
+SQRT(A) (m^1/2):             5.050539234e+03
+Right Ascen at TOA(rad):     4.819590300e+00
+Argument of Perigee(rad):   -1.479045101e+00
+Mean Anom(rad):              1.478127756e+00
+Af0(s):                      0.000000000e+00
+Af1(s/s):                    0.000000000e+00
+week:                        878
+ 
