@@ -122,7 +122,7 @@ if nargin ~= 0
                                     %                                 real(ESTV(:, 15)) < ESTV(:, 3);
                                 case 2
                                     fflagstr = 'ar';
-                                    arcap = 10;
+                                    arcap = 20;
                                     percentcap = 80;
                                     filter = ESTV(:, 11) <= arcap & ESTV(:, end) >= percentcap;
                             end

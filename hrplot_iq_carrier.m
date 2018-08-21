@@ -96,8 +96,8 @@ if 1
                 %         ttt = [660;721];
                 %     elseif prn == 22 && strcmp(year,'2015') && strcmp(doy,'076')
                 %         ttt = [600;900];
-                %             elseif (prn == 23 || prn == 10 || prn == 13) && strcmp(year,'2013') && strcmp(doy,'342')
-                %                 ttt = [2615;2660];
+                            elseif (prn == 23 || prn == 10 || prn == 13) && strcmp(year,'2013') && strcmp(doy,'342')
+                                ttt = [2615;2660];
                 %    elseif prn == 29 && strcmp(year,'2014') && strcmp(doy,'051')
                 %        ttt = [2685;2729];
             else
@@ -947,7 +947,7 @@ for i_dtau = 1:length(v_dtau)
                     datenum(telist(tt)/24/3600+init_time), ...
                     L_hat(:, rr) / 10^3, z_hat(:, rr) / 10^3, ep_min(:, rr)];
             end
-            MEGA_LZ
+%             MEGA_LZ
             title(sp(1), 'Rytov and Observed Log-Amplitude to Phase Power Spectrum Ratio');
             xlabel(sp(rr), 'Wavenumber along Drift Velocity Direction $\kappa_v$ [rad/m]');
             set(sp(1:(rr - 1)), 'xticklabel', []);

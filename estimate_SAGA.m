@@ -5,7 +5,7 @@ warning off;
 if nargin == 0
     clear;
     close all;
-    load va1.mat;
+    load va.mat;
     format short g
     dbstop if error; 
 else
@@ -15,9 +15,10 @@ end
 
 %hardcoded correlation cut off for SAGA
 rho_c = 0.65;
+rho_c = 0.4;
 
 % remove invalid observations
-[badrows, badcols] = find(CCVAL < rho_c | CCVAL > 1);
+[badrows, badcols] = find(CCVAL < rho_c | CCVAL > 1 | isnan(Y));
 %%
 Y(badrows,:) = [];
 YN(badrows,:) = [];
@@ -46,7 +47,7 @@ if ~isempty(Y) && nargin == 0
     set(gca,'yscale','log');
     title('$\nu = \tilde{Y} - Y, Y = Hx$');
     tightfig;
-    saveas(gcf,'../Nu.pdf');
+%     saveas(gcf,'../Nu.pdf');
     close(fignu);
 end
 
@@ -59,8 +60,10 @@ end
 XN = (H' * W * H) \ H' * W * YN;
 % State without noise
 X = (H' * W * H) \ H' * W * Y;
+err = Y - H * X;
+covx_ls = err' * err / (size(H, 1) - size(H, 2)) * inv(H' * W * H);
 rowsX = mat2cell(X,ones(1,size(X,1)));
-covxn = (H' * W * H) \ H' * W * cov(YN','partialrows') * W' * H / (H' * W' * H);
+% covxn = (H' * W * H) \ H' * W * cov(YN','partialrows') * W' * H / (H' * W' * H);
 %%
 if all(XN == 0)
     fprintf('max corr value smaller than hardcoded threshold %g \n', rho_c);
@@ -75,25 +78,31 @@ h(badcolspd) = []; h_ = h(~isnan(h));
 b(badcolspd) = []; b_ = b(~isnan(b));
 f(badcolspd) = []; f_ = f(~isnan(f));
 g(badcolspd) = []; g_ = g(~isnan(g));
-X_ = [a;h;b;f;g];   
+% X_ = [a;h;b;f;g]; 
 %recompute the \hat{Y}
-YH = YN; YH(:,badcolspd) = [];
-covxh = (H' * W * H) \ H' * W * cov(YH','partialrows') * W' * H / (H' * W' * H);
+% YH = YN; YH(:,badcolspd) = [];
+% covxh = (H' * W * H) \ H' * W * cov(YH','partialrows') * W' * H / (H' * W' * H);
 
-[estbarn, Jn, majorn, minorn, stdestn] = solve_SAGA(a, h, b, f, g);
+% [estbarn, Jn, majorn, minorn, stdestn] = solve_SAGA(a, h, b, f, g);
 [estbar, J, major, minor, ~] = solve_SAGA(rowsX{:});
-estbarncell = num2cell(estbarn);
-[vmagn, vangn, vge, vgn, arn, Psi_an, vc] = estbarncell{:};
-covestn = Jn * covxn * Jn';
-covesth = Jn * covxh * Jn';
-display([estbar estbarn stdestn diag(sqrt(covestn)) diag(sqrt(covesth))], '1 2 3 4 5');
-CCVALN(:,badcolspd) = [];
-%     [RHO0(:,badcolspd), RXILOC(:,badcolspd)] = deal([]);
-plotellipse(arn, majorn, minorn, Psi_an, vmagn, vangn, rho_c, ...
-CCVALN, COMBOS, RHO0, RXILOC, RCVRID);
+% estbarncell = num2cell(estbarn);
+% [vmagn, vangn, vge, vgn, arn, Psi_an, vc] = estbarncell{:};
+% covestn = Jn * covxn * Jn';
+% covesth = Jn * covxh * Jn';
 
-varargout = {estbarn, covesth, size(X_,2)/size(YN,2)*100, estbar};
+% 2018/08/21
+covest_ls = J * covx_ls * J';
+
+% display([estbar estbarn stdestn diag(sqrt(covestn)) diag(sqrt(covesth)) diag(sqrt(covest_ls))], '1 2 3 4 5 6');
+display([estbar diag(sqrt(covest_ls))], 'mean sigma')
+% CCVALN(:,badcolspd) = [];
+%     [RHO0(:,badcolspd), RXILOC(:,badcolspd)] = deal([]);
+% plotellipse(arn, majorn, minorn, Psi_an, vmagn, vangn, rho_c, ...
+% CCVALN, COMBOS, RHO0, RXILOC, RCVRID);
+
+% varargout = {estbarn, covesth, size(X_,2)/size(YN,2)*100, estbar};
 % varargout = {estbar, diag(stdest_).^2, size(X_,2)/size(YN,2)};
+varargout = {estbar, covest_ls, 100, estbar};
 end
 
 function [varargout] = solve_SAGA(varargin)
